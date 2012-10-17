@@ -1,0 +1,161 @@
+<%= form_for(@job) do |f| %>
+  <% if @job.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@job.errors.count, "error") %> prohibited this job from being saved:</h2>
+
+      <ul>
+      <% @job.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :maxscheduler_id %><br />
+    <%= f.text_field :maxscheduler_id %>
+  </div>
+  <div class="field">
+    <%= f.label :site_id %><br />
+    <%= f.text_field :site_id %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :resource_id %><br />
+    <%= f.text_field :resource_id %>
+  </div>
+  <div class="field">
+    <%= f.label :schedDateTime %><br />
+    <%= f.text_field :schedDateTime %>
+  </div>
+  <div class="field">
+    <%= f.label :schedPixelVal %><br />
+    <%= f.text_field :schedPixelVal %>
+  </div>
+  <div class="field">
+    <%= f.label :attr1 %><br />
+    <%= f.text_field :attr1 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr2 %><br />
+    <%= f.text_field :attr2 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr3 %><br />
+    <%= f.text_field :attr3 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr4 %><br />
+    <%= f.text_field :attr4 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr5 %><br />
+    <%= f.text_field :attr5 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr6 %><br />
+    <%= f.text_field :attr6 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr7 %><br />
+    <%= f.text_field :attr7 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr8 %><br />
+    <%= f.text_field :attr8 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr9 %><br />
+    <%= f.text_field :attr9 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr10 %><br />
+    <%= f.text_field :attr10 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr11 %><br />
+    <%= f.text_field :attr11 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr12 %><br />
+    <%= f.text_field :attr12 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr13 %><br />
+    <%= f.text_field :attr13 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr14 %><br />
+    <%= f.text_field :attr14 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr15 %><br />
+    <%= f.text_field :attr15 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr16 %><br />
+    <%= f.text_field :attr16 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr17 %><br />
+    <%= f.text_field :attr17 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr18 %><br />
+    <%= f.text_field :attr18 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr19 %><br />
+    <%= f.text_field :attr19 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr20 %><br />
+    <%= f.text_field :attr20 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr21 %><br />
+    <%= f.text_field :attr21 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr22 %><br />
+    <%= f.text_field :attr22 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr23 %><br />
+    <%= f.text_field :attr23 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr24 %><br />
+    <%= f.text_field :attr24 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr25 %><br />
+    <%= f.text_field :attr25 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr26 %><br />
+    <%= f.text_field :attr26 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr27 %><br />
+    <%= f.text_field :attr27 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr28 %><br />
+    <%= f.text_field :attr28 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr29 %><br />
+    <%= f.text_field :attr29 %>
+  </div>
+  <div class="field">
+    <%= f.label :attr30 %><br />
+    <%= f.text_field :attr30 %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

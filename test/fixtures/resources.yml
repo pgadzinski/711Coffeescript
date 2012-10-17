@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  maxscheduler_id: MyString
+  site_id: MyString
+  name: MyString
+  position: 1
+  board_id: MyString
+
+two:
+  maxscheduler_id: MyString
+  site_id: MyString
+  name: MyString
+  position: 1
+  board_id: MyString

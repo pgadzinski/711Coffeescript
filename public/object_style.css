@@ -1,0 +1,97 @@
+html 
+{
+	height: 100%;
+}
+
+
+body 
+{
+	height: 100%;
+	margin: 0;	
+	//padding: 10px 0 0 0;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+
+#backbar
+{
+	width: 1220px;
+	height: 1135px;
+	margin: 10px auto;
+
+	border:2px solid #eaf2f5;
+	border-radius:25px;
+	-moz-border-radius:25px; 
+}
+
+#header
+{
+	margin: 0 auto;
+	width: 1165px;
+}
+
+#root
+{
+	position:relative;
+	height: 980px;
+	width: 1165px;
+	margin: auto;
+	font-family: arial;
+	font-size: 0.9em;
+}
+
+.ui-widget-overlay 
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color:#000;
+	opacity: 0.7;
+}
+
+#hidden
+{
+	position: absolute;
+	visibility: hidden;
+	display: none;
+	font-size: 1.5em;
+	
+}
+
+.field
+{
+	
+	overflow: hidden;
+}
+
+#id.field{
+	
+}
+
+.field, .board_button
+{
+	background-image: -moz-linear-gradient(top, #e5e5e5 10%, #969797);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#e5e5e5), to(#969797));
+}
+
+.field:hover, .board_button:hover
+{
+	background-image: -moz-linear-gradient(top, #ffffff 10%, #969797);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#969797));
+}
+
+#dialog_table th
+{
+	width: '50px';
+	//overflow: 'hidden';
+
+}
+
+#dialog_table td
+{
+	width: '30px';
+	overflow: 'hidden';
+}

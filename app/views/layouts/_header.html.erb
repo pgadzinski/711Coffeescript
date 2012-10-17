@@ -1,0 +1,21 @@
+    <div class="navbar">
+    <div class="navbar-inner">
+    <a class="brand" href="#">MaxScheduler</a>
+    <ul class="nav">
+              	<% if signed_in? %>
+ 				
+ 				        <li><a href="/scheduler/showData">Scheduler</a>
+                <li><a href="/importdata">Import data</a>
+                <li><a href="/jobs">Jobs</a>
+                <li><%= link_to "User", current_user %>
+                <li>
+                  <%= link_to "Sign out", signout_path, method: "delete" %>
+
+          		<% else %>
+            	<li><%= link_to "Sign in", signin_path %>
+          		<% end %>
+          		
+    </ul>
+    </div>
+    </div>
+    

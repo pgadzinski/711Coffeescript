@@ -1,0 +1,57 @@
+<h1>Listing resources</h1>
+
+Sdata <%= @maxschedulerr%><br><br>
+
+
+<table class="table table-striped table-bordered table-condensed">
+  <tr>
+    <th>Name</th>
+    <th>Position</th>
+    <th>Board</th>
+    <th>Site</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @resources.each do |resource| %>
+  <tr>
+    <td><%= resource.name %></td>
+    <td><%= resource.position %></td>
+    <td><%= Board.find(resource.board_id).name %></td>
+    <td><%= Site.find(resource.site_id).name %></td>
+    <td><%= link_to 'Edit', edit_resource_path(resource), :class => 'btn btn-info'  %></td>
+    <td><%= link_to 'Destroy', resource, :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+
+
+<%= form_for(@resource) do |f| %>
+
+  <% if @resource.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@resource.errors.count, "error") %> prohibited this resource from being saved:</h2>
+
+      <ul>
+      <% @resource.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <tr><td colspan=7><b>Add a new entry below:</b></td></tr>
+
+  <tr>
+  <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
+  <td><%= f.text_field :name, :style => 'width: 50px;'  %></td>
+  <td><%= f.number_field :position, :style => 'width: 50px;'  %></td>
+  <td><%= f.select :board_id, Board.where("maxscheduler_id = ?", @maxschedulerId).collect {|site| [ site.name, site.id ] },  :style => 'width: 50px;'  %></td>
+  <td><%= f.select :site_id, Site.where("maxscheduler_id = ?", @maxschedulerId).collect {|site| [ site.name, site.id ] }, :style => 'width: 50px;'  %></td>
+  <td></td>
+  <td></td>
+  </tr>
+  <tr><td colspan=7><%= f.submit nil , :class => 'btn btn-primary'  %></td></tr>
+<% end %>
+
+</table><br><br>
+

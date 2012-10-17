@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></td>
+
+<td>
+  <b>Maxscheduler:</b>
+  <%= @operationhour.maxscheduler_id %>
+</td>
+
+<td>
+  <b>Site:</b>
+  <%= @operationhour.site_id %>
+</td>
+
+<td>
+  <b>Dayoftheweek:</b>
+  <%= @operationhour.dayOfTheWeek %>
+</td>
+
+<td>
+  <b>Start:</b>
+  <%= @operationhour.start %>
+</td>
+
+<td>
+  <b>End:</b>
+  <%= @operationhour.end %>
+</td>
+
+
+<%= link_to 'Edit', edit_operationhour_path(@operationhour) %> |
+<%= link_to 'Back', operationhours_path %>

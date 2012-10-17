@@ -1,0 +1,77 @@
+<h1>Editing importdatum</h1>
+
+<%= form_for(@importdatum) do |f| %>
+  <% if @importdatum.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@importdatum.errors.count, "error") %> prohibited this importdatum from being saved:</h2>
+
+      <ul>
+      <% @importdatum.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
+  <%= f.hidden_field :site_id, :value => @siteId %>
+  <%= f.hidden_field :user_id, :value => current_user.id %>
+  <div class="field" style="clear:both;">
+    <%= f.label :data %><br />
+    <%= f.text_area :data, :rows => "12", :cols => "300" %>
+  </div> 
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+<!--Build an HTML table that holds the validated import data -->
+
+<%
+@attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
+@numberOfAttributes = @attributes.size
+@tableString = "<table border=1><tr>"
+
+@attributes.each do | attr |
+  @tableString = @tableString + "<td>" + attr.name.to_s + "</td>"
+end
+@tableString = @tableString + "</tr>"
+
+#Pull in import data and parse out to a form
+require 'csv'    
+csv = CSV.parse(@importdatum.data, :headers => false)
+@rowCounter = 1
+csv.each do | rowAry |    
+  @colCounter = 1
+    rowAry.each do | entry |
+      @tableString = @tableString + "<td><input name=importdatum[" + @rowCounter.to_s + @colCounter.to_s  + "] 
+                    value=" + entry + " type=text></td>"
+      @colCounter = @colCounter + 1
+    end
+  @tableString = @tableString + "</tr>"
+  @rowCounter = @rowCounter + 1
+end
+@tableString = @tableString + "</table>"
+%>
+
+
+<%= form_for(@importdatum) do |f| %>
+  <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
+  <%= f.hidden_field :site_id, :value => @siteId %>
+  <%= f.hidden_field :user_id, :value => current_user.id %>
+  <input name=importdatum[numberOfImportedRows] value="<%= (@rowCounter - 1).to_s %>" type="hidden">
+
+<%=raw @tableString %>
+
+<div class="actions">
+    <%= f.submit %>
+</div>
+<% end %>
+
+Number Of colums <%=raw @numberOfAttributes %>
+
+<br>
+
+<%= link_to 'Show', @importdatum %> |
+<%= link_to 'Back', importdata_path %>

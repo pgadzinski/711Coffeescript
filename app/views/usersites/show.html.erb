@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></td>
+
+<td>
+  <b>Maxscheduler:</b>
+  <%= @usersite.maxscheduler_id %>
+</td>
+
+<td>
+  <b>Site:</b>
+  <%= @usersite.site_id %>
+</td>
+
+<td>
+  <b>User:</b>
+  <%= @usersite.user_id %>
+</td>
+
+
+<%= link_to 'Edit', edit_usersite_path(@usersite) %> |
+<%= link_to 'Back', usersites_path %>
