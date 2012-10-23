@@ -54,7 +54,7 @@ class SchedulerController < ApplicationController
       @boards.each do |board|
         @numOfResources = Resource.where("board_id= 2").count
         @colWidth = 1000/@numOfResources
-        @boardResourceAry = @boardResourceAry + '"' + 'Board' +  board.id.to_s + '":['
+        @boardResourceAry = @boardResourceAry + '"' + board.name.to_s + '":['
         @boardResourceAry = @boardResourceAry + '{"col_num":' + @numOfResources.to_s + ', "col_width": '+ @colWidth.to_s + '}, {'
             @resources.each do |resource|
                 if (board.id.to_s == resource.board_id)

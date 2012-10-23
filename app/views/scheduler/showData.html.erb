@@ -1,10 +1,9 @@
 <link type="text/css" rel="stylesheet" media="all" href="/object_style.css?body=1">
 
-<!--meta http-equiv="refresh" content="15; url=http://localhost:3000/scheduler/showData"--> 
+<!--meta http-equiv="refresh" content="15; url=http://localhost:80/scheduler/showData"--> 
 
 <html><head>
 
-<font color="blue">MaxScheduler:<%= @maxschedulerId.inspect %>, Site:<%= @siteId.inspect %>, Board:<%= @boardId.inspect %> </font>
 Sites: <% @sites.each do |site| %><a href="/users/setSite/<%= site.id %>"><%= site.name %></a>&nbsp;&nbsp;<% end %> &nbsp;&nbsp;&nbsp;&nbsp;
 Boards: <% @boards.each do |board| %><a href="/users/setBoard/<%= board.id %>"><%= board.name %></a>&nbsp;&nbsp;<% end %> 
 
@@ -37,7 +36,7 @@ var MXS_field_widths = {
 </script>
 
 </head><body>
-		<div id="root"></div></div><div id="hidden"></div><form id="load_form" name="ref_form" action="http://localhost:3000/scheduler/showData">	
+		<div id="root"></div></div><div id="hidden"></div><form id="load_form" name="ref_form" action="http://localhost/scheduler/showData">	
 		</form></body></html>
 
 

@@ -9,10 +9,11 @@ class AttributesController < ApplicationController
       @maxschedulerId = current_user.maxscheduler_id
       @siteId = current_user.currentSite
       @boardId = current_user.currentBoard
+      @configurationScreen = true
   end  
 
-  def index
-    @attributes = Attribute.all
+  def index    
+    @attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
     @attribute = Attribute.new
 
     respond_to do |format|

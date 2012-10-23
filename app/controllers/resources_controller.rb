@@ -9,10 +9,11 @@ class ResourcesController < ApplicationController
       @maxschedulerId = current_user.maxscheduler_id
       @siteId = current_user.currentSite
       @boardId = current_user.currentBoard
+      @configurationScreen = true
   end  
     
   def index
-    @resources = Resource.all
+    @resources = Resource.where("maxscheduler_id = ?", @maxschedulerId)
     @resource = Resource.new
 
     respond_to do |format|

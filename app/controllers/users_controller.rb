@@ -8,6 +8,7 @@ class UsersController < ApplicationController
       @maxschedulerId = current_user.maxscheduler_id
       @siteId = current_user.currentSite
       @boardId = current_user.currentBoard
+      @configurationScreen = true
   end  
 
   #Method to set the Site for a user and store value in the database. Done because session cookies weren't reliable
@@ -30,7 +31,7 @@ class UsersController < ApplicationController
     @maxschedulerId = current_user.maxscheduler_id
     @siteId = session[:site]
     @boardId = session[:board]
-    @users = User.all
+    @users = User.where("maxscheduler_id = ?", @maxschedulerId)
     @user = User.new
 
     respond_to do |format|
@@ -75,9 +76,9 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
 	       sign_in @user
-        flash[:success] = "Welcome to the Sample App!"
+        flash[:success] = "Welcome to MaxSchedulerWeb"
 	       format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render json: @user, status: :created, location: @user }
+         format.json { render json: @user, status: :created, location: @user }
       else
         format.html { render action: "new" }
         format.json { render json: @user.errors, status: :unprocessable_entity }

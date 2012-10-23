@@ -21,15 +21,16 @@
       <%= f.label :rowHeight %>
       <%= f.text_field :rowHeight %>
 <br><br>
+      <%= f.label :schedStartDate %>
+      <%= f.text_field :schedStartDate %>
+<br><br>
       <%= f.label :password %>
       <%= f.password_field :password %>
 <br><br>
       <%= f.label :password_confirmation, "Confirmation" %>
       <%= f.password_field :password_confirmation %>
 <br><br>
-      <%= f.label :maxscheduler_id %>
-      <%= f.text_field :maxscheduler_id %>
-<br><br>
+      <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
       <%= f.submit "Create my account", class: "btn btn-large btn-primary" %>
     <% end %>
   </div>

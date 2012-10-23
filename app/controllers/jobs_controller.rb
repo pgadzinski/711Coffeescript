@@ -12,7 +12,7 @@ class JobsController < ApplicationController
   # GET /jobs
   # GET /jobs.json
   def index
-    @jobs = Job.where("maxscheduler_id = ? and site_id = ?", @maxschedulerId, @siteId)
+    @jobs = Job.where("maxscheduler_id = ?", @maxschedulerId)
     @attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
 
     respond_to do |format|
@@ -46,6 +46,7 @@ class JobsController < ApplicationController
   # GET /jobs/1/edit
   def edit
     @job = Job.find(params[:id])
+    @attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
   end
 
   # POST /jobs

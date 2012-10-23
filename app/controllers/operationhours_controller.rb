@@ -9,10 +9,11 @@ class OperationhoursController < ApplicationController
       @maxschedulerId = current_user.maxscheduler_id
       @siteId = current_user.currentSite
       @boardId = current_user.currentBoard
+      @configurationScreen = true
   end  
 
   def index
-    @operationhours = Operationhour.all
+    @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
     @operationhour = Operationhour.new
 
     respond_to do |format|

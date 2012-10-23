@@ -1,5 +1,11 @@
 class SessionsController < ApplicationController
 
+  before_filter :getscheduleparameters
+
+  def getscheduleparameters
+      @configurationScreen = false
+  end  
+
   def new
      @title = "Sign in"
   end
@@ -9,8 +15,8 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       session[:maxscheduler] = user.maxscheduler_id
       sign_in user
-      redirect_to user
-      #redirect_to '/scheduler/showData'
+      #redirect_to user
+      redirect_to '/scheduler/showData'
 
     else
       flash.now[:error] = 'Invalid email/password combination'

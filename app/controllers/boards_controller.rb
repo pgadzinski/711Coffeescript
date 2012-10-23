@@ -9,6 +9,7 @@ class BoardsController < ApplicationController
       @maxschedulerId = current_user.maxscheduler_id
       @siteId = current_user.currentSite
       @boardId = current_user.currentBoard
+      @configurationScreen = true
   end  
   
   def test
@@ -27,7 +28,7 @@ class BoardsController < ApplicationController
   end
   
   def index
-    @boards = Board.all
+    @boards = Board.where("maxscheduler_id = ?", @maxschedulerId)
     @board = Board.new
 
     respond_to do |format|

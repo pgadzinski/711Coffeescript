@@ -9,6 +9,7 @@ class SitesController < ApplicationController
       @maxschedulerId = current_user.maxscheduler_id
       @siteId = current_user.currentSite
       @boardId = current_user.currentBoard
+      @configurationScreen = true
   end  
 
   def set
@@ -21,7 +22,7 @@ class SitesController < ApplicationController
   end
 
   def index    
-    @sites = Site.all
+    @sites = Site.where("maxscheduler_id = ?", @maxschedulerId)
     @site = Site.new
 
     respond_to do |format|

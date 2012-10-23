@@ -1,8 +1,8 @@
-<h1>Listing resources</h1>
-
-Sdata <%= @maxschedulerr%><br><br>
-
-
+<h1>Listing of Resources</h1>
+<br>
+<b>Screen for setting up resources that you will be assiging jobs to. For example, jobs will be assigned to Machines 1 and Machines 2. </b>
+<br>
+<br>
 <table class="table table-striped table-bordered table-condensed">
   <tr>
     <th>Name</th>
@@ -43,7 +43,7 @@ Sdata <%= @maxschedulerr%><br><br>
 
   <tr>
   <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
-  <td><%= f.text_field :name, :style => 'width: 50px;'  %></td>
+  <td><%= f.text_field :name, :style => 'width: 150px;'  %></td>
   <td><%= f.number_field :position, :style => 'width: 50px;'  %></td>
   <td><%= f.select :board_id, Board.where("maxscheduler_id = ?", @maxschedulerId).collect {|site| [ site.name, site.id ] },  :style => 'width: 50px;'  %></td>
   <td><%= f.select :site_id, Site.where("maxscheduler_id = ?", @maxschedulerId).collect {|site| [ site.name, site.id ] }, :style => 'width: 50px;'  %></td>

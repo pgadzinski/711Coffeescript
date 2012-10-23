@@ -46,7 +46,7 @@ csv.each do | rowAry |
   @colCounter = 1
     rowAry.each do | entry |
       @tableString = @tableString + "<td><input name=importdatum[" + @rowCounter.to_s + @colCounter.to_s  + "] 
-                    value=" + entry + " type=text></td>"
+                    value=" + entry.to_s + " type='text'></td>"
       @colCounter = @colCounter + 1
     end
   @tableString = @tableString + "</tr>"

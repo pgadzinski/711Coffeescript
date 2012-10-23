@@ -1,5 +1,8 @@
-<h1>Listing users</h1>
-
+<h1>Listing of Users</h1>
+<br>
+<b>Screen for setting up different user accounts for access to MaxScheduler. </b>
+<br>
+<br>
 <table class="table table-striped table-bordered table-condensed">
   <tr>
     <th>Firstname</th>
@@ -7,8 +10,7 @@
     <th>Email</th>
     <th>Color</th>
     <th>Rowheight</th>
-    <th>Current Site</th>
-    <th>Current Board</th>
+    <th>Schedule start date</th>
     <th>Password</th>
     <th>Confirmation</th>
     <th></th>
@@ -22,12 +24,11 @@
     <td><%= user.email %></td>
     <td><%= user.color %></td>
     <td><%= user.rowHeight %></td>
-    <td><%= user.currentSite %></td>
-    <td><%= user.currentBoard %></td>
+    <td><%= user.schedStartDate %></td>
     <td></td>
     <td></td>
     <td><%= link_to 'Edit', edit_user_path(user), :class => 'btn btn-info'  %></td>
-    <td><%= link_to 'Destroy', user, :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= link_to 'Delete', user, :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 
@@ -53,8 +54,7 @@
     <td><%= f.text_field :email, :style => 'width: 150px;' %></td>
     <td><%= f.text_field :color , :style => 'width: 100px;'%></td>
     <td><%= f.number_field :rowHeight, :style => 'width: 50px;' %></td>
-    <td><%= f.number_field :currentSite, :style => 'width: 50px;' %></td>
-    <td><%= f.number_field :currentBoard, :style => 'width: 50px;' %></td>
+    <td><%= f.text_field :schedStartDate, :style => 'width: 50px;' %></td>
     <td><%= f.password_field :password, :style => 'width: 100px;' %></td>
     <td><%= f.password_field :password_confirmation, :style => 'width: 100px;' %></td>
   	<td></td>

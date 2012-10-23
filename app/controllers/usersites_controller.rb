@@ -9,10 +9,11 @@ class UsersitesController < ApplicationController
       @maxschedulerId = current_user.maxscheduler_id
       @siteId = current_user.currentSite
       @boardId = current_user.currentBoard
+      @configurationScreen = true
   end  
 
   def index
-    @usersites = Usersite.all
+    @usersites = Usersite.where("maxscheduler_id = ?", @maxschedulerId)
 
     respond_to do |format|
       format.html # index.html.erb

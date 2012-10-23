@@ -7,10 +7,9 @@
     <th></th>
 	<% @attributes.each do |attr| %>
     	<% if attr.name %>
-	    	<th><b><%= attr.name %></b></th>   
+	    	<th><font size=4><%= attr.name %></font></th>   
     	<% end %>
 	<% end %> <!--attributeLoop -->
-    <th>Maxscheduler</th>
     <th>Site</th>
     <th>User</th>
     <th>Resource</th>
@@ -23,15 +22,15 @@
 <tr>
   	<td><%= link_to 'Show', job, :class => 'btn btn-info'  %></td>
     <td><%= link_to 'Edit', edit_job_path(job), :class => 'btn btn-info'  %></td>
-    <td><%= link_to 'Destroy', job, :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
-	<% @attributes.each do |attr| %>
+    <td><%= link_to 'Delete', job, :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
+	<!--attributeLoop -->
+    <% @attributes.each do |attr| %>
     	<% if attr.name %>
     	<% @x = "attr"+i.to_s %>
     	<td><%= job[@x] %></td>   
     	<% i=i+1 %>
     	<% end %>
-	<% end %> <!--attributeLoop -->
-    <td><%= job.maxscheduler_id %></td>
+	<% end %> 
     <td><%= job.site_id %></td>
     <td><%= job.user_id %></td>
     <td><%= job.resource_id %></td>

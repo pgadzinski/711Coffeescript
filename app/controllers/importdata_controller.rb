@@ -12,7 +12,7 @@ class ImportdataController < ApplicationController
   # GET /importdata
   # GET /importdata.json
   def index
-    @importdata = Importdatum.all
+    @importdata = Importdatum.where("maxscheduler_id = ?", @maxschedulerId)
 
     respond_to do |format|
       format.html # index.html.erb

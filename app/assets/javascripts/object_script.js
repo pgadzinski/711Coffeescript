@@ -357,10 +357,10 @@ function Board_bar(){
 			'position':'absolute',
 			'top': 0,
 			'width': (MXS_table_data.table_width + 21),
-			'height': '36px',
+			'height': '1px',
 			'border': '2px solid #f8fafb',
 			'background': 'transparent',
-			'line-height': '36px', 
+			'line-height': '1px', 
 			'border-radius': '10px 10px 0 0',
 	
 		});
@@ -429,7 +429,7 @@ function Schedule(board){
 	this.set_css = function(){		
 		$("#schedule_container").css({
 			'position': 'absolute',
-			'top':42,
+			'top':10,
 			'height': '600px',
 			'width': (MXS_table_data.table_width +25),
 			'overflow': 'scroll',
@@ -1241,23 +1241,23 @@ function makejob(){
 	{
 		case "move_on_board":
 			//msg = "utf8=%E2%9C%93&job[maxscheduler_id]=1&job[site_id]=1&job[user_id]=1&job[resource_id]="+job.lane+"&job[schedDate]=2012-09-26 10:00:00&job[schedTime]="+job.top+"&commit=Update+Job"
-			msg = "utf8=%E2%9C%93&job[maxscheduler_id]=1&job[site_id]=1&job[user_id]=1&job[resource_id]="+job.lane+"&job[schedPixelVal]="+job.top+"&commit=Update+Job"
+			msg = "utf8=%E2%9C%93&job[resource_id]="+job.lane+"&job[schedPixelVal]="+job.top+"&commit=Update+Job"
 			break;
 
 		case "drop_to_board":
 			//msg = "shipID="+id+"&boardName="+job.board+"&lane="+job.lane+"&y="+job.top+"&path="+action;
-			msg = "utf8=%E2%9C%93&job[maxscheduler_id]=1&job[site_id]=1&job[user_id]=1&job[resource_id]="+job.lane+"&job[schedPixelVal]="+job.top+"&commit=Update+Job"
+			msg = "utf8=%E2%9C%93&job[resource_id]="+job.lane+"&job[schedPixelVal]="+job.top+"&commit=Update+Job"
 			break;
 
 		case "drop_to_listview":
 			//msg = "shipID="+id+"&path="+action;
-			msg = "utf8=%E2%9C%93&job[maxscheduler_id]=1&job[site_id]=1&job[user_id]=1&job[resource_id]=none&job[schedPixelVal]=0&commit=Update+Job"
+			msg = "utf8=%E2%9C%93&job[resource_id]=none&job[schedPixelVal]=0&commit=Update+Job"
 			break;
 
 		case "update_data":
 			//msg = "shipID="+id+data+"&path="+action+"&commit=Update+Job";
 			//msg = "utf8=%E2%9C%93&job%5Bmaxscheduler_id%5D=1&job%5Bsite_id%5D=1&job%5Buser_id%5D=1&job%5Bresource_id%5D=1&job%5BschedDate%5D=&job%5BschedTime%5D=&job%5Battr1%5D="+id+"&job%5Battr2%5D=FeliksFeliksMinidata&job%5Battr3%5D=blue&job%5Battr4%5D=blue&job%5Battr5%5D=blue&job%5Battr6%5D=fdafdsa&job%5Battr7%5D=fdafdsa&job%5Battr8%5D=fdafdsa&job%5Battr9%5D=&job%5Battr10%5D=&job%5Battr11%5D=&job%5Battr12%5D=&job%5Battr13%5D=&job%5Battr14%5D=&job%5Battr15%5D=&job%5Battr16%5D=&job%5Battr17%5D=&job%5Battr18%5D=&job%5Battr19%5D=&job%5Battr20%5D=&job%5Battr21%5D=&job%5Battr22%5D=&job%5Battr23%5D=&job%5Battr24%5D=&job%5Battr25%5D=&job%5Battr26%5D=&job%5Battr27%5D=&job%5Battr28%5D=&job%5Battr29%5D=&job%5Battr30%5D=&commit=Update+Job"
-			msg = "utf8=%E2%9C%93&job[maxscheduler_id]=1&job[site_id]=1&job[user_id]=1&job[resource_id]="+job.lane+"&job[schedPixelVal]="+job.top+"&"+ data +"&commit=Update+Job"
+			msg = "utf8=%E2%9C%93&job[resource_id]="+job.lane+"&job[schedPixelVal]="+job.top+"&"+ data +"&commit=Update+Job"
 			break;	
 
 		default: 
