@@ -1292,14 +1292,14 @@ function makejob(){
 //refresh method - can't use AJAX because it catches the response
 
 $(document).ready(function(){
-	var t = setTimeout("$.fn.self_update()", 300000);	
+	var t = setTimeout("$.fn.self_update()", 30000);	
 
 });
 
 (function($){
 	$.fn.self_update = function(){
-
-		document.forms["load_form"].submit();	
+		window.location.reload();
+		//document.forms["load_form"].submit();	
 		
 	};
 })(jQuery);
