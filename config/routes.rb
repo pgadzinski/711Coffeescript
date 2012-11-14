@@ -2,8 +2,6 @@ Maxschedulerweb::Application.routes.draw do
 
   resources :importdata
 
-  resources :import_data
-
   root :to => 'sessions#new'
   
   resources :resources
@@ -26,6 +24,9 @@ Maxschedulerweb::Application.routes.draw do
   get "scheduler/showData"
   
   match '/test', to: 'boards#test'
+
+  match '/importdata/:id/review', to: 'importdata#review'
+  match '/importdata/:id/createjobs', to: 'importdata#createjobs'
   
   match '/jobs/update/:id', to: 'jobs#async_update'
   

@@ -26,52 +26,5 @@
 <% end %>
 
 
-<!--Build an HTML table that holds the validated import data -->
-
-<%
-@attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
-@numberOfAttributes = @attributes.size
-@tableString = "<table border=1><tr>"
-
-@attributes.each do | attr |
-  @tableString = @tableString + "<td>" + attr.name.to_s + "</td>"
-end
-@tableString = @tableString + "</tr>"
-
-#Pull in import data and parse out to a form
-require 'csv'    
-csv = CSV.parse(@importdatum.data, :headers => false)
-@rowCounter = 1
-csv.each do | rowAry |    
-  @colCounter = 1
-    rowAry.each do | entry |
-      @tableString = @tableString + "<td><input name=importdatum[" + @rowCounter.to_s + @colCounter.to_s  + "] 
-                    value=" + entry.to_s + " type='text'></td>"
-      @colCounter = @colCounter + 1
-    end
-  @tableString = @tableString + "</tr>"
-  @rowCounter = @rowCounter + 1
-end
-@tableString = @tableString + "</table>"
-%>
-
-
-<%= form_for(@importdatum) do |f| %>
-  <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
-  <%= f.hidden_field :site_id, :value => @siteId %>
-  <%= f.hidden_field :user_id, :value => current_user.id %>
-  <input name=importdatum[numberOfImportedRows] value="<%= (@rowCounter - 1).to_s %>" type="hidden">
-
-<%=raw @tableString %>
-
-<div class="actions">
-    <%= f.submit %>
-</div>
-<% end %>
-
-Number Of colums <%=raw @numberOfAttributes %>
-
-<br>
-
 <%= link_to 'Show', @importdatum %> |
 <%= link_to 'Back', importdata_path %>

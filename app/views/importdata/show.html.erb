@@ -23,20 +23,3 @@
 
 <%= link_to 'Edit', edit_importdatum_path(@importdatum) %> |
 <%= link_to 'Back', importdata_path %>
-
-<%
-require 'csv'    
-csv = CSV.parse(@importdatum.data, :headers => true)
-
-resultString = ''
-
-csv.each do |row|	  
-  row = row.to_s
-  resultString = resultString + row + "<br>"
-end
-
-%>
-
-<br><br>
-
-<%=raw resultString %>

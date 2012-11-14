@@ -31,6 +31,44 @@ class ImportdataController < ApplicationController
     end
   end
 
+  # GET /importdata/1/edit
+  def review
+    @importdatum = Importdatum.find(params[:id])
+
+  end
+
+  # GET /importdata/1/edit
+  def createjobs
+    @importdata = Importdatum.where("maxscheduler_id = ?", @maxschedulerId)
+    
+    @importdatum = Importdatum.find(params[:id])
+
+    #Pull in import data and parse out to a form
+    require 'csv'    
+    csv = CSV.parse(@importdatum.data, {:headers => false, :col_sep => "," } )
+    @rowCounter = 1
+    csv.each do | rowAry |    
+      @colCounter = 1
+      @job = Job.new(params[:job])
+        rowAry.each do | entry |
+          @job.attr1 = "1"
+          @job.attr2 = "2"
+          @job.attr3 = "3"
+          @job.attr4 = "4"
+          @job.attr5 = "5"
+          @colCounter = @colCounter + 1
+        end
+      @job.save
+      @rowCounter = @rowCounter + 1
+    end
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @importdata }
+    end
+
+  end  
+
   # GET /importdata/new
   # GET /importdata/new.json
   def new
@@ -69,33 +107,6 @@ class ImportdataController < ApplicationController
   def update
     @importdatum = Importdatum.find(params[:id])
     
-    binding.pry
-    
-    @requestHash = params["importdatum"]
-
-    #Re-assemble the data for the import file to support editing the parsed out data
-    @numberOfImportedRows = @requestHash["numberOfImportedRows"]
-    @attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
-    @numberOfAttributes = @attributes.size
-
-    @rebuiltImportString = ""
-
-    for @row in 1..(@numberOfImportedRows.to_i)
-      for @col in 1..(@numberOfAttributes.to_i)
-        @position = @row.to_s + @col.to_s
-        @rebuiltImportString = @rebuiltImportString + @requestHash[@position] + ","
-        @requestHash.delete(@position) 
-      end
-      @rebuiltImportString = @rebuiltImportString + "\n"  
-    end
-
-    @requestHash.delete("numberOfImportedRows")
-    @mergedHash = @requestHash.merge("data" => @rebuiltImportString)
-
-    params["importdatum"] = @mergedHash
-
-    binding.pry
-
     respond_to do |format|
       if @importdatum.update_attributes(params[:importdatum])
         format.html { redirect_to @importdatum, notice: 'Importdatum was successfully updated.' }
