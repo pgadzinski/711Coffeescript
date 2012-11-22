@@ -40,24 +40,31 @@ class ImportdataController < ApplicationController
   # GET /importdata/1/edit
   def createjobs
     @importdata = Importdatum.where("maxscheduler_id = ?", @maxschedulerId)
-    
     @importdatum = Importdatum.find(params[:id])
+    attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
 
     #Pull in import data and parse out to a form
     require 'csv'    
     csv = CSV.parse(@importdatum.data, {:headers => false, :col_sep => "," } )
     @rowCounter = 1
     csv.each do | rowAry |    
-      @colCounter = 1
+      colCounter = 1
       @job = Job.new(params[:job])
-        rowAry.each do | entry |
-          @job.attr1 = "1"
-          @job.attr2 = "2"
-          @job.attr3 = "3"
-          @job.attr4 = "4"
-          @job.attr5 = "5"
-          @colCounter = @colCounter + 1
-        end
+      @job.maxscheduler_id = @maxschedulerId
+      @job.site_id = @siteId
+      @job.user_id = current_user.id
+      @job.resource_id = "none"
+      @job.schedPixelVal = "0"
+
+      attributes.each do |attr|
+          if attr.name
+              @x = "attr" + colCounter.to_s
+              @job[@x] = rowAry[colCounter - 1]
+              colCounter = colCounter + 1
+              binding.pry
+          end 
+      end  
+
       @job.save
       @rowCounter = @rowCounter + 1
     end
