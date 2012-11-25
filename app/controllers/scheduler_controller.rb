@@ -1,5 +1,5 @@
 class SchedulerController < ApplicationController
-  include Sdata
+  #include Sdata
   before_filter :getscheduleparameters
 
   def getscheduleparameters
@@ -39,7 +39,6 @@ class SchedulerController < ApplicationController
       #Careful that unscheduled jobs don't have board set yet
 
       @attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
-
       @operationhours = Operationhour.where("maxscheduler_id = ? and site_id = ?", @maxschedulerId, @siteId)
 
       @sites = Site.where("maxscheduler_id = ?", @maxschedulerId)

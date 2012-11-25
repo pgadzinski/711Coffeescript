@@ -1,7 +1,7 @@
 class BoardsController < ApplicationController
   # GET /boards
   # GET /boards.json
-  include Sdata
+  #include Sdata
   
   before_filter :getscheduleparameters
 

@@ -6,7 +6,7 @@
 
 Sites: <% @sites.each do |site| %><a href="/users/setSite/<%= site.id %>"><%= site.name %></a>&nbsp;&nbsp;<% end %> &nbsp;&nbsp;&nbsp;&nbsp;
 Boards: <% @boards.each do |board| %><a href="/users/setBoard/<%= board.id %>"><%= board.name %></a>&nbsp;&nbsp;<% end %> 
-
+<script type ="text/javascript" src="./object_script.js"></script>
 <script type="text/javascript">
 
 //JavaScrip array built to hold job data
@@ -25,12 +25,12 @@ var MXS_table_data =
 var MXS_url = "http://localhost:3000/scheduler/showData";
 var MXS_posting_url = "http://localhost:3000";
 var MXS_field_widths = {
-	"id": 30,
-	"JobNum": 70,
-	"Cust": 50, 
-	"PNum": 70,
-	"Color": 40,
-	"Addr": 70,
+	"id": 50,
+	"JobNum": 200,
+	"Cust": 200, 
+	"PNum": 200,
+	"Color": 200,
+	"Addr": 300,
 }
 
 </script>

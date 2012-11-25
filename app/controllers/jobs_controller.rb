@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  include Sdata
+  #include Sdata
   
   before_filter :getscheduleparameters
 

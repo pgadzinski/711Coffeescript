@@ -88,7 +88,7 @@ function Job(id, location, board, lane, top, width, height, stats){
 		} 
 		else if(this.location =='listview'){
 			var lv_jobs= "";
-			lv_jobs+="<div class='lv_job' id='"+this.id+"'></div>";
+			lv_jobs+="<div class='lv_job' id='"+this.id+"'><div class='lv_job_wrapper'></div></div>";
 			$("#list_view").append(lv_jobs);
 			this.set_text();
 		}
@@ -171,6 +171,7 @@ function Job(id, location, board, lane, top, width, height, stats){
 				'height':30,
 				'width': (MXS_table_data.table_width +15),
 				'margin':'5px',
+
 				//'border': '1px solid black',
 				'background':'White',
 				'overflow' : 'hidden',
@@ -206,25 +207,25 @@ function Job(id, location, board, lane, top, width, height, stats){
 			});
 
 			//console.log(string);
-			$("#"+this.id).html(string);
+			$("#"+this.id).find(".lv_job_wrapper").html(string);
 
 			//set css for all job fields within newly minted job
 			//has to stay generic (for some reason)
-			$(".lvjob_data_field").css({
-				'position':'relative',
-				'display':'inline-table',
-				'margin':'0 45px 0 0',
-				'padding':'0 5 0 5',
-				'font-size':'1.5em',
-				'overflow':'hidden',	
-			});
+			// $(".lvjob_data_field").css({
+			// 	'position':'relative',
+			// 	'display':'inline-table',
+			// 	'margin':'0 45px 0 0',
+			// 	'padding':'0 5 0 5',
+			// 	'font-size':'1.5em',
+			// 	'overflow':'hidden',	
+			// });
 			//console.log(MXS_field_widths[this.id]);
 			//console.log(this.id);
 			//console.log(sd.width_arr);
 
-			$.each(this.stats, function(key){
-				console.log(key);
-				$("#"+key+".lvjob_data_field").width(MXS_field_widths[key]);						
+			$.each(MXS_field_widths, function(key, val){
+				console.log(key + " : " + val);
+				$("#"+key+".lvjob_data_field").width(MXS_field_widths[key]-2);						
 			})
 
 			/*
@@ -430,7 +431,7 @@ function Schedule(board){
 		$("#schedule_container").css({
 			'position': 'absolute',
 			'top':10,
-			'height': '600px',
+			'height': '330px',
 			'width': (MXS_table_data.table_width +25),
 			'overflow': 'scroll',
 		});
@@ -635,7 +636,7 @@ function LV_sorter(){
 	this.fields = [];
 	
 	this.create_sorter = function(){
-		var sorter = "<div id='list_view_sorter'>Sort</div>";
+		var sorter = "<div id='list_view_sorter'><div id='lvs_wrapper'></div></div>";
 		$("#root").append(sorter);
 
 	}
@@ -671,7 +672,7 @@ function LV_sorter(){
 			field_string+="<div id='"+self.fields[i]+"' class='field'>"+self.fields[i]+"</div>";
 		}
 	
-		$("#list_view_sorter").html(field_string);
+		$("#lvs_wrapper").html(field_string);
 
 	}
 	
@@ -689,27 +690,28 @@ function LV_sorter(){
 
 		//sets it for the fields too
 		$(".field").css({
-			'position':'relative',
-			'display':'inline',
+			//'position':'relative',
+			//'display':'inline',
 			//'margin':'0 15 0 15',
 			//'margin': '3 0 3 0',
 			//'padding':'0 5 0 5',
-			'height':'36px',
+			//'height':'36px',
 			//'line-height':'28px',
-			'font-size':'1.2em',
-			'border':'1px solid black', //#e5e5e5
-			'cursor':'default',
-			'border-radius': '5px',
+			//'font-size':'1.2em',
+			//'border':'1px solid black', //#e5e5e5
+			//'cursor':'default',
+			//'border-radius': '5px',
 			
 		});
 
+		
 		$.each(MXS_field_widths, function(key, val){
 			$("#"+key+".field").css({
 				'width': val
 			})
 
 		});
-
+		
 		/*
 
 		var field_offset = 36 + 55; //needs +6 

@@ -1,7 +1,7 @@
 class AttributesController < ApplicationController
   # GET /attributes
   # GET /attributes.json
-  include Sdata
+  #include Sdata
   
   before_filter :getscheduleparameters
 

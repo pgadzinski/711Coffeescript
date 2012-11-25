@@ -1,7 +1,7 @@
 class ResourcesController < ApplicationController
   # GET /resources
   # GET /resources.json  
-  include Sdata
+  #include Sdata
   
   before_filter :getscheduleparameters
 

@@ -1,7 +1,7 @@
 class UsersitesController < ApplicationController
   # GET /usersites
   # GET /usersites.json
-  include Sdata
+  # include Sdata
   
   before_filter :getscheduleparameters
 

@@ -1,7 +1,7 @@
 class OperationhoursController < ApplicationController
   # GET /operationhours
   # GET /operationhours.json
-  include Sdata
+  #include Sdata
   
   before_filter :getscheduleparameters
 

@@ -12,17 +12,17 @@ gem 'rails', '3.2.1'
 group :development, :test do
   gem 'sqlite3'
 end
-group :production do
-  gem 'pg'
-end
+#group :production do
+#  gem 'pg'
+#end
 
-gem 'pry', :group => :development
+#gem 'pry', :group => :development
 
-group :test, :development do
-  gem 'rspec-rails'
-  gem 'capybara'
-  gem 'webrat'
-end
+#group :test, :development do
+  #gem 'rspec-rails'
+  #gem 'capybara'
+ # gem 'webrat'
+#end
 
 
 # Gems used only for assets and not required

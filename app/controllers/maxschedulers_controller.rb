@@ -1,7 +1,7 @@
 class MaxschedulersController < ApplicationController
   # GET /maxschedulers
   # GET /maxschedulers.json
-  include Sdata
+  #include Sdata
   
   before_filter :getscheduleparameters
 

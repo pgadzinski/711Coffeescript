@@ -1,7 +1,7 @@
 class SitesController < ApplicationController
   # GET /sites
   # GET /sites.json
-  include Sdata
+  # include Sdata
   
   before_filter :getscheduleparameters
 
