@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Maxschedulerweb</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+  <![endif]-->
+  <link href="/assets/application.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/dataTables/jquery.dataTables.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/attributes.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/boards.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/bootstrap-responsive.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/bootstrap.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/importdata.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/jobs.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/maxschedulers.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/operationhours.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/resources.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/scaffolds.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/scheduler.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/sessions.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/sites.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/users.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/usersites.css?body=1" media="all" rel="stylesheet" type="text/css" />
+  <script src="/assets/jquery.js?body=1" type="text/javascript"></script>
+<script src="/assets/jquery_ujs.js?body=1" type="text/javascript"></script>
+<script src="/assets/attributes.js?body=1" type="text/javascript"></script>
+<script src="/assets/boards.js?body=1" type="text/javascript"></script>
+<script src="/assets/bootstrap-dropdown.js?body=1" type="text/javascript"></script>
+<script src="/assets/dropdowntabs.js?body=1" type="text/javascript"></script>
+<script src="/assets/importdata.js?body=1" type="text/javascript"></script>
+<script src="/assets/jobs.js?body=1" type="text/javascript"></script>
+<script src="/assets/library/jquery-1.6.4.js?body=1" type="text/javascript"></script>
+<script src="/assets/library/jquery-ui-1.8.16.custom.min.js?body=1" type="text/javascript"></script>
+<script src="/assets/library/jquery.corner.js?body=1" type="text/javascript"></script>
+<script src="/assets/maxschedulers.js?body=1" type="text/javascript"></script>
+<script src="/assets/object_script.js?body=1" type="text/javascript"></script>
+<script src="/assets/operationhours.js?body=1" type="text/javascript"></script>
+<script src="/assets/resources.js?body=1" type="text/javascript"></script>
+<script src="/assets/scheduler.js?body=1" type="text/javascript"></script>
+<script src="/assets/sessions.js?body=1" type="text/javascript"></script>
+<script src="/assets/sites.js?body=1" type="text/javascript"></script>
+<script src="/assets/users.js?body=1" type="text/javascript"></script>
+<script src="/assets/usersites.js?body=1" type="text/javascript"></script>
+<script src="/assets/application.js?body=1" type="text/javascript"></script>
+  <meta content="authenticity_token" name="csrf-param" />
+<meta content="ZZZrHXk2HEH+siq6eXEWCUPfnN5LY2/BEMzj6weDg4s=" name="csrf-token" />
+</head>
+<body>
+
+    <div class="navbar">
+    <div class="navbar-inner">
+    <a class="brand" href="#">MaxScheduler</a>
+    <ul class="nav">
+ 				
+ 				        <li><a href="/scheduler/showData">Scheduler</a>
+                <li><a href="/importdata">Import data</a>
+                <li><a href="/jobs">Jobs</a>
+                <li><a href="/sites">Configuration</a>
+                <li><a href="/users/1">User</a>
+                <li>
+                  <a href="/signout" data-method="delete" rel="nofollow">Sign out</a>
+
+          		
+    </ul>
+    </div>
+    </div>
+    
+
+
+<div class="container">
+   
+</div>
+
+  <link type="text/css" rel="stylesheet" media="all" href="/object_style.css?body=1">
+
+<!--meta http-equiv="refresh" content="15; url=http://localhost:80/scheduler/showData"--> 
+
+<html><head>
+
+Sites: <a href="/users/setSite/1">East</a>&nbsp;&nbsp;<a href="/users/setSite/2">Building2</a>&nbsp;&nbsp;<a href="/users/setSite/3">Building3</a>&nbsp;&nbsp;<a href="/users/setSite/4">Building4</a>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+Boards: <a href="/users/setBoard/1">Board1</a>&nbsp;&nbsp;<a href="/users/setBoard/2">Board2</a>&nbsp;&nbsp;<a href="/users/setBoard/6">Board4</a>&nbsp;&nbsp; 
+
+<script type="text/javascript">
+
+//JavaScrip array built to hold job data
+var MXS_job_data = {"1":[ {"left":0, "top":49, "width":250 , "height":100, 
+        "location": "board", "board": "Board1", "lane": 1},{ "JobNum":"Peter","Cust":"Peter","PNum":"feliks","Color":"magenta","Addr":"red",} , {"some_date":"data"} ],"2":[ {"left":0, "top":153, "width":250 , "height":100, 
+        "location": "board", "board": "Board1", "lane": 2},{ "JobNum":"Peter11111","Cust":"Peter","PNum":"feliks","Color":"blue","Addr":"feliks",} , {"some_date":"data"} ],};
+
+var MXS_table_data = 
+{"table_width":1130 ,"fcol_width":120 , "rcol_width":385 ,"row_height":50 
+,"row_num":30 ,"header_height":18};
+
+//JavaScript array used to build the date/time column
+var date_array = ["09/27/2012 12:00AM","09/27/2012 02:00AM","09/27/2012 04:00AM","09/27/2012 06:00AM","09/27/2012 08:00AM","09/27/2012 10:00AM","09/27/2012 12:00PM","09/27/2012 02:00PM","09/27/2012 04:00PM","09/27/2012 06:00PM","09/27/2012 08:00PM","09/27/2012 10:00PM","09/28/2012 12:00AM","09/28/2012 02:00AM","09/28/2012 04:00AM","09/28/2012 06:00AM","09/28/2012 08:00AM","09/28/2012 10:00AM","09/28/2012 12:00PM","09/28/2012 02:00PM","09/28/2012 04:00PM","09/28/2012 06:00PM","09/28/2012 08:00PM","09/28/2012 10:00PM","09/29/2012 12:00AM","09/29/2012 02:00AM","09/29/2012 04:00AM","09/29/2012 06:00AM","09/29/2012 08:00AM","09/29/2012 10:00AM","09/29/2012 12:00PM",];
+
+//JavaScript array used to describe the Board and Resources
+var MXS_board_data = {"Board1":[{"col_num":4, "col_width": 250}, {"1":"Door1","2":"Door2","4":"Door3","5":"Door4", } ],"Board2":[{"col_num":4, "col_width": 250}, { } ],"Board6":[{"col_num":4, "col_width": 250}, { } ],};
+
+var MXS_url = "http://localhost:3000/scheduler/showData";
+var MXS_posting_url = "http://localhost:3000";
+var MXS_field_widths = {
+	"id": 30,
+	"JobNum": 70,
+	"Cust": 50, 
+	"PNum": 70,
+	"Color": 40,
+	"Addr": 70,
+}
+
+</script>
+
+</head><body>
+		<div id="root"></div></div><div id="hidden"></div><form id="load_form" name="ref_form" action="http://localhost/scheduler/showData">	
+		</form></body></html>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

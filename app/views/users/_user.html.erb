@@ -1,0 +1,29 @@
+<h1>Listing users</h1>
+
+<table>
+  <tr>
+    <th>Firstname</th>
+    <th>Lastname</th>
+    <th>Email</th>
+    <th>Color</th>
+    <th>Rowheight</th>
+    <th>Schedule start date</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @users.each do |user| %>
+  <tr>
+    <td><%= user.FirstName %></td>
+    <td><%= user.LastName %></td>
+    <td><%= user.email %></td>
+    <td><%= user.color %></td>
+    <td><%= user.rowHeight %></td>
+    <td><%= user.schedStartDate %></td>
+    <td><%= link_to 'Show', user %></td>
+    <td><%= link_to 'Edit', edit_user_path(user) %></td>
+    <td><%= link_to 'Destroy', user, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>

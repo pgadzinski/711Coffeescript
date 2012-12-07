@@ -1,0 +1,37 @@
+<h1>Editing attribute</h1>
+
+<%= form_for(@attribute) do |f| %>
+  <% if @attribute.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@attribute.errors.count, "error") %> prohibited this attribute from being saved:</h2>
+
+      <ul>
+      <% @attribute.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :importposition %><br />
+    <%= f.number_field :importposition %>
+  </div>
+  <div class="field">
+    <%= f.label :listposition %><br />
+    <%= f.number_field :listposition %>
+  </div>
+  <div class="field">
+    <%= f.label :scheduleposition %><br />
+    <%= f.number_field :scheduleposition %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<%= link_to 'Back', attributes_path %>

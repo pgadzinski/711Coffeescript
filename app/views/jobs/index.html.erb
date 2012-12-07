@@ -1,0 +1,46 @@
+<h1>Listing jobs</h1>
+<br>
+<table class="table table-striped table-bordered table-condensed">
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+	<% @attributes.each do |attr| %>
+    	<% if attr.name %>
+	    	<th><font size=4><%= attr.name %></font></th>   
+    	<% end %>
+	<% end %> <!--attributeLoop -->
+    <th>Site</th>
+    <th>User</th>
+    <th>Resource</th>
+    <th>schedDateTime</th>
+    <th>schedPixelVal </th>
+  </tr>
+
+<% @jobs.each do |job| %>
+<% i=1 %>
+<tr>
+  	<td><%= link_to 'Show', job, :class => 'btn btn-info'  %></td>
+    <td><%= link_to 'Edit', edit_job_path(job), :class => 'btn btn-info'  %></td>
+    <td><%= link_to 'Delete', job, :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
+	<!--attributeLoop -->
+    <% @attributes.each do |attr| %>
+    	<% if attr.name %>
+    	<% @x = "attr"+i.to_s %>
+    	<td><%= job[@x] %></td>   
+    	<% i=i+1 %>
+    	<% end %>
+	<% end %> 
+    <td><%= job.site_id %></td>
+    <td><%= job.user_id %></td>
+    <td><%= job.resource_id %></td>
+    <td><%= job.schedDateTime %></td>
+    <td><%= job.schedPixelVal %></td>
+</tr>	
+<% end %> <!--jobLoop -->
+</table>	
+<br>	
+
+<br />
+
+<%= link_to 'New Job', new_job_path %>

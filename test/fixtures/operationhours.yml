@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  maxscheduler_id: MyString
+  site_id: MyString
+  dayOfTheWeek: MyString
+  start: 2012-07-11 19:26:52
+  end: 2012-07-11 19:26:52
+
+two:
+  maxscheduler_id: MyString
+  site_id: MyString
+  dayOfTheWeek: MyString
+  start: 2012-07-11 19:26:52
+  end: 2012-07-11 19:26:52

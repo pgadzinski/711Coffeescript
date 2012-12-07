@@ -1,0 +1,52 @@
+<link type="text/css" rel="stylesheet" media="all" href="/object_style.css?body=1">
+
+<script src="/js/object_script.js?body=1" type="text/javascript"></script>
+
+<!--meta http-equiv="refresh" content="15; url=http://localhost:80/scheduler/showData"--> 
+
+<html><head>
+&nbsp;&nbsp;<%= link_to 'New Job', new_job_path , :class => 'btn btn-info' %>&nbsp;&nbsp;&nbsp;
+Sites: <% @sites.each do |site| %><a href="/users/setSite/<%= site.id %>"><%= site.name %></a>&nbsp;&nbsp;<% end %> &nbsp;&nbsp;&nbsp;&nbsp;
+Boards: <% @boards.each do |board| %><a href="/users/setBoard/<%= board.id %>"><%= board.name %></a>&nbsp;&nbsp;<% end %> 
+
+
+<script type="text/javascript">
+
+//JavaScrip array built to hold job data
+<%=raw @jobAry %>
+
+var MXS_table_data = 
+{"table_width":1130 ,"fcol_width":<%= @site.dateTimeColumnWidth %> , "rcol_width":385 ,"row_height":<%= @site.rowHeight %> 
+,"row_num":<%= @site.numberOfRows %> ,"header_height":18};
+
+//JavaScript array used to build the date/time column
+<%=raw @dateTimeAry %>
+
+//JavaScript array used to describe the Board and Resources
+<%=raw @boardResourceAry %>
+
+var MXS_url = "http://localhost:3000/scheduler/showData";
+var MXS_posting_url = "http://localhost:3000";
+var MXS_field_widths = {
+	"id": 50,
+	"JobNum": 200,
+	"Cust": 200, 
+	"PNum": 200,
+	"Color": 200,
+	"Addr": 300,
+}
+
+</script>
+
+</head><body>
+		<div id="root"></div></div><div id="hidden"></div><form id="load_form" name="ref_form" action="./scheduler/showData">	
+		</form></body></html>
+
+
+
+
+
+
+
+
+

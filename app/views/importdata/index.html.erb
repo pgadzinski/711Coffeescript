@@ -1,0 +1,38 @@
+<h1>Listing importdata</h1>
+<br>
+<b>We're still in the process of implementing the import mechanism. </b>
+<br>
+<br>
+<table id="boards" class="table table-striped table-bordered table-condensed">
+  <tr>
+    <th>Maxscheduler</th>
+    <th>Site</th>
+    <th>User</th>
+    <th>Data</th>
+    <th>Created</th>
+    <th>Updated</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @importdata.each do |importdatum| %>
+  <tr>
+    <td><%= importdatum.maxscheduler_id %></td>
+    <td><%= importdatum.site_id %></td>
+    <td><%= importdatum.user_id %></td>
+    <td><%= importdatum.data %></td>
+    <td><%= importdatum.created_at %></td>
+    <td><%= importdatum.updated_at %></td>
+    <td><%= link_to 'Show', importdatum , :class => 'btn btn-info' %></td>
+    <td><a class="btn btn-info" href=/importdata/<%= importdatum.id.to_s %>/review>Review</a></td>
+    <td><%= link_to 'Edit', edit_importdatum_path(importdatum), :class => 'btn btn-info' %></td>
+    <td><%= link_to 'Delete', importdatum, :class => 'btn btn-danger',  confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Import', new_importdatum_path, :class => 'btn btn-primary' %>

@@ -1,0 +1,40 @@
+<h1>
+<%= gravatar_for @user %>
+<%= @user.FirstName %>
+</h1>
+
+<p id="notice"><%= notice %></td>
+
+<td>
+  <b>Firstname:</b>
+  <%= @user.FirstName %>
+</td>
+
+<td>
+  <b>Lastname:</b>
+  <%= @user.LastName %>
+</td>
+
+<td>
+  <b>Email:</b>
+  <%= @user.email %>
+</td>
+
+<td>
+  <b>Color:</b>
+  <%= @user.color %>
+</td>
+
+<td>
+  <b>Rowheight:</b>
+  <%= @user.rowHeight %>
+</td>
+
+<td>
+  <b>Schedule start date:</b>
+  <%= @user.schedStartDate %>
+</td>
+
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>

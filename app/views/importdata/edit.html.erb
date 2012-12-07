@@ -1,0 +1,30 @@
+<h1>Editing importdatum</h1>
+
+<%= form_for(@importdatum) do |f| %>
+  <% if @importdatum.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@importdatum.errors.count, "error") %> prohibited this importdatum from being saved:</h2>
+
+      <ul>
+      <% @importdatum.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
+  <%= f.hidden_field :site_id, :value => @siteId %>
+  <%= f.hidden_field :user_id, :value => current_user.id %>
+  <div class="field" style="clear:both;">
+    <%= f.label :data %><br />
+    <%= f.text_area :data, :rows => "12", :cols => "300" %>
+  </div> 
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+<%= link_to 'Show', @importdatum %> |
+<%= link_to 'Back', importdata_path %>

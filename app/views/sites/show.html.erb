@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></td>
+
+<td>
+  <b>Name:</b>
+  <%= @site.name %>
+</td>
+
+<td>
+  <b>Maxscheduler:</b>
+  <%= @site.maxscheduler_id %>
+</td>
+
+<td>
+  <b>Rowtimeincrement:</b>
+  <%= @site.rowTimeIncrement %>
+</td>
+
+<td>
+  <b>Datetimecolumnwidth:</b>
+  <%= @site.dateTimeColumnWidth %>
+</td>
+
+<td>
+  <b>Row Height:</b>
+  <%= @site.rowHeight %>
+</td>
+
+<td>
+  <b>Number of Rows:</b>
+  <%= @site.numberOfRows %>
+</td>
+
+<%= link_to 'Edit', edit_site_path(@site) %> |
+<%= link_to 'Back', sites_path %>

@@ -1,0 +1,53 @@
+<%= form_for(@job) do |f| %>
+  <% if @job.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@job.errors.count, "error") %> prohibited this job from being saved:</h2>
+
+      <ul>
+      <% @job.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+
+  <!--attributeLoop -->
+    <% i=1 %>
+    <% @attributes.each do |attr| %>
+      <% if attr.name %>
+      <% @x = "attr"+i.to_s %>
+      <div class="field">
+        <%= attr.name %><br />  
+        <%= f.text_field "attr"+i.to_s %></div>   
+      <% i=i+1 %>
+      <% end %>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :resource_id %><br />
+    <%= f.text_field :resource_id %>
+  </div>
+  <div class="field">
+    <%= f.label :schedDateTime %><br />
+    <%= f.text_field :schedDateTime %>
+  </div>
+  <div class="field">
+    <%= f.label :schedPixelVal %><br />
+    <%= f.text_field :schedPixelVal %>
+  </div>
+
+  <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
+  <div class="field">
+    <%= f.label :site_id %><br />
+      <%= f.select :site_id, Site.where("maxscheduler_id = ?", @maxschedulerId).collect {|site| [ site.name, site.id ] } %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.select :user_id, User.where("maxscheduler_id = ?", @maxschedulerId).collect {|user| [ user.FirstName, user.id ] } %>
+  </div>
+  
+<% end %>

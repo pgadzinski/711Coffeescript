@@ -1,0 +1,34 @@
+<h1>Listing importdata</h1>
+<br>
+<b>We're still in the process of implementing the import mechanism. </b>
+<br>
+<br>
+<table>
+  <tr>
+    <th>Maxscheduler</th>
+    <th>Site</th>
+    <th>User</th>
+    <th>Data</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @importdata.each do |importdatum| %>
+  <tr>
+    <td><%= importdatum.maxscheduler_id %></td>
+    <td><%= importdatum.site_id %></td>
+    <td><%= importdatum.user_id %></td>
+    <td><%= importdatum.data %></td>
+    <td><%= link_to 'Show', importdatum %></td>
+    <td><a href=/importdata/<%= importdatum.id.to_s %>/review>Review</a></td>
+    <td><%= link_to 'Edit', edit_importdatum_path(importdatum) %></td>
+    <td><%= link_to 'Destroy', importdatum, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Importdatum', new_importdatum_path %>

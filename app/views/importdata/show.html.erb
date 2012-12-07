@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Maxscheduler:</b>
+  <%= @importdatum.maxscheduler_id %>
+</p>
+
+<p>
+  <b>Site:</b>
+  <%= @importdatum.site_id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @importdatum.user_id %>
+</p>
+
+<p>
+  <b>Data:</b>
+  <%= @importdatum.data %>
+</p>
+
+
+<%= link_to 'Edit', edit_importdatum_path(@importdatum) %> |
+<%= link_to 'Back', importdata_path %>

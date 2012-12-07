@@ -1,0 +1,37 @@
+<%= form_for(@operationhour) do |f| %>
+  <% if @operationhour.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@operationhour.errors.count, "error") %> prohibited this operationhour from being saved:</h2>
+
+      <ul>
+      <% @operationhour.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :maxscheduler_id %><br />
+    <%= f.text_field :maxscheduler_id %>
+  </div>
+  <div class="field">
+    <%= f.label :site_id %><br />
+    <%= f.text_field :site_id %>
+  </div>
+  <div class="field">
+    <%= f.label :dayOfTheWeek %><br />
+    <%= f.text_field :dayOfTheWeek %>
+  </div>
+  <div class="field">
+    <%= f.label :start %><br />
+    <%= f.time_select :start %>
+  </div>
+  <div class="field">
+    <%= f.label :end %><br />
+    <%= f.time_select :end %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></td>
+
+<td>
+  <b>Maxscheduler:</b>
+  <%= @board.maxscheduler_id %>
+</td>
+
+<td>
+  <b>Site:</b>
+  <%= @board.site_id %>
+</td>
+
+<td>
+  <b>Name:</b>
+  <%= @board.name %>
+</td>
+
+<%= link_to 'Edit', edit_board_path(@board) %> |
+<%= link_to 'Back', boards_path %>
+
+</table>
