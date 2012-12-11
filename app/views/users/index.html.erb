@@ -9,8 +9,8 @@
     <th>Lastname</th>
     <th>Email</th>
     <th>Color</th>
-    <th>Rowheight</th>
     <th>Schedule start date</th>
+    <th>Time zone</th>
     <th>Password</th>
     <th>Confirmation</th>
     <th></th>
@@ -23,8 +23,8 @@
     <td><%= user.LastName %></td>
     <td><%= user.email %></td>
     <td><%= user.color %></td>
-    <td><%= user.rowHeight %></td>
     <td><%= user.schedStartDate %></td>
+    <td><%= user.timeZone %></td>
     <td></td>
     <td></td>
     <td><%= link_to 'Edit', edit_user_path(user), :class => 'btn btn-info'  %></td>
@@ -55,6 +55,7 @@
     <td><%= f.text_field :color , :style => 'width: 100px;'%></td>
     <td><%= f.number_field :rowHeight, :style => 'width: 50px;' %></td>
     <td><%= f.text_field :schedStartDate, :style => 'width: 50px;' %></td>
+    <td><%= f.text_field :timeZone, :style => 'width: 50px;' %></td>
     <td><%= f.password_field :password, :style => 'width: 100px;' %></td>
     <td><%= f.password_field :password_confirmation, :style => 'width: 100px;' %></td>
   	<td></td>

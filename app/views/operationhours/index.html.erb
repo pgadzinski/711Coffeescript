@@ -1,60 +1,34 @@
 <h1>Listing operationhours</h1>
-<br>
-<b>This feature is not currently implemented.</b>
-<br>
-<br>
-<table class="table table-striped table-bordered table-condensed"> 
+
+<table class="table table-striped table-bordered table-condensed">
   <tr>
+    <th>Maxscheduler</th>
     <th>Site</th>
     <th>Dayoftheweek</th>
     <th>Start</th>
     <th>End</th>
     <th></th>
     <th></th>
+    <th></th>
   </tr>
 
 <% @operationhours.each do |operationhour| %>
   <tr>
+    <td><%= operationhour.maxscheduler_id %></td>
     <td><%= operationhour.site_id %></td>
     <td><%= operationhour.dayOfTheWeek %></td>
     <td><%= operationhour.start %></td>
     <td><%= operationhour.end %></td>
-    <td><%= link_to 'Edit', edit_operationhour_path(operationhour), :class => 'btn btn-info' %></td>
-    <td><%= link_to 'Destroy', operationhour,  :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= link_to 'Show', operationhour, :class => 'btn btn-info'  %></td>
+    <td><%= link_to 'Edit', edit_operationhour_path(operationhour), :class => 'btn btn-info'  %></td>
+    <td><%= link_to 'Destroy', operationhour , :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
-
-<%= form_for(@operationhour) do |f| %>
-  <% if @operationhour.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@operationhour.errors.count, "error") %> prohibited this operationhour from being saved:</h2>
-
-      <ul>
-      <% @operationhour.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-
-    <tr><td colspan=7><b>Add a new entry below:</b></td></tr>
-    <tr>
-    <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
-    <td><%= f.text_field :site_id %></td>
-    <td><%= f.text_field :dayOfTheWeek %></td>
-    <td><%= f.time_select :start %></td>
-    <td><%= f.time_select :end %></td>
-    <td></td>
-    <td></td>    
-    </tr>
-    <tr><td colspan=7><%= f.submit nil , :class => 'btn btn-primary'  %></td></tr>
-
-<% end %>
-
-
 </table>
 
 <br />
 
 <%= link_to 'New Operationhour', new_operationhour_path %>
+
+<br><br>
+<%=raw @dateTimeAry %>

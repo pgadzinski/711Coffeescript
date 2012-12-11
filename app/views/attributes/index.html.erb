@@ -9,6 +9,7 @@
     <th>Importposition</th>
     <th>Listposition</th>
     <th>Scheduleposition</th>
+    <th>ColumnWidth</th>
     <th></th>
     <th></th>
   </tr>
@@ -19,6 +20,7 @@
     <td><%= attribute.importposition %></td>
     <td><%= attribute.listposition %></td>
     <td><%= attribute.scheduleposition %></td>
+    <td><%= attribute.columnWidth %></td>
     <td><%= link_to 'Edit', edit_attribute_path(attribute), :class => 'btn btn-info'  %></td>
     <td><%= link_to 'Destroy', attribute, :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
   </tr>
@@ -45,6 +47,7 @@
   <td><%= f.number_field :importposition, :style => 'width: 50px;'   %></td>
   <td><%= f.number_field :listposition, :style => 'width: 50px;'   %></td>
   <td><%= f.number_field :scheduleposition, :style => 'width: 50px;'   %></td>
+  <td><%= f.number_field :columnWidth, :style => 'width: 50px;'   %></td>
   <td></td>
   <td></td>
   </tr>

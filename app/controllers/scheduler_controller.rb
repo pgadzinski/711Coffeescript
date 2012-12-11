@@ -10,21 +10,35 @@ class SchedulerController < ApplicationController
       @boardId = current_user.currentBoard
       
       #Create date/time column array
+      @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
       @dateTimeAry = "var date_array = ["
       @site = Site.find(@siteId)
-      @numOfRows = (@site.numberOfRows).to_i
+      @numOfWeeks = ((@site.numberOfRows).to_i)
       @rowTimeIncrement = (@site.rowTimeIncrement).to_i
 
-      @time = (current_user.schedStartDate).to_time
-      @time = @time.getlocal(current_user.timeZone)
-      
-      @time = @time-@time.sec-@time.min%59*60
-      
-      for i in 0..@numOfRows
-        @dateTimeAry = @dateTimeAry + '"' + (@time.strftime("%m/%d/%y %I:%M%p")) + '",'
-        @time = @time + (@rowTimeIncrement * 3600)
+      @schedStartDate = current_user.schedStartDate.to_time
+      @schedStartDate = @schedStartDate.getlocal(current_user.timeZone)
+      @currentDay = @schedStartDate
+      @numberOfRows = 1
+
+      #Repeat the weekly Operation Hours config for a number of weeks, first loop
+      for j in 0..@numOfWeeks
+        @weekStartDate = @schedStartDate + (j.to_i * 7 * 24 * 3600)
+
+            #Create Date/Time stamps for each Operation Hours entry, which defines a continous length of time for a day
+            @operationhours.each do | entry |
+              @currentDay = @weekStartDate + ((entry.dayOfTheWeek.to_i) * 24 *3600)
+              @time = @currentDay + (entry.start.to_i * 3600)      
+              
+              #Loop through the number of rows for that Operation Hours entry
+              for i in 0..(entry.end.to_i)
+                  @dateTimeAry = @dateTimeAry + '"' + (@time.strftime("%m/%d/%y %I:%M%p")) + '",'
+                  @time = @time + (@rowTimeIncrement * 3600)
+              end
+            @numberOfRows = @numberOfRows + entry.end.to_i        
+            end
       end
-      
+              
       @dateTimeAry = @dateTimeAry + "];"
   
   end  
@@ -110,11 +124,21 @@ class SchedulerController < ApplicationController
               end #if end
               @i = @i + 1
           end #attribute end 
+
           @jobAry = @jobAry + '} , {"some_date":"data"} ],'
       
       end #job end
       
       @jobAry = @jobAry + '};'
+
+      #Create a hash that defines how wide each column is
+      @columnWidthsHash = "var MXS_field_widths = { 'id': 50, "
+      @attributes.each do |attr|
+              if attr.name
+                  @columnWidthsHash = @columnWidthsHash + '"' + attr.name + '":"' + attr.columnWidth.to_s + '",'
+              end #if end
+      end #attribute end 
+      @columnWidthsHash = @columnWidthsHash + "}"
 
   end
 

@@ -1,5 +1,7 @@
 Maxschedulerweb::Application.routes.draw do
 
+  resources :operationhours
+
   resources :importdata
 
   root :to => 'sessions#new'
@@ -10,8 +12,7 @@ Maxschedulerweb::Application.routes.draw do
   resources :users
   resources :maxschedulers
   resources :sessions, only: [:new, :create, :destroy]
-  resources :usersites
-  resources :operationhours
+  resources :usersites  
   resources :jobs
   resources :attributes   
   

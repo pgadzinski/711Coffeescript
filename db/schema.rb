@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121003203519) do
+ActiveRecord::Schema.define(:version => 20121211015737) do
 
   create_table "attributes", :force => true do |t|
     t.string   "name"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20121003203519) do
     t.integer  "scheduleposition"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.integer  "columnWidth"
   end
 
   create_table "boards", :force => true do |t|
@@ -92,8 +93,8 @@ ActiveRecord::Schema.define(:version => 20121003203519) do
     t.string   "maxscheduler_id"
     t.string   "site_id"
     t.string   "dayOfTheWeek"
-    t.time     "start"
-    t.time     "end"
+    t.string   "start"
+    t.string   "end"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end

@@ -25,156 +25,24 @@
   <%= @job.schedPixelVal  %>
 </td>
 
-<td>
-  <b>Attr1:</b>
-  <%= @job.attr1 %>
-</td>
+<!--attributeLoop -->
+<table border="1">
 
-<td>
-  <b>Attr2:</b>
-  <%= @job.attr2 %>
-</td>
+    <% i=1 %>
+<%= form_for(@job) do |f| %>
+    <% @attributes.each do |attr| %>
+      <% if attr.name %>
+      <% @x = '@job.attr'+i.to_s %>
+          <tr>
+          <td><b><%= attr.name %></b></td>
+          <td><%= f.text_field "attr"+i.to_s %></td>
+          </tr>
+      <% i=i+1 %>
+      <% end %>
+  <% end %>
+<% end %>
 
-<td>
-  <b>Attr3:</b>
-  <%= @job.attr3 %>
-</td>
-
-<td>
-  <b>Attr4:</b>
-  <%= @job.attr4 %>
-</td>
-
-<td>
-  <b>Attr5:</b>
-  <%= @job.attr5 %>
-</td>
-
-<td>
-  <b>Attr6:</b>
-  <%= @job.attr6 %>
-</td>
-
-<td>
-  <b>Attr7:</b>
-  <%= @job.attr7 %>
-</td>
-
-<td>
-  <b>Attr8:</b>
-  <%= @job.attr8 %>
-</td>
-
-<td>
-  <b>Attr9:</b>
-  <%= @job.attr9 %>
-</td>
-
-<td>
-  <b>Attr10:</b>
-  <%= @job.attr10 %>
-</td>
-
-<td>
-  <b>Attr11:</b>
-  <%= @job.attr11 %>
-</td>
-
-<td>
-  <b>Attr12:</b>
-  <%= @job.attr12 %>
-</td>
-
-<td>
-  <b>Attr13:</b>
-  <%= @job.attr13 %>
-</td>
-
-<td>
-  <b>Attr14:</b>
-  <%= @job.attr14 %>
-</td>
-
-<td>
-  <b>Attr15:</b>
-  <%= @job.attr15 %>
-</td>
-
-<td>
-  <b>Attr16:</b>
-  <%= @job.attr16 %>
-</td>
-
-<td>
-  <b>Attr17:</b>
-  <%= @job.attr17 %>
-</td>
-
-<td>
-  <b>Attr18:</b>
-  <%= @job.attr18 %>
-</td>
-
-<td>
-  <b>Attr19:</b>
-  <%= @job.attr19 %>
-</td>
-
-<td>
-  <b>Attr20:</b>
-  <%= @job.attr20 %>
-</td>
-
-<td>
-  <b>Attr21:</b>
-  <%= @job.attr21 %>
-</td>
-
-<td>
-  <b>Attr22:</b>
-  <%= @job.attr22 %>
-</td>
-
-<td>
-  <b>Attr23:</b>
-  <%= @job.attr23 %>
-</td>
-
-<td>
-  <b>Attr24:</b>
-  <%= @job.attr24 %>
-</td>
-
-<td>
-  <b>Attr25:</b>
-  <%= @job.attr25 %>
-</td>
-
-<td>
-  <b>Attr26:</b>
-  <%= @job.attr26 %>
-</td>
-
-<td>
-  <b>Attr27:</b>
-  <%= @job.attr27 %>
-</td>
-
-<td>
-  <b>Attr28:</b>
-  <%= @job.attr28 %>
-</td>
-
-<td>
-  <b>Attr29:</b>
-  <%= @job.attr29 %>
-</td>
-
-<td>
-  <b>Attr30:</b>
-  <%= @job.attr30 %>
-</td>
-
+</table>
 
 <%= link_to 'Edit', edit_job_path(@job) %> |
 <%= link_to 'Back', jobs_path %>

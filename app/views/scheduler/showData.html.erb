@@ -17,7 +17,7 @@ Boards: <% @boards.each do |board| %><a href="/users/setBoard/<%= board.id %>"><
 
 var MXS_table_data = 
 {"table_width":1130 ,"fcol_width":<%= @site.dateTimeColumnWidth %> , "rcol_width":385 ,"row_height":<%= @site.rowHeight %> 
-,"row_num":<%= @site.numberOfRows %> ,"header_height":18};
+,"row_num":<%= @numberOfRows %> ,"header_height":18};
 
 //JavaScript array used to build the date/time column
 <%=raw @dateTimeAry %>
@@ -27,14 +27,8 @@ var MXS_table_data =
 
 var MXS_url = "http://localhost:3000/scheduler/showData";
 var MXS_posting_url = "http://localhost:3000";
-var MXS_field_widths = {
-	"id": 50,
-	"JobNum": 200,
-	"Cust": 200, 
-	"PNum": 200,
-	"Color": 200,
-	"Addr": 300,
-}
+
+<%=raw @columnWidthsHash %>
 
 </script>
 

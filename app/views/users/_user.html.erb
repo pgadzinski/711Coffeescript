@@ -6,8 +6,8 @@
     <th>Lastname</th>
     <th>Email</th>
     <th>Color</th>
-    <th>Rowheight</th>
     <th>Schedule start date</th>
+    <th>Time Zone</th>
     <th></th>
     <th></th>
     <th></th>
@@ -19,8 +19,8 @@
     <td><%= user.LastName %></td>
     <td><%= user.email %></td>
     <td><%= user.color %></td>
-    <td><%= user.rowHeight %></td>
     <td><%= user.schedStartDate %></td>
+    <td><%= user.timeZone %></td>
     <td><%= link_to 'Show', user %></td>
     <td><%= link_to 'Edit', edit_user_path(user) %></td>
     <td><%= link_to 'Destroy', user, confirm: 'Are you sure?', method: :delete %></td>

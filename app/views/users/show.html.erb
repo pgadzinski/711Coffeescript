@@ -26,15 +26,14 @@
 </td>
 
 <td>
-  <b>Rowheight:</b>
-  <%= @user.rowHeight %>
-</td>
-
-<td>
   <b>Schedule start date:</b>
   <%= @user.schedStartDate %>
 </td>
 
+<td>
+  <b>Time Zone:</b>
+  <%= @user.timeZone %>
+</td>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
