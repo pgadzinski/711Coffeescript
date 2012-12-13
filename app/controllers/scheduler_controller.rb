@@ -8,6 +8,7 @@ class SchedulerController < ApplicationController
       @maxschedulerId = current_user.maxscheduler_id
       @siteId = current_user.currentSite
       @boardId = current_user.currentBoard
+      @user = current_user
       
       #Create date/time column array
       @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)

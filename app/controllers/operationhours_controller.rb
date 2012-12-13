@@ -1,5 +1,6 @@
 class OperationhoursController < ApplicationController
 
+  require 'time'
   before_filter :getscheduleparameters
 
   def getscheduleparameters
@@ -15,13 +16,13 @@ class OperationhoursController < ApplicationController
   def index
     @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
 
-    @dateTimeAry = "date array <br><br>"
-    @rowHeight = "30"
+    @rowHeight = 30
     @rowTimeIncrement = "2".to_i
     @numOfWeeks = "3".to_i
     @schedStartDate = current_user.schedStartDate.to_time
     @currentDay = @schedStartDate
-    @rowCounter = 1
+    @rowCounter = 0
+    @dateHash = Hash.new
 
     for j in 0..@numOfWeeks
         @weekStartDate = @schedStartDate + (j.to_i * 7 * 24 * 3600)
@@ -30,12 +31,24 @@ class OperationhoursController < ApplicationController
             @time = @currentDay + (entry.start.to_i * 3600)      
             
             for i in 0..(entry.end.to_i)
-                @dateTimeAry = @dateTimeAry + ' ' + @rowCounter.to_s + ' - ' + (@time.strftime("%m/%d/%y %I:%M%p")) + ' , ' + @time.to_i.to_s + "<br>"
+                @dateHash[@rowCounter.to_s] = @time.to_s
                 @time = @time + (@rowTimeIncrement * 3600)
                 @rowCounter = @rowCounter + 1
             end
         end
     end
+
+    @jobPosition = 0
+
+    @row = @jobPosition/@rowHeight
+
+    @secondsInRow = (@jobPosition.fdiv(@rowHeight).abs.modulo(1)) * (@rowTimeIncrement * 3600)
+
+    @timeOfRow = @dateHash[@row.to_s]
+
+    #binding.pry
+
+    @jobTime = (@timeOfRow.to_time) + (@secondsInRow.to_i)
 
     respond_to do |format|
       format.html # index.html.erb

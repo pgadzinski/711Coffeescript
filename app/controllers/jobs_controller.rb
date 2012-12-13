@@ -77,20 +77,44 @@ class JobsController < ApplicationController
     @job.update_attributes(params[:job])
 
     #Converting pixel values to UTC time
+    @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
     @site = Site.find(@siteId)
-    @rowHeight = (@site.rowHeight).to_f
+    @rowHeight = @site.rowHeight.to_i
     @rowTimeIncrement = (@site.rowTimeIncrement).to_f
-    
-    @time = (current_user.schedStartDate).to_time
-    @timeTop = @time.getlocal(current_user.timeZone)           # time for the top of the schedule
-    
     @pixelValue = @job.schedPixelVal
-    @diffInSeconds = (@pixelValue.to_f / @rowHeight) * (@rowTimeIncrement * 3600) 
+    
+    #Large chunk of code needed to calculate job time based on operation hours. 
 
-    @jobTime = @timeTop + @diffInSeconds
+    @numOfWeeks = ((@site.numberOfRows).to_i)
+    @schedStartDate = current_user.schedStartDate.to_time
+    #@schedStartDate = @schedStartDate.getlocal(current_user.timeZone)           # time for the top of the schedule
+    @currentDay = @schedStartDate
+    @rowCounter = 0
+    @dateHash = Hash.new
+ 
+    #Create hash that has the date/time data. Used for look up of pixel value matching to correct date/time. 
+    #This is done by finding the row the job is one and looking up the date. The remainder is just the position within the row
 
-    #binding.pry
+      for j in 0..@numOfWeeks
+        @weekStartDate = @schedStartDate + (j.to_i * 7 * 24 * 3600)
+        @operationhours.each do | entry |
+            @currentDay = @weekStartDate + ((entry.dayOfTheWeek.to_i) * 24 *3600)
+            @time = @currentDay + (entry.start.to_i * 3600)      
+            
+            for i in 0..(entry.end.to_i)
+                @dateHash[@rowCounter.to_s] = @time.to_s
+                @time = @time + (@rowTimeIncrement * 3600)
+                @rowCounter = @rowCounter + 1
+            end
+        end
+      end
 
+    @row = (@pixelValue.to_i) / (@rowHeight.to_i)
+    @timeOfRow = @dateHash[@row.to_s]
+    @secondsInRow = ((@pixelValue.to_i).fdiv(@rowHeight).abs.modulo(1)) * (@rowTimeIncrement * 3600)
+    
+    @jobTime = (@timeOfRow.to_time) + (@secondsInRow.to_i)
+  
     @job.schedDateTime = @jobTime
     @job.save(:validate => false)
 
