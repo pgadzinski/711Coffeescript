@@ -14,35 +14,41 @@ class SchedulerController < ApplicationController
       @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
       @dateTimeAry = "var date_array = ["
       @site = Site.find(@siteId)
-      @numOfWeeks = ((@site.numberOfRows).to_i)
+      @numOfWeeks = ((@site.numberOfRows).to_i) - 1
       @rowTimeIncrement = (@site.rowTimeIncrement).to_i
 
       @schedStartDate = current_user.schedStartDate.to_time
-      @schedStartDate = @schedStartDate.getlocal(current_user.timeZone)
+      #@schedStartDate = @schedStartDate.getlocal(current_user.timeZone)
       @currentDay = @schedStartDate
       @numberOfRows = 1
+      @rowCounter = 0
+      @dateHash = Hash.new
 
       #Repeat the weekly Operation Hours config for a number of weeks, first loop
-      for j in 0..@numOfWeeks
+      for j in 0..@numOfWeeks 
         @weekStartDate = @schedStartDate + (j.to_i * 7 * 24 * 3600)
 
             #Create Date/Time stamps for each Operation Hours entry, which defines a continous length of time for a day
             @operationhours.each do | entry |
               @currentDay = @weekStartDate + ((entry.dayOfTheWeek.to_i) * 24 *3600)
-              @time = @currentDay + (entry.start.to_i * 3600)      
+              @currenttime = @currentDay + (entry.start.to_i * 3600)      
               
               #Loop through the number of rows for that Operation Hours entry
               for i in 0..(entry.end.to_i)
-                  @dateTimeAry = @dateTimeAry + '"' + (@time.strftime("%m/%d/%y %I:%M%p")) + '",'
-                  @time = @time + (@rowTimeIncrement * 3600)
+                  @dateTimeAry = @dateTimeAry + '"' + (@currenttime.strftime("%m/%d/%y %I:%M%p")) + '",'
+                  @dateHash[@rowCounter.to_s] = @currenttime
+                  @currenttime = @currenttime + (@rowTimeIncrement * 3600)
+                  @rowCounter = @rowCounter + 1
               end
             @numberOfRows = @numberOfRows + entry.end.to_i        
             end
       end
               
       @dateTimeAry = @dateTimeAry + "];"
+      @endOfSchedule = @currenttime
   
   end  
+
 
   def showData
 
@@ -60,12 +66,8 @@ class SchedulerController < ApplicationController
       #Get the list of jobs that should be displayed on this schedule, ie. in the schedule time frame
       #binding.pry
       @site = Site.find(@siteId)
-      @endOfSchedule = @time + (@site.rowTimeIncrement.to_i * (@site.numberOfRows.to_i + 2) * 3600)
-
-      @time = (current_user.schedStartDate).to_time
-      @time = @time.getlocal(current_user.timeZone)
       
-      @scheduledJobs = Job.where("maxscheduler_id = ? and site_id = ? and schedDateTime >= ? and schedDateTime <= ?", @maxschedulerId, @siteId, @time, @endOfSchedule)
+      @scheduledJobs = Job.where("maxscheduler_id = ? and site_id = ? and resource_id != 'none' and schedDateTime >= ? and schedDateTime <= ?", @maxschedulerId, @siteId, @schedStartDate, @endOfSchedule)
       @listJobs = Job.where("maxscheduler_id = ? and site_id = ? and resource_id = 'none' ", @maxschedulerId, @siteId)
       @jobs = @scheduledJobs|@listJobs
       #@jobs = Job.where("maxscheduler_id = ? and site_id = ? ", @maxschedulerId, @siteId)
@@ -86,6 +88,9 @@ class SchedulerController < ApplicationController
       end #board end
       @boardResourceAry = @boardResourceAry + '};'
 
+      @rowHeight = (@site.rowHeight).to_f
+      @rowTimeIncrement = (@site.rowTimeIncrement).to_f
+
       #Create array that holds job data
       @jobAry = "var MXS_job_data = {"
       @jobs.each do |job|
@@ -94,23 +99,34 @@ class SchedulerController < ApplicationController
           if (job.resource_id == "none")
               @joblane = "0"
               @jobLocation = "listview"
+              @pixelValue = 0
           else
+              @pixelValue = 0
               @joblane = job.resource_id
               @jobLocation = "board"
-              #@boardName = Board.find(Resource.find(job.resource_id).board_id).name
+              @jobRowNumber = 10000000
+                #Calculate the position on the schedule from the job time stamp
+                #Step through the dateHash to find out which row the job should be placed in. Check the job time is bounded by the row
+                @dateHash.each do | rowNumber , rowStartDateTime |
+                     @jobTime = (job.schedDateTime).to_time
+                     @rowNumber = rowNumber
+                     @rowStartDateTime = rowStartDateTime
+                     @rowEndDateTime = rowStartDateTime + (@rowTimeIncrement * 3600)
+
+                     if ((rowStartDateTime < @jobTime) && ( @jobTime < @rowEndDateTime))
+                          @jobRowNumber = rowNumber           
+                          @pixelValue = (@jobRowNumber.to_i) * @rowHeight
+                          @remainingTimeDifference = (@jobTime - rowStartDateTime)
+                          @pixelValue = @pixelValue + (((@remainingTimeDifference.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight )
+                     end
+                end
           end 
 
-          #Calculate the position on the schedule from the job time stamp
-          @rowHeight = (@site.rowHeight).to_f
-          @rowTimeIncrement = (@site.rowTimeIncrement).to_f
-
-          @time = (current_user.schedStartDate).to_time
-          @timeTop = @time.getlocal(current_user.timeZone)          
-
-          @jobTime = (job.schedDateTime).to_time
-          @timeDifference = @jobTime - @timeTop
-
-          @pixelValue = ((@timeDifference.to_f) / (@rowTimeIncrement * 3600) ) * (@rowHeight)
+          
+          #If a job hasn't found a row to sit in, then it should be pushed to list view
+          if @jobRowNumber == 10000000
+              @jobLocation = "listview"
+          end 
 
           @jobAry = @jobAry + '"' + job.id.to_s 
           @jobAry = @jobAry + 
