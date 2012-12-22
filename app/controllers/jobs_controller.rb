@@ -52,6 +52,7 @@ class JobsController < ApplicationController
   # POST /jobs
   # POST /jobs.json
   def create
+    print params
     @job = Job.new(params[:job])
 
     respond_to do |format|
@@ -62,6 +63,32 @@ class JobsController < ApplicationController
         format.html { render action: "new" }
         format.json { render json: @job.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  #POST /jobs/async_create
+  def async_create
+    @job = Job.new
+    i=1
+    for key, val in params[:job] do
+      print val
+      at = "attr"+i.to_s #this shit is hacks yo, change your model!
+      @job[at] = val
+      i=i+1
+    end
+
+    @job.user_id = current_user.id
+    @job.maxscheduler_id = @maxschedulerId
+    @job.site_id = @siteId
+    @job.resource_id = 'none' #why are we mixing types here... none or 1,2,3,... why not 0,1,2,3?
+    @job.schedDateTime = Time.now
+    @job.schedPixelVal = 0
+    
+    if @job.save(:validate => true)
+      print @job
+      render :json => params
+    else
+      render json: @job.errors, status: :unprocessable_entity
     end
   end
 

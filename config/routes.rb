@@ -32,6 +32,8 @@ Maxschedulerweb::Application.routes.draw do
   match '/jobs/update/:id', to: 'jobs#async_update'
   
   match ':controller(/:action(/:id))(.:format)'
+
+  match '/jobs/async_create', to: 'jobs#async_create'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

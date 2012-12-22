@@ -16,7 +16,7 @@ end
 #  gem 'pg'
 #end
 
-gem 'pry', :group => :development
+#gem 'pry', :group => :development
 
 #group :test, :development do
   #gem 'rspec-rails'

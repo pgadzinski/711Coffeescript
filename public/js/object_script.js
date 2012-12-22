@@ -225,7 +225,7 @@ function Job(id, location, board, lane, top, width, height, stats){
 			//console.log(sd.width_arr);
 
 			$.each(MXS_field_widths, function(key, val){
-				console.log(key + " : " + val);
+				//console.log(key + " : " + val);
 				$("#"+key+".lvjob_data_field").width(MXS_field_widths[key]-2);						
 			})
 
@@ -342,6 +342,7 @@ function Job(id, location, board, lane, top, width, height, stats){
 		
 
 }
+
 
 function Board_bar(){
 	this.create_bar = function(){
@@ -936,7 +937,6 @@ function Modaldialog(){
 	
 	}	
 	
-
 	this.collect_string = function(){
 		var self=this;
 		self.data_string = "";
@@ -953,9 +953,114 @@ function Modaldialog(){
 
 }
 
+function ModaldialogNew(){
+	this.label_array = [];
+	this.parent_handle = "";
+	this.data_string = "";
+	this.data_dict = {};
+	
+	this.create_box = function(){
+		var dialog = "<div id='modal_dialog_new'>";
+		
+		dialog += "<table id='dialog_table_new'>";
+
+		dialog+="</table>";
 
 
+		$("#root").append(dialog);
+	}
 
+	this.set_features = function(){
+		//dialog box settings
+		var self = this;
+
+		$("#modal_dialog_new").dialog({
+			'modal': true,
+			'autoOpen': false,
+			'resizable': true,
+			'buttons':{
+				"Create":function(){
+					
+					//need to update the job's own stats values and draw from there
+					//self.collect_string();
+					self.collect_data();
+					//console.log(self.data_string);
+					$.fn.ajax_update(0, "create_job", self.data_dict);
+					$(this).dialog("close");
+					},
+				"Cancel":function(){
+					$(this).dialog("close");
+					},				
+				},
+		});
+		
+		//jquery ui dialog css class
+		$(".ui-dialog").css({
+			'overflow':'scroll',
+			'padding': '0.2em',
+			'background': 'LightGrey',
+			'border': '1px solid black',
+		});		
+
+				
+	}
+
+	this.collect_data = function()
+	{
+		var self = this;
+		//grab values from each dialog input
+		i = 0;
+		self.data_dict['job'] = {};
+		$(".dlg_val").map(function(key, val){
+			ival = $("#"+val.id).val();
+			if(self.label_array[i] !== 'id'){
+				self.data_dict['job'][self.label_array[i]] = ival;
+				i++;
+			}
+
+		});
+		//console.log(dict);
+		
+	}
+
+	this.generic_attributes_setup = function(){
+		var self =this;		
+
+		var labels = "";
+		var vals = "";
+		var input_id = "";
+
+		var table_body = "";
+		//table_body += "<tr><th id='label_head'>Name</th><th id='val_head'>Value</th></tr>";
+		$.each(MXS_field_widths, function(key, value){
+			if(key !== 'id'){
+				table_body += "<tr>"
+
+				table_body += "<td>"+key+"</td>"
+
+
+				input_id = "input_"+key;
+				table_body += "<td><input type ='text' id='"+input_id+"' class='dlg_val'/></td>";
+
+				table_body += "</tr>";
+				self.label_array.push(key);
+
+			}
+			
+			
+		});
+
+		$("#dialog_table_new").html(table_body);
+	}
+
+	this.create_new_job = function(){
+		//this.update_data(MXS_field_widths, null);
+		this.generic_attributes_setup();
+		//console.log(MXS);
+
+	}
+
+}
 
 /*HELPER METHODS*/
 
@@ -1238,30 +1343,40 @@ function makejob(){
 	$.fn.ajax_update = function(id, action, data){
 	var msg = "";	
 	var job = window[("job"+id)];
-	var urladdon = "/jobs/" + id
-		
+	var type = "text";
+	//var urladdon = "/jobs/" + id;
 	switch(action)
 	{
 		case "move_on_board":
 			//msg = "utf8=%E2%9C%93&job[maxscheduler_id]=1&job[site_id]=1&job[user_id]=1&job[resource_id]="+job.lane+"&job[schedDate]=2012-09-26 10:00:00&job[schedTime]="+job.top+"&commit=Update+Job"
 			msg = "utf8=%E2%9C%93&job[resource_id]="+job.lane+"&job[schedPixelVal]="+job.top+"&commit=Update+Job"
+			url = '/jobs/update/' + id;
 			break;
 
 		case "drop_to_board":
 			//msg = "shipID="+id+"&boardName="+job.board+"&lane="+job.lane+"&y="+job.top+"&path="+action;
 			msg = "utf8=%E2%9C%93&job[resource_id]="+job.lane+"&job[schedPixelVal]="+job.top+"&commit=Update+Job"
+			url = '/jobs/update/' + id;
 			break;
 
 		case "drop_to_listview":
 			//msg = "shipID="+id+"&path="+action;
 			msg = "utf8=%E2%9C%93&job[resource_id]=none&job[schedPixelVal]=0&commit=Update+Job"
+			url = '/jobs/update/' + id;
 			break;
 
 		case "update_data":
 			//msg = "shipID="+id+data+"&path="+action+"&commit=Update+Job";
 			//msg = "utf8=%E2%9C%93&job%5Bmaxscheduler_id%5D=1&job%5Bsite_id%5D=1&job%5Buser_id%5D=1&job%5Bresource_id%5D=1&job%5BschedDate%5D=&job%5BschedTime%5D=&job%5Battr1%5D="+id+"&job%5Battr2%5D=FeliksFeliksMinidata&job%5Battr3%5D=blue&job%5Battr4%5D=blue&job%5Battr5%5D=blue&job%5Battr6%5D=fdafdsa&job%5Battr7%5D=fdafdsa&job%5Battr8%5D=fdafdsa&job%5Battr9%5D=&job%5Battr10%5D=&job%5Battr11%5D=&job%5Battr12%5D=&job%5Battr13%5D=&job%5Battr14%5D=&job%5Battr15%5D=&job%5Battr16%5D=&job%5Battr17%5D=&job%5Battr18%5D=&job%5Battr19%5D=&job%5Battr20%5D=&job%5Battr21%5D=&job%5Battr22%5D=&job%5Battr23%5D=&job%5Battr24%5D=&job%5Battr25%5D=&job%5Battr26%5D=&job%5Battr27%5D=&job%5Battr28%5D=&job%5Battr29%5D=&job%5Battr30%5D=&commit=Update+Job"
 			msg = "utf8=%E2%9C%93&job[resource_id]="+job.lane+"&job[schedPixelVal]="+job.top+"&"+ data +"&commit=Update+Job"
-			break;	
+			url = '/jobs/update/' + id;
+			break;
+
+		case "create_job":
+			msg = data;
+			url = '/jobs/async_create';
+			type = 'text/javascript';
+			break;
 
 		default: 
 			alert("The action did not result in a valid message");
@@ -1273,12 +1388,14 @@ function makejob(){
 	//if(action === "update_data"){
 		$.ajax({
 			type: 'POST',
-			url: '/jobs/update/' + id,  //MXS_posting_url+urladdon
+			url: url,  //MXS_posting_url+urladdon
+			beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 			data: msg, //{ _method:'PUT', msg : msg },
-			dataType: 'text',
+			dataType: type,
 			async: true,
 			success: function(data){
-				console.log(data); //place around methods to allow success return to initiate action
+			
+				//console.log(data); //place around methods to allow success return to initiate action
 			}					
 			
 		});		
@@ -1288,24 +1405,11 @@ function makejob(){
 	};
 })(jQuery);
 
-
-
-
 /*MAIN*/
 //refresh method - can't use AJAX because it catches the response
-
 $(document).ready(function(){
-	var t = setTimeout("$.fn.self_update()", 30000);	
-
+	var t = setInterval(function(){ window.location.reload(); }, 30000);	
 });
-
-(function($){
-	$.fn.self_update = function(){
-		window.location.reload();
-		//document.forms["load_form"].submit();	
-		
-	};
-})(jQuery);
 
 
 //The main object creator
@@ -1336,6 +1440,10 @@ dialog1 = new Modaldialog();
 dialog1.create_box();
 dialog1.set_features();
 
+dialog2 = new ModaldialogNew();
+dialog2.create_box()
+dialog2.set_features();
+
 rdj = new ReDrawJobs();
 
 makejob();
@@ -1347,12 +1455,18 @@ sorter1.create_fields();
 sorter1.set_css();
 sorter1.add_sorting();
 
+add_new_job_setup();
+
 });
 
+function add_new_job_setup(){
+	$("#new_job_btn").click(function(){
+			$("#modal_dialog_new").dialog("open");
+			dialog2.create_new_job(); //pass stats at dialog creation
+	});
 
 
-
-
+}
 
 
 
