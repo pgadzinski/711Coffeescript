@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121214050933) do
+ActiveRecord::Schema.define(:version => 20121224044405) do
 
   create_table "attributes", :force => true do |t|
     t.string   "name"
@@ -128,7 +128,8 @@ ActiveRecord::Schema.define(:version => 20121214050933) do
     t.datetime "updated_at",          :null => false
     t.string   "maxscheduler_id"
     t.string   "rowHeight"
-    t.string   "numberOfRows"
+    t.string   "defaultJobLength"
+    t.string   "numberOfWeeks"
   end
 
   create_table "users", :force => true do |t|

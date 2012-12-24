@@ -85,7 +85,7 @@ class JobsController < ApplicationController
     
     #Large chunk of code needed to calculate job time based on operation hours. 
 
-    @numOfWeeks = ((@site.numberOfRows).to_i)
+    @numOfWeeks = ((@site.numberOfWeeks).to_i) - 1
     @schedStartDate = current_user.schedStartDate.to_time
     #@schedStartDate = @schedStartDate.getlocal(current_user.timeZone)           # time for the top of the schedule
     @currentDay = @schedStartDate
@@ -99,11 +99,11 @@ class JobsController < ApplicationController
         @weekStartDate = @schedStartDate + (j.to_i * 7 * 24 * 3600)
         @operationhours.each do | entry |
             @currentDay = @weekStartDate + ((entry.dayOfTheWeek.to_i) * 24 *3600)
-            @time = @currentDay + (entry.start.to_i * 3600)      
-            
-            for i in 0..(entry.end.to_i)
-                @dateHash[@rowCounter.to_s] = @time.to_s
-                @time = @time + (@rowTimeIncrement * 3600)
+            @currenttime = @currentDay + (entry.start.to_i * 3600)      
+              
+            for i in 1..(entry.end.to_i)
+                @dateHash[@rowCounter.to_s] = @currenttime
+                @currenttime = @currenttime + (@rowTimeIncrement * 3600)
                 @rowCounter = @rowCounter + 1
             end
         end
