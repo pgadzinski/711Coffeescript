@@ -117,11 +117,11 @@ class SchedulerController < ApplicationController
 
       #Figure out some timebound parameters for figuring out scheduled job edge cases
       @schedEndTime = @schedStartDateTime + (@numberOfRows * 3600 * @rowTimeIncrement)
-      @schedUpperBound = @schedStartDateTime - (3600 * 24 * 7 * 2)
-      @schedLowerBound = @schedEndTime + (3600 * 24 * 7 * 2)
+      @schedUpperBound = @schedStartDateTime - (3600 * 24 * 7 )
+      @schedLowerBound = @schedEndTime + (3600 * 24 * 7 )
       #@schedStartTime = @schedStartTime.getlocal(current_user.timeZone)
 
-      @scheduledJobs = Job.where("maxscheduler_id = ? and site_id = ? and resource_id != 'none' and schedDateTime >= ? and schedDateTime <= ?", @maxschedulerId, @siteId, @schedStartDateTime, @endOfSchedule)
+      @scheduledJobs = Job.where("maxscheduler_id = ? and site_id = ? and resource_id != 'none' and schedDateTime >= ? and schedDateTime <= ?", @maxschedulerId, @siteId, @schedUpperBound, @schedLowerBound)
       @listJobs = Job.where("maxscheduler_id = ? and site_id = ? and resource_id = 'none' ", @maxschedulerId, @siteId)
       @jobs = @scheduledJobs|@listJobs
       #@jobs = Job.where("maxscheduler_id = ? and site_id = ? ", @maxschedulerId, @siteId)
@@ -188,31 +188,37 @@ class SchedulerController < ApplicationController
                 @extendedDateHash.each do | rowNumber , rowDataStart |
                      @rowNumber = rowNumber
                      @rowStartDateTime = rowDataStart[0]
-                     @rowStatusStart = rowDataStart[1]
                      @rowEndDateTime = @rowStartDateTime + (@rowTimeIncrement * 3600)
 
                      if ((@rowStartDateTime <= @jobStartTime) && ( @jobStartTime <= @rowEndDateTime))
                           @jobRowNumber = @rowNumber           
+                          @rowStatusStart = rowDataStart[1]
                           @pixelValue = (@jobRowNumber.to_i) * @rowHeight
                           @remainingTimeDifference = (@jobStartTime - @rowStartDateTime)
                           @pixelValue = @pixelValue + (((@remainingTimeDifference.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight )
                      end
                 end
 
-                @pixelValue = @pixelValue - (@operationalHoursRowCount * @rowHeight)
-
                 #Find out which row the end of the job lands
                 @pixelValueEndOfJob = @pixelValue + @jobDisplaySize
                 @endRow = (@pixelValueEndOfJob) / (@rowHeight)
                 @endRow = @endRow.to_i
                 @rowDataEnd = @extendedDateHash[@endRow.to_s]
+
+                #binding.pry
+
                 @rowStatusEnd = @rowDataEnd[1]
 
-                if (@rowStatusStart == "-1" && @rowStatusEnd == "0")
-                    @jobDisplaySize = 5
+                @pixelValue = @pixelValue - (@operationalHoursRowCount * @rowHeight)
+                @pixelValueEndOfJob = @pixelValueEndOfJob - (@operationalHoursRowCount * @rowHeight)
+
+                if (@rowStatusStart == -1 && @rowStatusEnd == 0)
+                    @jobDisplaySize = @pixelValue
+                    @pixelValue = 0 
                 end
-                if (@rowStatusStart == "0" && @rowStatusEnd == "1")
-                    @jobDisplaySize = 5
+                if (@rowStatusStart == 0 && @rowStatusEnd == 1)
+                    @pixelValue = @pixelValue
+                    @jobDisplaySize = (@operationalHoursRowCount * @rowHeight) - @pixelValue
                 end
 
           end 
