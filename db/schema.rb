@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121224044405) do
+ActiveRecord::Schema.define(:version => 20121231053343) do
 
   create_table "attributes", :force => true do |t|
     t.string   "name"
@@ -95,9 +95,9 @@ ActiveRecord::Schema.define(:version => 20121224044405) do
     t.string   "site_id"
     t.string   "dayOfTheWeek"
     t.string   "start"
-    t.string   "end"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.string   "numberOfRows"
   end
 
   create_table "resources", :force => true do |t|

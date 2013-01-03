@@ -6,7 +6,7 @@
     <th>Site</th>
     <th>Dayoftheweek</th>
     <th>Start</th>
-    <th>End</th>
+    <th>Number of Rows</th>
     <th></th>
     <th></th>
     <th></th>
@@ -18,7 +18,7 @@
     <td><%= operationhour.site_id %></td>
     <td><%= operationhour.dayOfTheWeek %></td>
     <td><%= operationhour.start %></td>
-    <td><%= operationhour.end %></td>
+    <td><%= operationhour.numberOfRows %></td>
     <td><%= link_to 'Show', operationhour, :class => 'btn btn-info'  %></td>
     <td><%= link_to 'Edit', edit_operationhour_path(operationhour), :class => 'btn btn-info'  %></td>
     <td><%= link_to 'Destroy', operationhour , :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
@@ -30,13 +30,3 @@
 
 <%= link_to 'New Operationhour', new_operationhour_path %>
 
-<br><br>
-JobTime = <%=raw @timeOfRow.to_s %>
-<br><br>
-JobTime = <%=raw @secondsInRow.to_s %>
-<br><br>
-JobTime = <%=raw @jobTime %>
-<br><br>
-JobTime = <%=raw @jobTime.to_time %>
-<br><br>
-<%=raw @extendedDateHash.to_s %>

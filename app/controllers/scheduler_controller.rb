@@ -35,7 +35,7 @@ class SchedulerController < ApplicationController
               @currenttime = @currentDay + (entry.start.to_i * 3600)      
               
               #Loop through the number of rows for that Operation Hours entry
-              for i in 1..(entry.end.to_i)
+              for i in 1..(entry.numberOfRows.to_i)
                   @dateTimeAry = @dateTimeAry + '"' + (@currenttime.strftime("%m/%d/%y %I:%M%p")) + '",'
                   @dateHash[@rowCounter.to_s] = @currenttime
                   @currenttime = @currenttime + (@rowTimeIncrement * 3600)
@@ -60,7 +60,7 @@ class SchedulerController < ApplicationController
       #Figure out how many rows one week of operations hours is in row count
       @operationalHoursRowCount = 0
       @operationhours.each do | entry |
-          @operationalHoursRowCount = @operationalHoursRowCount + entry.end.to_i 
+          @operationalHoursRowCount = @operationalHoursRowCount + entry.numberOfRows.to_i 
       end  
 
       #Repeat the weekly Operation Hours config for a number of weeks, first loop
@@ -73,7 +73,7 @@ class SchedulerController < ApplicationController
               @currenttime = @currentDay + (entry.start.to_i * 3600)      
               
               #Loop through the number of rows for that Operation Hours entry
-              for i in 1..(entry.end.to_i)
+              for i in 1..(entry.numberOfRows.to_i)
                       #If a row is above the schedule startDateTime, then mark it 
                       if (j == -1)
                          @extendedDateHash[@extendedRowCounter.to_s] = [@currenttime,-1]
@@ -209,16 +209,27 @@ class SchedulerController < ApplicationController
 
                 @rowStatusEnd = @rowDataEnd[1]
 
+                #if (@pixelValue > (@operationalHoursRowCount * @rowHeight))
                 @pixelValue = @pixelValue - (@operationalHoursRowCount * @rowHeight)
                 @pixelValueEndOfJob = @pixelValueEndOfJob - (@operationalHoursRowCount * @rowHeight)
 
+                #if the job is entirely before the schedule start, don't do anything. 'next' jumps out of the loop
+                if (@rowStatusStart == -1 && @rowStatusEnd == -1)
+                    next
+                end
+                #if the job starts before the schedule start and overlaps onto the visible schedule
                 if (@rowStatusStart == -1 && @rowStatusEnd == 0)
-                    @jobDisplaySize = @pixelValue
+                    @jobDisplaySize = @pixelValue.abs
                     @pixelValue = 0 
                 end
+                #if the job starts on the visible schedule, but trails off the end
                 if (@rowStatusStart == 0 && @rowStatusEnd == 1)
                     @pixelValue = @pixelValue
                     @jobDisplaySize = (@operationalHoursRowCount * @rowHeight) - @pixelValue
+                end
+                #if the job is entirely after the schedule end, don't do anything. 'next' jumps out of the loop
+                if (@rowStatusStart == 1 && @rowStatusEnd == 1)
+                    next
                 end
 
           end 

@@ -76,15 +76,12 @@ class JobsController < ApplicationController
     @job = Job.find(params[:id])
     @job.update_attributes(params[:job])
 
-    #Converting pixel values to UTC time
+    #Set parameters for building the row to time convert hash
     @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
     @site = Site.find(@siteId)
     @rowHeight = @site.rowHeight.to_i
     @rowTimeIncrement = (@site.rowTimeIncrement).to_f
     @pixelValue = @job.schedPixelVal
-    
-    #Large chunk of code needed to calculate job time based on operation hours. 
-
     @numOfWeeks = ((@site.numberOfWeeks).to_i) - 1
     @schedStartDate = current_user.schedStartDate.to_time
     #@schedStartDate = @schedStartDate.getlocal(current_user.timeZone)           # time for the top of the schedule
@@ -101,7 +98,7 @@ class JobsController < ApplicationController
             @currentDay = @weekStartDate + ((entry.dayOfTheWeek.to_i) * 24 *3600)
             @currenttime = @currentDay + (entry.start.to_i * 3600)      
               
-            for i in 1..(entry.end.to_i)
+            for i in 1..(entry.numberOfRows.to_i)
                 @dateHash[@rowCounter.to_s] = @currenttime
                 @currenttime = @currenttime + (@rowTimeIncrement * 3600)
                 @rowCounter = @rowCounter + 1
@@ -135,6 +132,86 @@ class JobsController < ApplicationController
         format.json { render json: @job.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def moveDown
+    #A job id and value will be passed in. The purpose is to move this job to an later start time as well as all jobs underneath it. 
+    @job = Job.find(params[:id])
+    @job = Job.find(1)
+    @jobResource = @job.resource
+    @moveAmount = 12    #Static amount to move
+    @jobStartTime = @job.schedDateTime
+    @jobsToMove = Job.where("maxscheduler_id = ? and site_id = ? and resource_id = ? and schedDateTime >= ?", @maxschedulerId, @siteId, @jobResource, @jobStartTime)
+    #@jobsToMove = Job.where("maxscheduler_id = ? and site_id = ? and resource_id = ?", @maxschedulerId, @siteId, @jobResource)
+
+    #Set parameters for building the row to time convert hash
+    @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
+    @site = Site.find(@siteId)
+    @rowHeight = @site.rowHeight.to_i
+    @rowTimeIncrement = (@site.rowTimeIncrement).to_f
+    @pixelValue = @job.schedPixelVal
+    @numOfWeeks = ((@site.numberOfWeeks).to_i) + 12
+    @schedStartDate = current_user.schedStartDate.to_time
+    #@schedStartDate = @schedStartDate.getlocal(current_user.timeZone)           # time for the top of the schedule
+    @currentDay = @schedStartDate
+    @rowCounter = 0
+    @dateHash = Hash.new
+ 
+    #Create hash that has the date/time data. Used for look up of pixel value matching to correct date/time. 
+    #This is done by finding the row the job is one and looking up the date. The remainder is just the position within the row
+
+    for j in 0..@numOfWeeks
+      @weekStartDate = @schedStartDate + (j.to_i * 7 * 24 * 3600)
+      @operationhours.each do | entry |
+          @currentDay = @weekStartDate + ((entry.dayOfTheWeek.to_i) * 24 *3600)
+          @currenttime = @currentDay + (entry.start.to_i * 3600)      
+            
+          for i in 1..(entry.numberOfRows.to_i)
+              @dateHash[@rowCounter.to_s] = @currenttime
+              @currenttime = @currenttime + (@rowTimeIncrement * 3600)
+              @rowCounter = @rowCounter + 1
+          end
+      end
+    end
+
+    #Loop through the jobs to move
+    @jobsToMove.each do |job|
+              @jobStartTime = job.schedDateTime
+              @jobStartTime = @jobStartTime.to_time
+               
+              #Searching loop to find the pixel value of a job
+              @dateHash.each do | rowNumber , rowDataStart |
+                               @rowNumber = rowNumber
+                               @rowStartDateTime = rowDataStart
+                               @rowEndDateTime = @rowStartDateTime + (@rowTimeIncrement * 3600)
+
+                               if ((@rowStartDateTime <= @jobStartTime) && ( @jobStartTime <= @rowEndDateTime))
+                                    @jobRowNumber = @rowNumber           
+                                    @pixelValue = (@jobRowNumber.to_i) * @rowHeight
+                                    @remainingTimeDifference = (@jobStartTime - @rowStartDateTime)
+                                    @pixelValue = @pixelValue + (((@remainingTimeDifference.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight )
+                               end #if
+                               @moveAmountInPixels = (@moveAmount.to_i / @rowTimeIncrement) * @rowHeight
+                               @newPixelValue = @pixelValue.to_i + @moveAmountInPixels
+            end #end hash
+            #Have the new pixel value. Now find the new time for that pixel value
+            @row = (@newPixelValue.to_i) / (@rowHeight.to_i)
+            @timeOfRow = @dateHash[@row.to_s]
+            @secondsInRow = ((@pixelValue.to_i).fdiv(@rowHeight).abs.modulo(1)) * (@rowTimeIncrement * 3600)
+            @jobTime = (@timeOfRow.to_time) + (@secondsInRow.to_i)
+            job.schedDateTime = @jobTime
+            job.save(:validate => false)
+    end #job loop         
+
+    # respond_to do |format|
+    #   if @job.update_attributes(params[:job])
+    #     format.html { redirect_to @job, notice: 'Job was successfully updated.' }
+    #     format.json { head :no_content }
+    #   else
+    #     format.html { render action: "edit" }
+    #     format.json { render json: @job.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # DELETE /jobs/1

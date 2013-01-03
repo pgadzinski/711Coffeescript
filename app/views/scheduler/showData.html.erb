@@ -6,6 +6,7 @@
 
 <html><head>
 &nbsp;&nbsp;<%= link_to 'New Job', new_job_path , :class => 'btn btn-info' %>&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;<a href="http://localhost:3000/jobs/moveDown/1">Move Down</a>&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;<a href="../Sites">Config</a>&nbsp;&nbsp;&nbsp;
 Sites: <% @sites.each do |site| %><a href="/users/setSite/<%= site.id %>"><%= site.name %></a>&nbsp;&nbsp;<% end %> &nbsp;&nbsp;&nbsp;&nbsp;
 Boards: <% @boards.each do |board| %><a href="/users/setBoard/<%= board.id %>"><%= board.name %></a>&nbsp;&nbsp;<% end %> 

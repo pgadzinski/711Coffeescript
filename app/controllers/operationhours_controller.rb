@@ -16,56 +16,6 @@ class OperationhoursController < ApplicationController
   def index
     @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
 
-    @rowHeight = 30
-    @rowTimeIncrement = "4".to_i
-    @numOfWeeks = "1".to_i - 1
-    @schedStartDate = current_user.schedStartDate.to_time
-    @currentDay = @schedStartDate
-    @rowCounter = 0
-    @dateHash = Hash.new
-
-      @extendedNumberOfRows = 0
-      @extendedRowCounter = 0
-      @extendedDateHash = Hash.new
-
-      #Repeat the weekly Operation Hours config for a number of weeks, first loop
-      for j in -1..(@numOfWeeks + 1) 
-        @weekStartDate = @schedStartDate + (j.to_i * 7 * 24 * 3600)
-
-            #Create Date/Time stamps for each Operation Hours entry, which defines a continous length of time for a day
-            @operationhours.each do | entry |
-              @currentDay = @weekStartDate + ((entry.dayOfTheWeek.to_i) * 24 *3600)
-              @currenttime = @currentDay + (entry.start.to_i * 3600)      
-              
-              #Loop through the number of rows for that Operation Hours entry
-              for i in 1..(entry.end.to_i)
-                      #If a row is above the schedule startDateTime, then mark it 
-                      if (j == -1)
-                         @extendedDateHash[@extendedRowCounter.to_s] = [@currenttime,-1]
-                      #If a row is below the schedule startDateTime, then mark it 
-                      elsif (j == (@numOfWeeks + 1))
-                         @extendedDateHash[@extendedRowCounter.to_s] = [@currenttime,1]
-                      else
-                      @extendedDateHash[@extendedRowCounter.to_s] = [@currenttime,0]
-                      end
-                  @currenttime = @currenttime + (@rowTimeIncrement * 3600)
-                  @extendedRowCounter = @extendedRowCounter + 1
-              end
-            end
-      end
-
-    @jobPosition = 0
-
-    @row = @jobPosition/@rowHeight
-
-    @secondsInRow = (@jobPosition.fdiv(@rowHeight).abs.modulo(1)) * (@rowTimeIncrement * 3600)
-
-    @timeOfRow = @extendedDateHash[@row.to_s][0]
-
-    #binding.pry
-
-    @jobTime = (@timeOfRow.to_time) + (@secondsInRow.to_i)
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @operationhours }
