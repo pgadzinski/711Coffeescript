@@ -136,10 +136,9 @@ class JobsController < ApplicationController
 
   def moveDown
     #A job id and value will be passed in. The purpose is to move this job to an later start time as well as all jobs underneath it. 
-    @job = Job.find(params[:id])
-    @job = Job.find(1)
+    @job = Job.find(params[:jobId])
+    @moveAmount = params[:shiftAmount]
     @jobResource = @job.resource
-    @moveAmount = 12    #Static amount to move
     @jobStartTime = @job.schedDateTime
     @jobsToMove = Job.where("maxscheduler_id = ? and site_id = ? and resource_id = ? and schedDateTime >= ?", @maxschedulerId, @siteId, @jobResource, @jobStartTime)
     #@jobsToMove = Job.where("maxscheduler_id = ? and site_id = ? and resource_id = ?", @maxschedulerId, @siteId, @jobResource)
@@ -150,7 +149,7 @@ class JobsController < ApplicationController
     @rowHeight = @site.rowHeight.to_i
     @rowTimeIncrement = (@site.rowTimeIncrement).to_f
     @pixelValue = @job.schedPixelVal
-    @numOfWeeks = ((@site.numberOfWeeks).to_i) + 12
+    @numOfWeeks = ((@site.numberOfWeeks).to_i) + 3
     @schedStartDate = current_user.schedStartDate.to_time
     #@schedStartDate = @schedStartDate.getlocal(current_user.timeZone)           # time for the top of the schedule
     @currentDay = @schedStartDate
@@ -160,7 +159,7 @@ class JobsController < ApplicationController
     #Create hash that has the date/time data. Used for look up of pixel value matching to correct date/time. 
     #This is done by finding the row the job is one and looking up the date. The remainder is just the position within the row
 
-    for j in 0..@numOfWeeks
+    for j in -3..@numOfWeeks
       @weekStartDate = @schedStartDate + (j.to_i * 7 * 24 * 3600)
       @operationhours.each do | entry |
           @currentDay = @weekStartDate + ((entry.dayOfTheWeek.to_i) * 24 *3600)
@@ -191,7 +190,7 @@ class JobsController < ApplicationController
                                     @remainingTimeDifference = (@jobStartTime - @rowStartDateTime)
                                     @pixelValue = @pixelValue + (((@remainingTimeDifference.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight )
                                end #if
-                               @moveAmountInPixels = (@moveAmount.to_i / @rowTimeIncrement) * @rowHeight
+                               @moveAmountInPixels = (@moveAmount.to_f / @rowTimeIncrement) * @rowHeight
                                @newPixelValue = @pixelValue.to_i + @moveAmountInPixels
             end #end hash
             #Have the new pixel value. Now find the new time for that pixel value
@@ -203,15 +202,15 @@ class JobsController < ApplicationController
             job.save(:validate => false)
     end #job loop         
 
-    # respond_to do |format|
-    #   if @job.update_attributes(params[:job])
-    #     format.html { redirect_to @job, notice: 'Job was successfully updated.' }
-    #     format.json { head :no_content }
-    #   else
-    #     format.html { render action: "edit" }
-    #     format.json { render json: @job.errors, status: :unprocessable_entity }
-    #   end
-    # end
+     respond_to do |format|
+       if @job.update_attributes(params[:job])
+         format.html { redirect_to "/scheduler/showData"}
+         format.json { head :no_content }
+       else
+         format.html { render action: "edit" }
+         format.json { render json: @job.errors, status: :unprocessable_entity }
+       end
+     end
   end
 
   # DELETE /jobs/1

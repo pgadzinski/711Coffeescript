@@ -5,13 +5,22 @@
 <!--meta http-equiv="refresh" content="6000; url=http://localhost:80/scheduler/showData"--> 
 
 <html><head>
-&nbsp;&nbsp;<%= link_to 'New Job', new_job_path , :class => 'btn btn-info' %>&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;<a href="http://localhost:3000/jobs/moveDown/1">Move Down</a>&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;<a href="../Sites">Config</a>&nbsp;&nbsp;&nbsp;
-Sites: <% @sites.each do |site| %><a href="/users/setSite/<%= site.id %>"><%= site.name %></a>&nbsp;&nbsp;<% end %> &nbsp;&nbsp;&nbsp;&nbsp;
-Boards: <% @boards.each do |board| %><a href="/users/setBoard/<%= board.id %>"><%= board.name %></a>&nbsp;&nbsp;<% end %> 
+<form accept-charset="UTF-8" action="http://localhost:3000/jobs/moveDown/" method="post"><div style="margin:0;padding:0;display:inline">
+<input name="utf8" type="hidden" value="&#x2713;" /><input name="_method" type="hidden" value="put" />
 
-<%=raw @jobsHash %>
+<b>Job Shifter</b> Id: <input type="text" name="jobId" value="" style="width: 20px;" > 
+
+Amount: <input  type="text" name="shiftAmount" value="" style="width: 20px;" >
+
+<input name="commit" type="submit" value="Move Job">
+
+</form>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Sites</b>: <% @sites.each do |site| %><a href="/users/setSite/<%= site.id %>"><%= site.name %></a>&nbsp;&nbsp;<% end %> &nbsp;&nbsp;&nbsp;&nbsp;
+<b>Boards</b>: <% @boards.each do |board| %><a href="/users/setBoard/<%= board.id %>"><%= board.name %></a>&nbsp;&nbsp;<% end %> 
+
+&nbsp;&nbsp;<%= link_to 'Config', sites_path , :class => 'btn btn-info' %>&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;<%= link_to 'New Job', new_job_path , :class => 'btn btn-info' %>&nbsp;&nbsp;&nbsp;
 
 <script type="text/javascript">
 

@@ -882,7 +882,7 @@ function Modaldialog(){
 		var input_id = "";
 
 		var table_body = "";
-		//table_body += "<tr><th id='label_head'>Name</th><th id='val_head'>Value</th></tr>";
+		table_body += "<tr><td class='dlg_val'><b>Id</b></td><td class='dlg_val'><b>" + id + "</b></td></tr>";
 		$.each(stats, function(key, value){
 			
 			table_body += "<tr>"

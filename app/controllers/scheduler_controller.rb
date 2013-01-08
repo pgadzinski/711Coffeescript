@@ -129,7 +129,7 @@ class SchedulerController < ApplicationController
       #Create array that holds Board and Resource data
       @boardResourceAry = "var MXS_board_data = {"
       @boards.each do |board|
-        @numOfResources = Resource.where("board_id= 2").count
+        @numOfResources = Resource.where("board_id= 1").count
         @colWidth = 1000/@numOfResources
         @boardResourceAry = @boardResourceAry + '"' + board.name.to_s + '":['
         @boardResourceAry = @boardResourceAry + '{"col_num":' + @numOfResources.to_s + ', "col_width": '+ @colWidth.to_s + '}, {'

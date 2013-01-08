@@ -6,6 +6,8 @@ Maxschedulerweb::Application.routes.draw do
 
   root :to => 'sessions#new'
   
+  match '/jobs/moveDown/', to: 'jobs#moveDown'
+  
   resources :resources
   resources :boards
   resources :sites
@@ -30,7 +32,6 @@ Maxschedulerweb::Application.routes.draw do
   match '/importdata/:id/createjobs', to: 'importdata#createjobs'
   
   match '/jobs/update/:id', to: 'jobs#async_update'
-  match '/jobs/moveDown/:id', to: 'jobs#moveDown'
   
   match ':controller(/:action(/:id))(.:format)'
   
