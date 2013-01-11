@@ -111,7 +111,17 @@ class JobsController < ApplicationController
     @secondsInRow = ((@pixelValue.to_i).fdiv(@rowHeight).abs.modulo(1)) * (@rowTimeIncrement * 3600)
     
     @jobTime = (@timeOfRow.to_time) + (@secondsInRow.to_i)
-  
+
+    #Set the board for a job based on the assigned resource
+    @jobHash = params[:job]
+    @resource_id = @jobHash["resource_id"]
+
+    #if (@resource_id)
+      @resource = Resource.find(@resource_id)
+      @board_id = @resource.board_id
+      @job.board = @board_id.to_s
+    #end 
+
     @job.schedDateTime = @jobTime
     @job.save(:validate => false)
 
@@ -120,8 +130,6 @@ class JobsController < ApplicationController
   
   def update
     @job = Job.find(params[:id])
-
-    #binding.pry
 
     respond_to do |format|
       if @job.update_attributes(params[:job])
