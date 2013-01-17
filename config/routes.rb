@@ -30,6 +30,7 @@ Maxschedulerweb::Application.routes.draw do
 
   match '/importdata/:id/review', to: 'importdata#review'
   match '/importdata/:id/createjobs', to: 'importdata#createjobs'
+  match '/importdata/:id/importScheduledJobs', to: 'importdata#importScheduledJobs'
   
   match '/jobs/update/:id', to: 'jobs#async_update'
   

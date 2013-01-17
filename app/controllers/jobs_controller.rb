@@ -68,13 +68,33 @@ class JobsController < ApplicationController
   # PUT /jobs/1
   # PUT /jobs/1.json
   def async_update
-     #params :id
+    #params :id
     #render :json => params
        
     render :json => params 
     
     @job = Job.find(params[:id])
     @job.update_attributes(params[:job])
+
+    #Hacky bad code
+    #Currently the UI gives back the index of the resource the job is in. It DOES NOT give the proper resource_id. 
+    #This is code to get the resource_id from the resource index
+
+    @jobHash = params[:job]
+    @wrongResource_id = @jobHash["resource_id"]
+
+    # if (@resource_id)
+      @resource = Resource.where("maxscheduler_id = ? and site_id = ? and board_id= ? and position = ?", @maxschedulerId, @siteId, @boardId, @wrongResource_id)
+
+      #binding.pry
+
+      @resource_id = @resource.first.id
+      #Set the board for a job based on the assigned resource
+      @resource = Resource.find(@resource_id)
+      @board_id = @resource.board_id
+      @job.board_id = @board_id.to_s
+    #end 
+    @job.resource_id = @resource_id
 
     #Set parameters for building the row to time convert hash
     @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
@@ -111,16 +131,6 @@ class JobsController < ApplicationController
     @secondsInRow = ((@pixelValue.to_i).fdiv(@rowHeight).abs.modulo(1)) * (@rowTimeIncrement * 3600)
     
     @jobTime = (@timeOfRow.to_time) + (@secondsInRow.to_i)
-
-    #Set the board for a job based on the assigned resource
-    @jobHash = params[:job]
-    @resource_id = @jobHash["resource_id"]
-
-    #if (@resource_id)
-      @resource = Resource.find(@resource_id)
-      @board_id = @resource.board_id
-      @job.board = @board_id.to_s
-    #end 
 
     @job.schedDateTime = @jobTime
     @job.save(:validate => false)

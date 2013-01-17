@@ -24,6 +24,15 @@ class SchedulerController < ApplicationController
       @rowCounter = 0
       @dateHash = Hash.new
 
+      #Hacky bad code needed to make up for resource labeling problem in UI
+      #For all the resources on this board create a lookup for their position value
+      @resources = Resource.where("board_id = ?", @boardId)
+      @resourceHash = Hash.new
+
+      @resources.each do | resource |
+          @resourceHash[resource.id] = [resource.position]
+      end 
+
       #Create date/time column array
       #Repeat the weekly Operation Hours config for a number of weeks, first loop
       for j in 0..@numOfWeeks 
@@ -121,17 +130,20 @@ class SchedulerController < ApplicationController
       @schedLowerBound = @schedEndTime + (3600 * 24 * 7 )
       #@schedStartTime = @schedStartTime.getlocal(current_user.timeZone)
 
-      @scheduledJobs = Job.where("maxscheduler_id = ? and site_id = ? and resource_id != 'none' and schedDateTime >= ? and schedDateTime <= ?", @maxschedulerId, @siteId, @schedUpperBound, @schedLowerBound)
+      @scheduledJobs = Job.where("maxscheduler_id = ? and board_id = ? and schedDateTime >= ? and schedDateTime <= ?", @maxschedulerId, @boardId, @schedUpperBound, @schedLowerBound)
       @listJobs = Job.where("maxscheduler_id = ? and site_id = ? and resource_id = 'none' ", @maxschedulerId, @siteId)
       @jobs = @scheduledJobs|@listJobs
       #@jobs = Job.where("maxscheduler_id = ? and site_id = ? ", @maxschedulerId, @siteId)
 
       #Create array that holds Board and Resource data
       @boardResourceAry = "var MXS_board_data = {"
-      @boards.each do |board|
-        @numOfResources = Resource.where("board_id= 1").count
+      board = Board.find(@boardId)
+      
+      #@boards.each do |board|
+      
+        @numOfResources = Resource.where("board_id= ?", @boardId).count
         @colWidth = 1000/@numOfResources
-        @boardResourceAry = @boardResourceAry + '"' + board.name.to_s + '":['
+        @boardResourceAry = @boardResourceAry + '"Board1":['
         @boardResourceAry = @boardResourceAry + '{"col_num":' + @numOfResources.to_s + ', "col_width": '+ @colWidth.to_s + '}, {'
             @resources.each do |resource|
                 if (board.id.to_s == resource.board_id)
@@ -139,7 +151,9 @@ class SchedulerController < ApplicationController
                 end #if end
             end #resource end
         @boardResourceAry = @boardResourceAry  + ' } ],'
-      end #board end
+      
+      #end #board end
+      
       @boardResourceAry = @boardResourceAry + '};'
 
       @rowHeight = (@site.rowHeight).to_f
@@ -150,38 +164,41 @@ class SchedulerController < ApplicationController
           if (attr.name == "Duration")
               attrPosition = attr.importposition
               @jobLengthInData = "attr" + attrPosition.to_s
-          else
-              @jobDurationInTime = @site.defaultJobLength.to_i * 3600
-              @jobDisplaySize = (( @jobDurationInTime.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight 
           end
       end
 
       #Create array that holds job data
       @jobAry = "var MXS_job_data = {"
       @jobs.each do |job|
+
+          if (@jobLengthInData)
+              @jobDurationInTime = (job[@jobLengthInData].to_i) * 3600 
+              @jobDisplaySize = (( @jobDurationInTime.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight 
+          else              
+              @jobDurationInTime = @site.defaultJobLength.to_i * 3600
+              @jobDisplaySize = (( @jobDurationInTime.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight 
+          end
         
           #Figure out if the job is in the Listview or scheduled
           if (job.resource_id == "none")
               @joblane = "0"
               @jobLocation = "listview"
               @pixelValue = 0
-              @jobDurationInTime = @site.defaultJobLength.to_i * 3600
-              @jobDisplaySize = (( @jobDurationInTime.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight 
           else
               @jobStartTime = job.schedDateTime
               @jobStartTime = @jobStartTime.to_time
               @jobEndTime = @jobStartTime + @jobDurationInTime
 
-              if (@jobLengthInData)
-                @jobDurationInTime = (job[@jobLengthInData].to_i) * 3600 
-              end              
-
-                @jobDisplaySize = (( @jobDurationInTime.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight 
-
                 #Calculate the position on the schedule from the job time stamp
                 #Step through the dateHash to find out which row the job should be placed in. Check the job time is bounded by the row
                 @pixelValue = 0
-                @joblane = job.resource_id
+
+                #Hacky bad code to make up for the incorrect labeling of resources in the UI. Backend uses resource id, UI uses 
+                #resource position
+                #@joblane = job.resource_id
+
+                @joblane = @resourceHash[job.resource_id.to_i]
+
                 @jobLocation = "board"
                 @jobRowNumber = 10000000
               
@@ -240,10 +257,12 @@ class SchedulerController < ApplicationController
               @jobLocation = "listview"
           end 
 
+          #binding.pry
+
           @jobAry = @jobAry + '"' + job.id.to_s 
           @jobAry = @jobAry + 
           '":[ {"left":0, "top":' + @pixelValue.to_s + ', "width":' + @colWidth.to_s + ' , "height":' + @jobDisplaySize.to_s + ', 
-          "location": "' + @jobLocation + '", "board": "Board1", "lane": ' + @joblane + '},{ '   
+          "location": "' + @jobLocation + '", "board": "Board1", "lane": ' + @joblane.to_s + '},{ '   
           @i = 1
           
           @attributes.each do |attr|

@@ -37,6 +37,7 @@ class ImportdataController < ApplicationController
   end
 
   # GET /importdata/1/edit
+  # Method for importing jobs to the ListView
   def createjobs
     @importdata = Importdatum.where("maxscheduler_id = ?", @maxschedulerId)
     @importdatum = Importdatum.find(params[:id])
@@ -51,6 +52,7 @@ class ImportdataController < ApplicationController
       @job = Job.new(params[:job])
       @job.maxscheduler_id = @maxschedulerId
       @job.site_id = @siteId
+      @job.board_id = @boardId
       @job.user_id = current_user.id
       @job.resource_id = "none"
       @job.schedPixelVal = "0"
@@ -73,6 +75,57 @@ class ImportdataController < ApplicationController
     end
 
   end  
+
+  # GET /importdata/1/edit
+  # Method for importing data from MaxScheduler desktop into MaxScheduler Web
+  # Will always assume there is a proper, matching configurations
+  def importScheduledJobs
+    @importdata = Importdatum.where("maxscheduler_id = ?", @maxschedulerId)
+    @importdatum = Importdatum.find(params[:id])
+    attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
+
+    #Pull in import data and parse out to a form
+    require 'csv'    
+    csv = CSV.parse(@importdatum.data, {:headers => false, :col_sep => "," } )
+    @rowCounter = 1
+    csv.each do | rowAry |    
+      colCounter = 1    #Going to re-use the MaxScheduler id for matching data purposes
+      @job = Job.new(params[:job])
+      @job.maxscheduler_id = @maxschedulerId
+      @job.site_id = @siteId
+      @job.board_id = @boardId
+      @job.user_id = current_user.id
+      @job.schedPixelVal = "0"
+
+      attributes.each do |attr|
+          if attr.name
+              @x = "attr" + colCounter.to_s
+              @job[@x] = rowAry[colCounter - 1]    #Take into account arrays indexed at 0
+              colCounter = colCounter + 1
+          end 
+      end  
+
+      #There are still three more columns: BoardId, ResourceId and ScheduleDateTime
+      colCounter = colCounter - 1
+      @job.board_id = rowAry[colCounter]
+      colCounter = colCounter + 1
+      binding.pry
+      @job.resource_id = rowAry[colCounter]
+      colCounter = colCounter + 1
+      @job.schedDateTime = rowAry[colCounter]
+
+      
+      @job.save
+      @rowCounter = @rowCounter + 1
+    end
+
+    respond_to do |format|
+      format.html { redirect_to @importdatum, notice: 'Importdatum was successfully updated.' }
+      format.json { render json: @importdata }
+    end
+
+  end  
+
 
   # GET /importdata/new
   # GET /importdata/new.json

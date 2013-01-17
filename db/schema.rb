@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130110054340) do
+ActiveRecord::Schema.define(:version => 20130111032329) do
 
   create_table "attributes", :force => true do |t|
     t.string   "name"
@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(:version => 20130110054340) do
     t.string   "schedDateTime"
     t.string   "schedPixelVal"
     t.string   "endTime"
-    t.string   "board"
+    t.string   "board_id"
   end
 
   create_table "maxschedulers", :force => true do |t|
