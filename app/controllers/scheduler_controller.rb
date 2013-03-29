@@ -14,7 +14,7 @@ class SchedulerController < ApplicationController
       @dateTimeAry = "var date_array = ["
       @site = Site.find(@siteId)
       @numOfWeeks = ((@site.numberOfWeeks).to_i) - 1
-      @rowTimeIncrement = (@site.rowTimeIncrement).to_i
+      @rowTimeIncrement = (@site.rowTimeIncrement).to_f
 
       @schedStartDate = current_user.schedStartDate.to_time
       @schedStartDateTime = @schedStartDate + (@operationhours[0].start.to_i * 3600)
@@ -172,7 +172,7 @@ class SchedulerController < ApplicationController
       @jobs.each do |job|
 
           if (@jobLengthInData)
-              @jobDurationInTime = (job[@jobLengthInData].to_i) * 3600 
+              @jobDurationInTime = (job[@jobLengthInData].to_f) * 3600 
               @jobDisplaySize = (( @jobDurationInTime.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight 
           else              
               @jobDurationInTime = @site.defaultJobLength.to_i * 3600
@@ -254,15 +254,16 @@ class SchedulerController < ApplicationController
           
           #If a job hasn't found a row to sit in, then it should be pushed to list view
           if @jobRowNumber == 10000000
-              @jobLocation = "listview"
+              #@jobLocation = "listview"
+              next
           end 
 
           #binding.pry
 
           @jobAry = @jobAry + '"' + job.id.to_s 
           @jobAry = @jobAry + 
-          '":[ {"left":0, "top":' + @pixelValue.to_s + ', "width":' + @colWidth.to_s + ' , "height":' + @jobDisplaySize.to_s + ', 
-          "location": "' + @jobLocation + '", "board": "Board1", "lane": ' + @joblane.to_s + '},{ '   
+          '":[ 
+          {"left":0, "top":' + @pixelValue.to_s + ', "width":' + @colWidth.to_s + ' , "height":' + @jobDisplaySize.to_s + ', "location": "' + @jobLocation + '", "board": "Board1", "lane": ' + @joblane.to_s + '},{ '   
           @i = 1
           
           @attributes.each do |attr|

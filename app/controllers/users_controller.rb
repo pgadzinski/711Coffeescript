@@ -28,10 +28,15 @@ class UsersController < ApplicationController
   end
 
   def index
-    @maxschedulerId = current_user.maxscheduler_id
     @siteId = session[:site]
     @boardId = session[:board]
     @users = User.where("maxscheduler_id = ?", @maxschedulerId)
+
+    #If the user is admin show all system users
+    if (current_user.admin == true)
+        @users = User.all      
+    end
+
     @user = User.new
 
     respond_to do |format|

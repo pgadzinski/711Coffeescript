@@ -11,8 +11,8 @@
     <th>Color</th>
     <th>Schedule start date</th>
     <th>Time zone</th>
-    <th>Password</th>
-    <th>Confirmation</th>
+    <th>Current Site</th>
+    <th>Current Board</th>    
     <th></th>
     <th></th>
   </tr>
@@ -25,47 +25,13 @@
     <td><%= user.color %></td>
     <td><%= user.schedStartDate %></td>
     <td><%= user.timeZone %></td>
-    <td></td>
-    <td></td>
+    <td><%= Site.find(user.currentSite).name %></td>
+    <td><%= Board.find(user.currentBoard).name %></td>
     <td><%= link_to 'Edit', edit_user_path(user), :class => 'btn btn-info'  %></td>
     <td><%= link_to 'Delete', user, :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
-
-<%= form_for(@user) do |f| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-      <ul>
-      <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <tr><td colspan=7><b>Add a new entry below:</b></td></tr>
-
-  <tr>
-  	<%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
-	  <td><%= f.text_field :FirstName, :style => 'width: 150px;' %></td>
-    <td><%= f.text_field :LastName, :style => 'width: 150px;' %></td>
-    <td><%= f.text_field :email, :style => 'width: 150px;' %></td>
-    <td><%= f.text_field :color , :style => 'width: 100px;'%></td>
-    <td><%= f.number_field :rowHeight, :style => 'width: 50px;' %></td>
-    <td><%= f.text_field :schedStartDate, :style => 'width: 50px;' %></td>
-    <td><%= f.text_field :timeZone, :style => 'width: 50px;' %></td>
-    <td><%= f.password_field :password, :style => 'width: 100px;' %></td>
-    <td><%= f.password_field :password_confirmation, :style => 'width: 100px;' %></td>
-  	<td></td>
-  	<td></td>
-  </tr>
-  <tr><td colspan=7><%= f.submit nil , :class => 'btn btn-primary'  %></td></tr>
-
-<% end %>
-
-
 </table>
 
+<%= link_to 'New User', new_user_path %>
 <br />

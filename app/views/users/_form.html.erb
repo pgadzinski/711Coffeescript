@@ -36,6 +36,14 @@
     <%= f.label :timeZone %><br />
     <%= f.number_field :timeZone %>
   </div>
+  <div>
+  Current Site<br>
+      <%= f.select :currentSite, Site.where("maxscheduler_id = ?", @maxschedulerId).collect {|site| [ site.name, site.id ] }, :style => 'width: 50px;'  %>
+  </div>
+  <div>
+      Current Board<br>
+      <%= f.select :currentBoard, Board.where("maxscheduler_id = ?", @maxschedulerId).collect {|board| [ board.name, board.id ] }, :style => 'width: 50px;'  %>
+  </div>
   <div class="field">
     <%= f.label :password %><br />
     <%= f.number_field :password %>

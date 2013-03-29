@@ -115,7 +115,7 @@ function Job(id, location, board, lane, top, width, height, stats){
 			});
 
 			//set cornet using new library
-			$(".job").corner();
+			//$(".job").corner();
 
 
 			//Unfortunately setting this in a generic manner for all jobs messes it up when other jobs, with their own grid-widths (on 				//different boards) are created
@@ -188,8 +188,8 @@ function Job(id, location, board, lane, top, width, height, stats){
 			var string="";
 			var tooltip="";
 			$.each(this.stats, function(key, value){
-				string+=key+": "+value+"</BR>";
-				tooltip+=key+": "+value+" - ";
+				string+= value+"</BR>";
+				tooltip+= key+": "+value+" - ";
 
 			});
 		

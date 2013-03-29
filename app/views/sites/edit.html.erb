@@ -1,5 +1,5 @@
 <h1>Editing site</h1>
-
+<br> 
 <%= form_for(@site) do |f| %>
   <% if @site.errors.any? %>
     <div id="error_explanation">
@@ -14,24 +14,22 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
+    Name: <br> <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :rowTimeIncrement %><br />
-    <%= f.text_field :rowTimeIncrement %>
+    Row time increment: <br> <%= f.text_field :rowTimeIncrement %>
   </div>
   <div class="field">
-    <%= f.label :dateTimeColumnWidth %><br />
-    <%= f.text_field :dateTimeColumnWidth %>
+    Date time column width: <br> <%= f.text_field :dateTimeColumnWidth %>
   </div>
   <div class="field">
-    <%= f.label :rowHeight%><br />
-    <%= f.text_field :rowHeight %>
+    Row height: <br> <%= f.text_field :rowHeight %>
   </div>
   <div class="field">
-    <%= f.label :numberOfWeeks%><br />
-    <%= f.text_field :numberOfWeeks %>
+    Default job length: <br> <%= f.text_field :defaultJobLength %>
+  </div>
+  <div class="field">
+    Number of weeks: <br> <%= f.text_field :numberOfWeeks %>
   </div>
   <div class="actions">
     <%= f.submit %>

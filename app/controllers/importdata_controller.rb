@@ -11,7 +11,7 @@ class ImportdataController < ApplicationController
   # GET /importdata
   # GET /importdata.json
   def index
-    @importdata = Importdatum.where("maxscheduler_id = ?", @maxschedulerId)
+    @importdata = Importdatum.where("maxscheduler_id = ?", @maxschedulerId).order('id desc')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -105,22 +105,35 @@ class ImportdataController < ApplicationController
           end 
       end  
 
-      #There are still three more columns: BoardId, ResourceId and ScheduleDateTime
+      #There are still three more columns: BoardId, ResourceId and ScheduleDateTime. 
       colCounter = colCounter - 1
-      @job.board_id = rowAry[colCounter]
-      colCounter = colCounter + 1
-      binding.pry
-      @job.resource_id = rowAry[colCounter]
-      colCounter = colCounter + 1
-      @job.schedDateTime = rowAry[colCounter]
 
-      
+      #Need to do a reference look up to get the board_id and resource_id 
+      @board_label = rowAry[colCounter]
+      @boardResult = Board.where("maxscheduler_id = ? and name = ?", @maxschedulerId.to_s, @board_label.to_s)
+      @job.board_id = @boardResult[0].id
+      colCounter = colCounter + 1
+  
+      @resource_label = rowAry[colCounter]
+      @resourceResult = Resource.where("maxscheduler_id = ? and name = ?", @maxschedulerId, @resource_label)
+      @job.resource_id = @resourceResult[0].id
+      colCounter = colCounter + 1
+
+      #The export from MaxScheduler has a bad date format, 1/8/13 , need to parse and re-arrange
+      @importDate = rowAry[colCounter]
+      colCounter = colCounter + 1
+      @importTime = rowAry[colCounter]
+      @importString = @importDate + " " + @importTime
+      @importDateTime = DateTime.strptime(@importString, '%m/%d/%y %H:%M')
+    
+      @job.schedDateTime = @importDateTime
+
       @job.save
       @rowCounter = @rowCounter + 1
     end
 
     respond_to do |format|
-      format.html { redirect_to @importdatum, notice: 'Importdatum was successfully updated.' }
+      format.html { redirect_to @importdatum, notice: 'MaxScheduler import completed successfully.' }
       format.json { render json: @importdata }
     end
 

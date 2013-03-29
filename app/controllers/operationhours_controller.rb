@@ -15,7 +15,8 @@ class OperationhoursController < ApplicationController
   # GET /operationhours.json
   def index
     @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
-
+    @operationhour = Operationhour.new
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @operationhours }

@@ -9,14 +9,19 @@ gem 'rails', '3.2.1'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
+gem 'mysql2'
+
 group :development, :test do
-  gem 'sqlite3'
+#  gem 'sqlite3'
 end
 #group :production do
 #  gem 'pg'
 #end
 
 gem 'pry', :group => :development
+
+#gem 'jquery-ui-rails'       #Added for modal support
+#gem 'jquery-modal-rails'      #Added for modal support
 
 #group :test, :development do
   #gem 'rspec-rails'

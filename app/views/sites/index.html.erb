@@ -9,10 +9,11 @@
   <thead>
   <tr>
     <th>Name</th>
-    <th>Rowtimeincrement</th>
-    <th>Datetimecolumnwidth</th>
-    <th>rowHeight</th>
-    <th>numberOfWeeks</th>
+    <th>Row time increment</th>
+    <th>Date time column width</th>
+    <th>Row Height</th>
+    <th>Default job length</th>
+    <th>Number of weeks</th>
     <th></th>
     <th></th>
   </tr>
@@ -25,6 +26,7 @@
     <td><%= site.rowTimeIncrement %></td>
     <td><%= site.dateTimeColumnWidth %></td>
     <td><%= site.rowHeight %></td>
+    <td><%= site.defaultJobLength %></td>
     <td><%= site.numberOfWeeks %></td>
     <td><%= link_to 'Edit', edit_site_path(site), :class => 'btn btn-info'   %></td>
     <td><%= link_to 'Delete', site, :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
@@ -50,11 +52,12 @@
 
   <tr>
   	<%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
-    <td><%= f.text_field :name %></td>
-    <td><%= f.text_field :rowTimeIncrement %></td>
-    <td><%= f.text_field :dateTimeColumnWidth %></td>
-  	<td><%= f.text_field :rowHeight %></td>
-  	<td><%= f.text_field :numberOfWeeks %></td>
+    <td><%= f.text_field :name, :style => 'width: 120px;' %></td>
+    <td><%= f.text_field :rowTimeIncrement, :style => 'width: 120px;' %></td>
+    <td><%= f.text_field :dateTimeColumnWidth, :style => 'width: 120px;' %></td>
+  	<td><%= f.text_field :rowHeight, :style => 'width: 120px;' %></td>
+    <td><%= f.text_field :defaultJobLength, :style => 'width: 120px;' %></td>
+  	<td><%= f.text_field :numberOfWeeks, :style => 'width: 120px;' %></td>
   	<td></td>
   	<td></td>
   </tr>

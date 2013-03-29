@@ -22,4 +22,5 @@
 
 
 <%= link_to 'Edit', edit_importdatum_path(@importdatum) %> |
-<%= link_to 'Back', importdata_path %>
+<%= link_to 'Back', importdata_path %> | 
+<a href=/importdata/<%= @importdatum.id.to_s %>/review>Review</a>
