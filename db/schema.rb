@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130111032329) do
+ActiveRecord::Schema.define(:version => 20130413045155) do
 
   create_table "attributes", :force => true do |t|
     t.string   "name"
@@ -149,6 +149,7 @@ ActiveRecord::Schema.define(:version => 20130111032329) do
     t.string   "currentBoard"
     t.string   "schedStartDate"
     t.string   "timeZone"
+    t.string   "numberOfWeeks"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

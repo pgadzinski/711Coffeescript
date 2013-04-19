@@ -1,6 +1,9 @@
 <h1>Listing jobs</h1>
 <br>
-<table class="table table-striped table-bordered table-condensed">
+<table class="table table-striped table-bordered table-condensed" id="jobs">
+
+  <thead>
+
   <tr>
     <th></th>
     <th></th>
@@ -10,12 +13,15 @@
 	    	<th><font size=4><%= attr.name %></font></th>   
     	<% end %>
 	<% end %> <!--attributeLoop -->
-    <th>Site</th>
-    <th>User</th>
     <th>Resource</th>
     <th>schedDateTime</th>
     <th>schedPixelVal </th>
+    <th>Site</th>
+    <th>User</th>
   </tr>
+</thead>
+
+<tbody>
 
 <% @jobs.each do |job| %>
 <% i=1 %>
@@ -31,16 +37,20 @@
     	<% i=i+1 %>
     	<% end %>
 	<% end %> 
-    <td><%= job.site_id %></td>
-    <td><%= job.user_id %></td>
     <td><%= job.resource_id %></td>
     <td><%= job.schedDateTime %></td>
     <td><%= job.schedPixelVal %></td>
+    <td><%= Site.find(job.site_id).name %></td>
+    <td><%= User.find(job.user_id).FirstName %> , <%= User.find(job.user_id).LastName %> </td>
 </tr>	
 <% end %> <!--jobLoop -->
+
+</tbody>
+
 </table>	
 <br>	
 
 <br />
 
 <%= link_to 'New Job', new_job_path %>
+

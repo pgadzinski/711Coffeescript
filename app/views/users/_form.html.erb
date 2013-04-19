@@ -11,7 +11,13 @@
     </div>
   <% end %>
 
-<%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
+  <% if @user.admin == true %>
+        MaxSchedulerId <br>
+        <%= f.text_field :maxscheduler_id %>
+  <% else %>
+        <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
+  <% end %>
+
   <div class="field">
     <%= f.label :FirstName %><br />
     <%= f.text_field :FirstName %>
@@ -30,11 +36,15 @@
   </div>
   <div class="field">
     <%= f.label :schedStartDate %><br />
-    <%= f.number_field :schedStartDate %>
+    <%= f.text_field :schedStartDate %>
+  </div>
+  <div class="field">
+    <%= f.label :numberOfWeeks %><br />
+    <%= f.text_field :numberOfWeeks %>
   </div>
   <div class="field">
     <%= f.label :timeZone %><br />
-    <%= f.number_field :timeZone %>
+    <%= f.text_field :timeZone %>
   </div>
   <div>
   Current Site<br>
@@ -46,11 +56,11 @@
   </div>
   <div class="field">
     <%= f.label :password %><br />
-    <%= f.number_field :password %>
+    <%= f.password_field :password %>
   </div>
   <div class="field">
     <%= f.label :password_confirmation %><br />
-    <%= f.number_field :password_confirmation %>
+    <%= f.password_field :password_confirmation %>
   </div>
   <div class="actions">
     <%= f.submit %>

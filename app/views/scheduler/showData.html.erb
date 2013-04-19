@@ -2,19 +2,23 @@
 
 <script src="/js/object_script.js?body=1" type="text/javascript"></script>
 
-<!--meta http-equiv="refresh" content="6000; url=http://localhost:80/scheduler/showData"--> 
+
+<!--Refresh of page -->
+<meta http-equiv="refresh" content="300; url=../scheduler/showData"> 
 
 <html><head>
-<form accept-charset="UTF-8" action="http://localhost:3000/jobs/moveDown/" method="post"><div style="margin:0;padding:0;display:inline">
+<form accept-charset="UTF-8" action="../jobs/moveDown/" method="post"><div style="margin:0;padding:0;display:inline">
 <input name="utf8" type="hidden" value="&#x2713;" /><input name="_method" type="hidden" value="put" />
 
-<b>Job Shifter</b> Id: <input type="text" name="jobId" value="" style="width: 20px;" > 
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Job Shifter</b> Id: <input type="text" name="jobId" value="" style="width: 20px;" > 
 
 Amount: <input  type="text" name="shiftAmount" value="" style="width: 20px;" >
 
 <input name="commit" type="submit" value="Move Job">
 
 </form>
+
+&nbsp;&nbsp; MX: <b><%= Maxscheduler.find(@maxschedulerId).name %></b>
 
 &nbsp;&nbsp;&nbsp;&nbsp;<b>Sites</b>: <% @sites.each do |site| %><a href="/users/setSite/<%= site.id %>"><%= site.name %></a>&nbsp;&nbsp;<% end %> &nbsp;&nbsp;&nbsp;&nbsp;
 <b>Boards</b>: <% @boards.each do |board| %><a href="/users/setBoard/<%= board.id %>"><%= board.name %></a>&nbsp;&nbsp;<% end %> 

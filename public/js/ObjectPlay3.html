@@ -1,0 +1,147 @@
+<html>
+<script src="./jquery-1.6.2.min.js"></script>
+<script src="./jquery-ui.js"></script>
+
+<link rel="stylesheet" href="./jquery-ui.css" />
+
+<link rel="StyleSheet" href="./vhg.css" type="text/css"> 
+
+ <style>
+#draggable { width: 150px; height: 150px; padding: 0.5em; }
+</style>
+<script>
+
+$( init );
+ 
+function init() {
+  $(".draggable").draggable( {
+    cursor: 'move',
+    containment: 'document',
+    stop: handleDragStop
+  } );
+}
+
+</script>
+
+<body>
+
+<button id="create-user">Create new job</button>
+<button id="buildList">Build List</button>
+
+<table border="1" style="width: 1268px" cellpadding="0" cellspacing="0">
+<tr>
+	<td align=center width="130">Board1</td>
+	<td align=center><b>tank1</b></td>
+	<td align=center><b>tank2</b></td>
+	<td align=center><b>tank3</b></td>
+	<td align=center><b>tank4</b></td>
+	<td align=center><b>tank5</b></td>
+</tr>
+</table>
+
+<!-- div that hold the schedule table and makes it scrollable -->
+<div style="overflow: auto;height: 150px; width: 1286px;">
+
+	<div id="schedule" style="position:relative;"> 
+		<!-- table that shows the schedule structure -->
+		<table width="1268" border="1">
+		
+		<tr height=50>
+		<td width="130"><b>2/26/13 Tue/8:00 am</b></td><td></td>
+		<td></td>
+		<td></td>
+		<td>
+
+		</td>
+		<td></td>
+		</tr>
+		<tr height=50>
+		<td><b>2/26/13 Tue/10:00 am</b></td><td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		</tr>
+		<tr height=50>
+		<td><b>2/26/13 Tue/12:00 pm</b></td><td></td>
+		<td></td>
+		<td>
+		</td>
+		<td></td>
+		<td></td>
+		</tr>
+		<tr height=50>
+		<td><b>2/27/13 Wed/8:00 am</b></td><td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		</tr>
+
+		</table>
+
+		<div id="ScheduledJobs">
+	    </div>
+
+	</div>	
+</div>
+
+<br>
+List view
+
+<table border="1" style="width: 1268px" cellpadding="0" cellspacing="0">
+<tr>
+	<td align=center width="130">Id</td>
+	<td align=center><b>Attr1</b></td>
+	<td align=center><b>Attr2</b></td>
+	<td align=center><b>Attr3</b></td>
+	<td align=center><b>Attr4</b></td>
+	<td align=center><b>Attr5</b></td>
+	<td align=center><b>Attr6</b></td>
+	<td align=center><b>Attr7</b></td>
+</tr>
+</table>
+
+<div style="overflow: auto;height: 100px; width: 1286px;">
+<table id="ListView" width="1268" border="1">
+
+
+</table>
+</div>
+
+<!-- New Job Modal -->
+<div id="dialog-form" title="Job Edit">
+<form>
+<fieldset>
+Id: 		<input type="text" name="id" id="id" class="text ui-widget-content ui-corner-all" /><br>
+Attr1:   	<input type="text" name="attr1" id="attr1" class="text ui-widget-content ui-corner-all" /><br>
+Attr2:		<input type="text" name="attr2" id="attr2" value="" class="text ui-widget-content ui-corner-all" /><br>
+Attr3: 		<input type="text" name="attr3" id="attr3" value="" class="text ui-widget-content ui-corner-all" /><br>
+Attr4: 		<input type="text" name="attr4" id="attr4" value="" class="text ui-widget-content ui-corner-all" /><br>
+Attr5: 		<input type="text" name="attr5" id="attr5" value="" class="text ui-widget-content ui-corner-all" /><br>
+Attr6: 		<input type="text" name="attr6" id="attr6" value="" class="text ui-widget-content ui-corner-all" /><br>
+Attr7: 		<input type="text" name="attr7" id="attr7" value="" class="text ui-widget-content ui-corner-all" /><br>
+</fieldset>
+</form>
+</div>
+
+<!-- Edit Job Modal -->
+<div id="edit-form" title="Job Edit">
+<form>
+<fieldset>
+Id: 		<input type="text" name="eid" id="eid" class="text ui-widget-content ui-corner-all" /><br>
+Attr1:   	<input type="text" name="eattr1" id="eattr1" class="text ui-widget-content ui-corner-all" /><br>
+Attr2:		<input type="text" name="eattr2" id="eattr2" value="" class="text ui-widget-content ui-corner-all" /><br>
+Attr3: 		<input type="text" name="eattr3" id="eattr3" value="" class="text ui-widget-content ui-corner-all" /><br>
+Attr4: 		<input type="text" name="eattr4" id="eattr4" value="" class="text ui-widget-content ui-corner-all" /><br>
+Attr5: 		<input type="text" name="eattr5" id="eattr5" value="" class="text ui-widget-content ui-corner-all" /><br>
+Attr6: 		<input type="text" name="eattr6" id="eattr6" value="" class="text ui-widget-content ui-corner-all" /><br>
+Attr7: 		<input type="text" name="eattr7" id="eattr7" value="" class="text ui-widget-content ui-corner-all" /><br>
+</fieldset>
+</form>
+</div>
+
+<script src="./mx.js"></script>
+<script src="./modal.js"></script>
+
+</body></html>

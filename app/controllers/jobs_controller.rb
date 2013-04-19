@@ -102,7 +102,7 @@ class JobsController < ApplicationController
     @rowHeight = @site.rowHeight.to_i
     @rowTimeIncrement = (@site.rowTimeIncrement).to_f
     @pixelValue = @job.schedPixelVal
-    @numOfWeeks = ((@site.numberOfWeeks).to_i) - 1
+    @numOfWeeks = ((current_user.numberOfWeeks).to_i) - 1
     @schedStartDate = current_user.schedStartDate.to_time
     #@schedStartDate = @schedStartDate.getlocal(current_user.timeZone)           # time for the top of the schedule
     @currentDay = @schedStartDate
@@ -167,7 +167,7 @@ class JobsController < ApplicationController
     @rowHeight = @site.rowHeight.to_i
     @rowTimeIncrement = (@site.rowTimeIncrement).to_f
     @pixelValue = @job.schedPixelVal
-    @numOfWeeks = ((@site.numberOfWeeks).to_i) + 3
+    @numOfWeeks = ((current_user.numberOfWeeks).to_i) + 3
     @schedStartDate = current_user.schedStartDate.to_time
     #@schedStartDate = @schedStartDate.getlocal(current_user.timeZone)           # time for the top of the schedule
     @currentDay = @schedStartDate

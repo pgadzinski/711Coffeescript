@@ -22,7 +22,7 @@
     <td><%= importdatum.maxscheduler_id %></td>
     <td><%= importdatum.site_id %></td>
     <td><%= importdatum.user_id %></td>
-    <td><%= importdatum.data %></td>
+    <td><%= importdatum.data[0...400] %></td>
     <td><%= importdatum.created_at %></td>
     <td><%= importdatum.updated_at %></td>
     <td><%= link_to 'Show', importdatum , :class => 'btn btn-info' %></td>

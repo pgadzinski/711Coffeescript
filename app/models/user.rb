@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-	attr_accessible :FirstName, :LastName, :email, :color, :rowHeight, :password, :password_confirmation, :maxscheduler_id, :currentSite, :currentBoard, :schedStartDate, :timeZone
+	attr_accessible :FirstName, :LastName, :email, :color, :rowHeight, :password, :password_confirmation, :maxscheduler_id, :currentSite, :currentBoard, :schedStartDate, :timeZone, :numberOfWeeks
 	has_secure_password
 
 	belongs_to :maxscheduler

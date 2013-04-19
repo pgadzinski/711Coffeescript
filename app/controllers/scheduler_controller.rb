@@ -13,11 +13,11 @@ class SchedulerController < ApplicationController
       @operationhours = Operationhour.where("maxscheduler_id = ?", @maxschedulerId)
       @dateTimeAry = "var date_array = ["
       @site = Site.find(@siteId)
-      @numOfWeeks = ((@site.numberOfWeeks).to_i) - 1
+      @numOfWeeks = ((current_user.numberOfWeeks).to_i) - 1
       @rowTimeIncrement = (@site.rowTimeIncrement).to_f
 
       @schedStartDate = current_user.schedStartDate.to_time
-      @schedStartDateTime = @schedStartDate + (@operationhours[0].start.to_i * 3600)
+      @schedStartDateTime = @schedStartDate + (@operationhours[0].start.to_f * 3600)
       #@schedStartDateTime = @schedStartDateTime.getlocal(current_user.timeZone)
       @currentDay = @schedStartDate
       @numberOfRows = 0
@@ -33,6 +33,16 @@ class SchedulerController < ApplicationController
           @resourceHash[resource.id] = [resource.position]
       end 
 
+      #Array for color coding the roles
+      colorArray = Array.new 
+      colorArray[0] = '003300' #light green
+      colorArray[1] = '666633' #aqua
+      colorArray[2] = 'FF3366' #pink
+      colorArray[3] = '006633' #dark green
+      colorArray[4] = 'FF33CC' #magenta
+      colorArray[5] = 'CC33FF' #purple
+      colorArray[6] = '3366FF' #blue
+
       #Create date/time column array
       #Repeat the weekly Operation Hours config for a number of weeks, first loop
       for j in 0..@numOfWeeks 
@@ -41,11 +51,11 @@ class SchedulerController < ApplicationController
             #Create Date/Time stamps for each Operation Hours entry, which defines a continous length of time for a day
             @operationhours.each do | entry |
               @currentDay = @weekStartDate + ((entry.dayOfTheWeek.to_i) * 24 *3600)
-              @currenttime = @currentDay + (entry.start.to_i * 3600)      
+              @currenttime = @currentDay + (entry.start.to_f * 3600)      
               
               #Loop through the number of rows for that Operation Hours entry
               for i in 1..(entry.numberOfRows.to_i)
-                  @dateTimeAry = @dateTimeAry + '"' + (@currenttime.strftime("%m/%d/%y %I:%M%p")) + '",'
+                  @dateTimeAry = @dateTimeAry + '"<font color=' + colorArray[entry.dayOfTheWeek.to_i] + '>' + (@currenttime.strftime("%m/%d/%y %I:%M%p")) + '",'
                   @dateHash[@rowCounter.to_s] = @currenttime
                   @currenttime = @currenttime + (@rowTimeIncrement * 3600)
                   @rowCounter = @rowCounter + 1
@@ -79,7 +89,7 @@ class SchedulerController < ApplicationController
             #Create Date/Time stamps for each Operation Hours entry, which defines a continous length of time for a day
             @operationhours.each do | entry |
               @currentDay = @weekStartDate + ((entry.dayOfTheWeek.to_i) * 24 *3600)
-              @currenttime = @currentDay + (entry.start.to_i * 3600)      
+              @currenttime = @currentDay + (entry.start.to_f * 3600)      
               
               #Loop through the number of rows for that Operation Hours entry
               for i in 1..(entry.numberOfRows.to_i)
@@ -116,7 +126,6 @@ class SchedulerController < ApplicationController
       @resources = Resource.where("maxscheduler_id = ? and site_id = ?", @maxschedulerId, @siteId)
       
       #Get the list of jobs that should be displayed on this schedule, ie. in the schedule time frame
-      #binding.pry
       @site = Site.find(@siteId)
 
       #Figure out what jobs should be displayed on this schedule. The jobs contained within are the relevant ones. 
@@ -130,10 +139,9 @@ class SchedulerController < ApplicationController
       @schedLowerBound = @schedEndTime + (3600 * 24 * 7 )
       #@schedStartTime = @schedStartTime.getlocal(current_user.timeZone)
 
-      @scheduledJobs = Job.where("maxscheduler_id = ? and board_id = ? and schedDateTime >= ? and schedDateTime <= ?", @maxschedulerId, @boardId, @schedUpperBound, @schedLowerBound)
+      @scheduledJobs = Job.where("maxscheduler_id = ? and board_id = ? and schedDateTime >= ? and schedDateTime <= ? and resource_id != 'none' ", @maxschedulerId, @boardId, @schedUpperBound, @schedLowerBound)
       @listJobs = Job.where("maxscheduler_id = ? and site_id = ? and resource_id = 'none' ", @maxschedulerId, @siteId)
       @jobs = @scheduledJobs|@listJobs
-      #@jobs = Job.where("maxscheduler_id = ? and site_id = ? ", @maxschedulerId, @siteId)
 
       #Create array that holds Board and Resource data
       @boardResourceAry = "var MXS_board_data = {"
@@ -168,7 +176,7 @@ class SchedulerController < ApplicationController
       end
 
       #Create array that holds job data
-      @jobAry = "var MXS_job_data = {"
+      @jobAry = "var MXS_job_data = {" + "\n"
       @jobs.each do |job|
 
           if (@jobLengthInData)
@@ -251,6 +259,7 @@ class SchedulerController < ApplicationController
 
           end 
 
+          #binding.pry
           
           #If a job hasn't found a row to sit in, then it should be pushed to list view
           if @jobRowNumber == 10000000
@@ -260,21 +269,22 @@ class SchedulerController < ApplicationController
 
           #binding.pry
 
-          @jobAry = @jobAry + '"' + job.id.to_s 
-          @jobAry = @jobAry + 
-          '":[ 
-          {"left":0, "top":' + @pixelValue.to_s + ', "width":' + @colWidth.to_s + ' , "height":' + @jobDisplaySize.to_s + ', "location": "' + @jobLocation + '", "board": "Board1", "lane": ' + @joblane.to_s + '},{ '   
+          @jobAry = @jobAry + '"' + job.id.to_s + '":[ {"left":0, "top":' + @pixelValue.to_s + ', "width":' + @colWidth.to_s + ' , "height":' + @jobDisplaySize.to_s + ', "location": "' + @jobLocation + '", "board": "Board1", "lane": ' + @joblane.to_s + '},{ '   
           @i = 1
           
           @attributes.each do |attr|
               if attr.name
                   @x = "attr"+ @i.to_s
+                  #Need to protect against Null attribute values in database
+                  if (job[@x].nil?) 
+                      job[@x] =' '
+                  end    
                   @jobAry = @jobAry + '"' + attr.name + '":"' + job[@x] + '",'
               end #if end
               @i = @i + 1
           end #attribute end 
 
-          @jobAry = @jobAry + '} , {"some_date":"data"} ],'
+          @jobAry = @jobAry + '} , {"some_date":"data"} ],' + "\n"
       
       end #job end
       

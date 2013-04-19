@@ -13,7 +13,7 @@ class ResourcesController < ApplicationController
   end  
     
   def index
-    @resources = Resource.where("maxscheduler_id = ?", @maxschedulerId)
+    @resources = Resource.where("maxscheduler_id = ?", @maxschedulerId).order("board_id")
     @resource = Resource.new
 
     respond_to do |format|

@@ -5,12 +5,11 @@
 <br>
 <table class="table table-striped table-bordered table-condensed">
   <tr>
-    <th>Name</th>
-    <th>Importposition</th>
-    <th>Listposition</th>
-    <th>Scheduleposition</th>
-    <th>ColumnWidth</th>
-    <th></th>
+    <th>Attribute Name</th>
+    <th>Import Position</th>
+    <th>List Position</th>
+    <th>Schedule Position</th>
+    <th>Column Width</th>
     <th></th>
   </tr>
 
@@ -22,7 +21,6 @@
     <td><%= attribute.scheduleposition %></td>
     <td><%= attribute.columnWidth %></td>
     <td><%= link_to 'Edit', edit_attribute_path(attribute), :class => 'btn btn-info'  %></td>
-    <td><%= link_to 'Destroy', attribute, :class => 'btn btn-danger', confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 
@@ -48,7 +46,6 @@
   <td><%= f.number_field :listposition, :style => 'width: 50px;'   %></td>
   <td><%= f.number_field :scheduleposition, :style => 'width: 50px;'   %></td>
   <td><%= f.number_field :columnWidth, :style => 'width: 50px;'   %></td>
-  <td></td>
   <td></td>
   </tr>
 
