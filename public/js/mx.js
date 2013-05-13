@@ -92,6 +92,7 @@
 	  	for(var index in jobBucket) {
 	  			if (jobBucket[index].resource == 'none') {
 		  			jobRow =  '<tr height=50><td width=130>' + 
+		  			'<img id=drag'+ index + ' src=./30day.gif draggable=true width=30 ondragstart=drag(event)>' +
 		      		'<button class=editButton id=l'+ index + '>E</button> &nbsp;' +
 		      		'<button class=deleteButton id='+ index + '>D</button> &nbsp;' +
 					index + '</td>><td>';
@@ -122,6 +123,14 @@
 		$("#eattr5").val(jobBucket[$id].attr5);
 		$("#eattr6").val(jobBucket[$id].attr6);
 		$("#eattr7").val(jobBucket[$id].attr7);
+		$("#eattr8").val(jobBucket[$id].attr8);
+		$("#eattr9").val(jobBucket[$id].attr9);
+		$("#eattr10").val(jobBucket[$id].attr10);
+		$("#eattr11").val(jobBucket[$id].attr11);
+		$("#eattr12").val(jobBucket[$id].attr12);
+		$("#eattr13").val(jobBucket[$id].attr13);
+		$("#eattr14").val(jobBucket[$id].attr14);
+		$("#eattr15").val(jobBucket[$id].attr15);
 
 		$( "#edit-form" ).dialog( "open" );
 	    });

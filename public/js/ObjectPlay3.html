@@ -9,6 +9,32 @@
  <style>
 #draggable { width: 150px; height: 150px; padding: 0.5em; }
 </style>
+
+<!-- script for supporting drag/drop between list view and schedule --> 
+<script>
+		function allowDrop(ev) {
+			ev.preventDefault();
+		}
+
+		function drag(ev) {
+			ev.dataTransfer.setData("Text",ev.target.id);
+		}
+
+		function drop(ev) {
+			var data = ev.dataTransfer.getData("Text");
+			ev.target.appendChild(document.getElementById(data));
+			console.log(ev.screenX);
+			console.log(ev.screenY);
+			
+			var x = ev.screenX;
+			var y = ev.screenY;
+			alert('x ' + x + ' y ' + y);
+			ev.preventDefault();
+		}
+
+</script>	
+
+
 <script>
 
 $( init );
@@ -42,12 +68,12 @@ function init() {
 <!-- div that hold the schedule table and makes it scrollable -->
 <div style="overflow: auto;height: 150px; width: 1286px;">
 
-	<div id="schedule" style="position:relative;"> 
+	<div id="schedule" style="position:relative;" ondrop="drop(event)" ondragover="allowDrop(event)"> 
 		<!-- table that shows the schedule structure -->
 		<table width="1268" border="1">
 		
 		<tr height=50>
-		<td width="130"><b>2/26/13 Tue/8:00 am</b></td><td></td>
+		<td width="130" ><b>2/26/13 Tue/8:00 am</b></td><td></td>
 		<td></td>
 		<td></td>
 		<td>
