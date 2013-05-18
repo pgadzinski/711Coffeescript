@@ -1,4 +1,5 @@
 <html>
+
 <script src="./jquery-1.6.2.min.js"></script>
 <script src="./jquery-ui.js"></script>
 
@@ -9,30 +10,6 @@
  <style>
 #draggable { width: 150px; height: 150px; padding: 0.5em; }
 </style>
-
-<!-- script for supporting drag/drop between list view and schedule --> 
-<script>
-		function allowDrop(ev) {
-			ev.preventDefault();
-		}
-
-		function drag(ev) {
-			ev.dataTransfer.setData("Text",ev.target.id);
-		}
-
-		function drop(ev) {
-			var data = ev.dataTransfer.getData("Text");
-			ev.target.appendChild(document.getElementById(data));
-			console.log(ev.screenX);
-			console.log(ev.screenY);
-			
-			var x = ev.screenX;
-			var y = ev.screenY;
-			alert('x ' + x + ' y ' + y);
-			ev.preventDefault();
-		}
-
-</script>	
 
 
 <script>
@@ -46,6 +23,23 @@ function init() {
     stop: handleDragStop
   } );
 }
+
+	//Call to create the job javascript objects and store them into JobBucket associative array
+	//Data file
+
+	attributeNamesAry = new Array ("Cust","JobNum","PONum","Duration","Qty","Completed","Color");
+
+	numberOfAttributes = 7;
+
+	resourceDict = {
+		0:0,
+		1:130,
+		2:350,
+		3:585,
+		4:815,
+		5:1040,
+	};
+
 
 </script>
 
@@ -167,7 +161,15 @@ Attr7: 		<input type="text" name="eattr7" id="eattr7" value="" class="text ui-wi
 </form>
 </div>
 
-<script src="./mx.js"></script>
-<script src="./modal.js"></script>
+</body>
 
-</body></html>
+<script src="http://localhost:3000/js/modal.js"></script>
+
+
+<br>
+
+<div id="jtest">
+
+</div>
+
+</html>

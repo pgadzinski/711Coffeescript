@@ -23,7 +23,7 @@ Maxschedulerweb::Application.routes.draw do
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
 
-  get "scheduler/show"
+  get "scheduler/jobData"
   get "scheduler/showData"
   
   match '/test', to: 'boards#test'
