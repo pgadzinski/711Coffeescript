@@ -465,7 +465,7 @@ class SchedulerController < ApplicationController
           #@jobAry = @jobAry + '"' + job.id.to_s + '":[ {"left":0, "top":' + @pixelValue.to_s + ', "width":' + @colWidth.to_s + ' , "height":' + @jobDisplaySize.to_s + ', "location": "' + @jobLocation + '", "board": "Board1", "lane": ' + @joblane.to_s + '},{ '   
           
 
-          @jobAry = @jobAry + job.id.to_s + ': (new jobCreate( "' + job.id.to_s + '","' + @joblane.to_s + '","0",' + @pixelValue.to_s + ',' + @colWidth.to_s + ',' + @jobDisplaySize.to_s + ',"blue",'
+          @jobAry = @jobAry + job.id.to_s + ': (new jobCreate( ' + job.id.to_s + ',"' + @joblane.to_s + '","100",' + @pixelValue.to_s + ',' + @colWidth.to_s + ',' + @jobDisplaySize.to_s + ',"blue",'
 
           @i = 1
 

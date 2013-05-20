@@ -1,44 +1,4 @@
-
-
-//Next 2 methods are for long polling the job data from Rails for synching job data between the separate users of the same schedule
-	var FREQ = 1000000 ;
-	var repeat = true;
-		
-	//Endless loop that triggers the Ajax call below	
-	function startAJAXcalls(){
-	
-		if(repeat){
-			setTimeout( function() {
-					getJobData();
-					startAJAXcalls();
-				}, 	
-				FREQ
-			);
-		}
-	}
-	
-
-	//Pull the proper job data for this schedule. Does it need to include a query perhaps? 
-	function getJobData(){
-		$.ajax({
-			url: "http://localhost:3000/scheduler/jobData.js",
-			cache: false,
-			dataType: "script",
-			success: function(){
-				
-				buildList();
- 				placeScheduledJobs();
-
-			}
-
-		});
-	}
-
-	//Kick of the looping of Ajax calls
-	getJobData();
-	startAJAXcalls();
-
-	//Build and place jobs onto schedule. Major function that should run everytime a job state changes.
+//Build and place jobs onto schedule. Major function that should run everytime a job state changes.
 	function placeScheduledJobs() {
 		 $('#ScheduledJobs').html(' ');	
 		 var scheduledJob = '';
@@ -54,10 +14,10 @@
 						attributeString = attributeString + jobBucket[index][attrIndex]  + ' | ';
 					}
 
-		  			scheduledJob =  "<div id=s" + index + " style='position:absolute; width:" + jobBucket[index].width 
+		  			scheduledJob =  "<div id=s" + index + " class='draggable ui-draggable' style='position: absolute; width:" + jobBucket[index].width 
 		  			+ "px; height:" + jobBucket[index].height 
 		  			+ "px; background-color:" + jobBucket[index].color 
-		  			+ "; left:" + jobBucket[index].left + "px; top:" + jobBucket[index].top + "px; z-index: 5; draggable:true;' class='draggable'>" 
+		  			+ "; left:" + jobBucket[index].left + "px; top:" + jobBucket[index].top + "px; z-index: 5; draggable:true;'>" 
 		  			+ "<button class=editButton id=s" + index + ">E</button>"
 		  			+ "<button class=dropButton id=d" + index + ">D</button>"
 		  			+ attributeString
@@ -223,7 +183,7 @@
 
 			"Save Job Edit": function editJobModal() {
 				//console.log(test);
-				//Create new job object, add to jobBucket and regenerate ListView
+				//Take imputs from Job Edit modal, update the job attributes
 				inputId = $("#eid").val();
 				jobToEdit = jobBucket[ inputId];
 				jobToEdit.attr1 = $("#eattr1").val();
@@ -243,14 +203,15 @@
 				jobToEdit.attr15 = $("#eattr15").val();
 
 				//Build the URL string for posting the data
-								
-
+				editJobString = 'job[attr1]='+jobToEdit.attr1+'&job[attr2]='+jobToEdit.attr2+'&job[attr3]='+jobToEdit.attr3+'&job[attr4]='+jobToEdit.attr4+	
+								'&job[attr5]='+jobToEdit.attr5+'&job[attr6]='+jobToEdit.attr6+'&job[attr7]='+jobToEdit.attr7+'&job[attr8]='+jobToEdit.attr8+
+								'&job[attr9]='+jobToEdit.attr9+'&job[attr10]='+jobToEdit.attr10+'&job[attr11]='+jobToEdit.attr11+'&job[attr12]='+jobToEdit.attr12+
+								'&job[attr13]='+jobToEdit.attr13+'&job[attr14]='+jobToEdit.attr14+'&job[attr15]='+jobToEdit.attr15
 				//Trying to implement Ajax for a job edit
 				$.ajax({
 				type: 'POST',
-				url: '/jobs/update/' + '20',  //MXS_posting_url+urladdon
-				data: "utf8=%E2%9C%93&job[resource_id]=none&job[schedPixelVal]=0&commit=Update+Job", //{ _method:'PUT', msg : msg },
-				dataType: 'text',
+				url: '/jobs/update/' + inputId,  //MXS_posting_url+urladdon
+				data: "utf8=%E2%9C%93&" + editJobString + "&commit=Update+Job", //{ _method:'PUT', msg : msg },				dataType: 'text',
 				async: true,
 					success: function(data){
 						alert("success");
@@ -279,6 +240,13 @@
 			buildList();
 			console.log("BuildListPing");
 		});	
+
+		//Function binding for rebuilding the ListView
+		$("#placeScheduledJobs").live('click', function(){
+			//alert("build List");
+			placeScheduledJobs();
+			console.log("placeScheduledJobsPing");
+		});
 
 		//Define Edit button to bring up Edit Modal to change data. Need to add Ajax call back to Rails. 
 	  	$(".editButton").live('click', function editJobModal() {
@@ -347,3 +315,48 @@
 		this.attr15 = attr15;
 	
 	}; 
+
+/*
+
+   //Next 2 methods are for long polling the job data from Rails for synching job data between the separate users of the same schedule
+	var FREQ = 1000000 ;
+	var repeat = true;
+		
+	//Endless loop that triggers the Ajax call below	
+	function startAJAXcalls(){
+	
+		if(repeat){
+			setTimeout( function() {
+					getJobData();
+					startAJAXcalls();
+				}, 	
+				FREQ
+			);
+		}
+	}
+	
+
+	//Pull the proper job data for this schedule. Does it need to include a query perhaps? 
+	function getJobData(){
+		$.ajax({
+			url: "./jobDataFile2.js",
+			cache: false,
+			dataType: "script",
+			success: function(){
+				
+				buildList();
+ 				placeScheduledJobs();
+
+			}
+
+		});
+	}
+
+	//Kick of the looping of Ajax calls
+	getJobData();
+	startAJAXcalls();
+
+*/
+
+buildList();
+placeScheduledJobs();
