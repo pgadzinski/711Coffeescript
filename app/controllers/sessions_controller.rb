@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
       session[:maxscheduler] = user.maxscheduler_id
       sign_in user
       #redirect_to user
-      redirect_to '/scheduler/showData'
+      redirect_to '/scheduler/mx'
 
     else
       flash.now[:error] = 'Invalid email/password combination'

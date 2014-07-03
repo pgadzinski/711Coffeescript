@@ -30,9 +30,124 @@ class ImportdataController < ApplicationController
     end
   end
 
-  # GET /importdata/1/edit
+  # GET /importdata/1/review
+  # At the review stage, cleaning out single and double quotes. They destroy the JavaScript front end. 
+  # Will need to find bake in support for quotes that doesn't effect the JavaScript frontend. 
   def review
     @importdatum = Importdatum.find(params[:id])
+
+    importData = @importdatum.data
+
+    importData = importData.gsub("\'", "")
+    importData = importData.gsub("\"", "")
+
+    @importdatum.data = importData
+
+  end
+
+  # GET /importdata/1/reviewDesktopScheduledJobs
+  # Review the data assuming your bringing it over from the MaxScheduler desktop. Remove the id column from MaxScheduler export
+  # Also clean out single and double quotes which ruin JavaScript. These are scheduled jobs
+  def reviewDesktopScheduledJobs
+    @importdatum = Importdatum.find(params[:id])
+
+    importData = @importdatum.data
+    importData = importData.gsub("\'", "")
+    importData = importData.gsub("\"", "")
+
+    #Take out the first column that holds MaxScheduler desktop id data, which is useless. 
+    require 'csv'    
+    csv = CSV.parse(importData, {:headers => false, :col_sep => "," } )
+    @cleanedImportData = ''
+
+    #Play with trying to reorder the data according to attribute config in MaxScheduler
+    headingRowAry = csv[0]
+    numOfAttributes = headingRowAry.length - 1 - 4  #don't count id and 4 trailing columns of schedule data
+    @attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
+
+    #Loop through the attributes to figure out the data mapping
+    @columnMapAry = Array.new
+    @attrIndex = 0
+    @attributes.each do |attr|
+      @attrName = attr.name
+      @columnMapAry[@attrIndex] = headingRowAry.index(@attrName)
+      @attrIndex = @attrIndex + 1       
+    end
+    scheduleDataArray = [ (@attrIndex + 1), (@attrIndex + 2), (@attrIndex + 3), (@attrIndex + 4)]
+    @columnMapAry = @columnMapAry.concat(scheduleDataArray)
+
+
+    # @columnMapAry = [5,1,2,3,4]
+
+    csv.each do | rowAry |  
+      rowAry.shift          #gets rid of first element of an array in this case the id we don't want.  
+      #Now apply the columnMapAry to re-arrange the data to fall under the right columns
+      @columnMapAry.each do | colMapIndex |
+        colMapIndex = colMapIndex.to_i - 1
+        entry = rowAry[colMapIndex]
+        @cleanedImportData = @cleanedImportData + entry.to_s + ","
+      end
+      @cleanedImportData = @cleanedImportData + "\r\n"
+    end
+
+    #binding.pry
+
+    #Save change to database
+    @importdatum.data = @cleanedImportData
+    @importdatum.save
+
+  end
+
+# GET /importdata/1/reviewDesktopListViewJobs
+  # Review the data assuming your bringing it over from the MaxScheduler desktop. Remove the id column from MaxScheduler export
+  # Also clean out single and double quotes which ruin JavaScript. These are listview jobs. 
+  def reviewDesktopListViewJobs
+    @importdatum = Importdatum.find(params[:id])
+
+    importData = @importdatum.data
+    importData = importData.gsub("\'", "")
+    importData = importData.gsub("\"", "")
+
+    #Take out the first column that holds MaxScheduler desktop id data, which is useless. 
+    require 'csv'    
+    csv = CSV.parse(importData, {:headers => false, :col_sep => "," } )
+    @cleanedImportData = ''
+
+    #Play with trying to reorder the data according to attribute config in MaxScheduler
+    headingRowAry = csv[0]
+    numOfAttributes = headingRowAry.length - 1 - 4  #don't count id and 4 trailing columns of schedule data
+    @attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
+
+    #Loop through the attributes to figure out the data mapping
+    @columnMapAry = Array.new
+    @attrIndex = 0
+    @attributes.each do |attr|
+      @attrName = attr.name
+      @columnMapAry[@attrIndex] = headingRowAry.index(@attrName)
+      @attrIndex = @attrIndex + 1       
+    end
+    #scheduleDataArray = [ (@attrIndex + 1), (@attrIndex + 2), (@attrIndex + 3), (@attrIndex + 4)]
+    #@columnMapAry = @columnMapAry.concat(scheduleDataArray)
+
+
+    # @columnMapAry = [5,1,2,3,4]
+
+    csv.each do | rowAry |  
+      rowAry.shift          #gets rid of first element of an array in this case the id we don't want.  
+      #Now apply the columnMapAry to re-arrange the data to fall under the right columns
+      @columnMapAry.each do | colMapIndex |
+        colMapIndex = colMapIndex.to_i - 1
+        entry = rowAry[colMapIndex]
+        @cleanedImportData = @cleanedImportData + entry.to_s + ","
+      end
+      @cleanedImportData = @cleanedImportData + "\r\n"
+    end
+
+    #binding.pry
+
+    #Save change to database
+    @importdatum.data = @cleanedImportData
+    @importdatum.save
 
   end
 
@@ -43,10 +158,43 @@ class ImportdataController < ApplicationController
     @importdatum = Importdatum.find(params[:id])
     attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
 
+    #Adding the feature to only import unique jobs. This works off of the unique field definition in Sites. Use the unique key, do comparison 
+    #between existing jobs and jobs to import. Reject jobs that are dubplicates. Try to show these to user
+    @jobImportCount = 0
+    @jobRejectCount = 0
+    @jobRejectString = ''
+    
+    @existingJobs = Job.where("maxscheduler_id = ?", @maxschedulerId)
+    @existingJobHash = Hash.new
+
+    #Build a Hash that is used to grab just the request data columns from the import file. There is ImportPosition which defines which columns should be imported. 
+    @attrToImportAry = Array.new 
+    attributes.each do | attr |
+      @attrToImportAry.push(attr.importposition)
+    end
+
+    @site = Site.find(@siteId)
+    if (@site.uniqueDataFields != "(NULL)")
+      @uniqueFieldsAry = @site.uniqueDataFields.split(",")
+    end
+
+    #Build a hash of existing jobs, just storing the unique id
+    if (@site.uniqueDataFields != "(NULL)")
+        @existingJobs.each do | existingJob |
+              uniqueJobKeyExisting = ''
+              @uniqueFieldsAry.each do | attrEntry | 
+                  uniqueJobKeyExisting = uniqueJobKeyExisting + existingJob[attrEntry]
+              end  
+              @existingJobHash[existingJob.id] = uniqueJobKeyExisting
+        end  
+    end
+
     #Pull in import data and parse out to a form
     require 'csv'    
     csv = CSV.parse(@importdatum.data, {:headers => false, :col_sep => "," } )
     @rowCounter = 1
+
+    #Step through each job in the csv and try to save it. 
     csv.each do | rowAry |    
       colCounter = 1
       @job = Job.new(params[:job])
@@ -54,23 +202,50 @@ class ImportdataController < ApplicationController
       @job.site_id = @siteId
       @job.board_id = @boardId
       @job.user_id = current_user.id
-      @job.resource_id = "none"
+      @job.resource_id = "0"
       @job.schedPixelVal = "0"
 
-      attributes.each do |attr|
-          if attr.name
+      #Loop imports only columns that have an attribute Importposition value
+      @attrToImportAry.each do |importPosition|
               @x = "attr" + colCounter.to_s
-              @job[@x] = rowAry[colCounter - 1]
+              @job[@x] = rowAry[importPosition - 1]
               colCounter = colCounter + 1
-          end 
       end  
 
-      @job.save
+      if (@site.uniqueDataFields != "(NULL)")
+    
+          #For the specific job pick out the unique key
+          uniqueJobKeyNew = ''
+          @uniqueFieldsAry.each do | attrEntry | 
+                 uniqueJobKeyNew = uniqueJobKeyNew + @job[attrEntry]
+          end 
+
+          #Test if the new job is already in MX
+          if !(@existingJobHash.has_value?(uniqueJobKeyNew))
+              @job.save
+              @jobImportCount = @jobImportCount + 1
+          else
+              @jobRejectCount = @jobRejectCount + 1
+              @jobRejectString = @jobRejectString + uniqueJobKeyNew + ','
+          end
+      else
+         @job.save
+      end  
+
+      #binding.pry
+
       @rowCounter = @rowCounter + 1
     end
 
+    if (@site.uniqueDataFields != "(NULL)")
+    
+      importMessage = 'MaxScheduler imported: ' + @jobImportCount.to_s + ' Jobs, Rejected: ' + @jobRejectCount.to_s + ' Rejected Keys: ' + @jobRejectString
+    else
+      importMessage = 'No unique key is defined in the configuration. Number of jobs imported is ' + @rowCounter.to_s
+    end
+
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { redirect_to @importdatum, notice: importMessage }
       format.json { render json: @importdata }
     end
 
@@ -87,8 +262,10 @@ class ImportdataController < ApplicationController
     #Pull in import data and parse out to a form
     require 'csv'    
     csv = CSV.parse(@importdatum.data, {:headers => false, :col_sep => "," } )
+    csv.shift       #get rid of first row of data because this is header data 
     @rowCounter = 1
     csv.each do | rowAry |    
+      #binding.pry
       colCounter = 1    #Going to re-use the MaxScheduler id for matching data purposes
       @job = Job.new(params[:job])
       @job.maxscheduler_id = @maxschedulerId
@@ -133,7 +310,7 @@ class ImportdataController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to @importdatum, notice: 'MaxScheduler import completed successfully.' }
+      format.html { redirect_to @importdatum, notice: 'MaxScheduler imported scheduled jobs successfully.' }
       format.json { render json: @importdata }
     end
 

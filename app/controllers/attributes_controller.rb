@@ -53,6 +53,8 @@ class AttributesController < ApplicationController
   # POST /attributes.json
   def create
     @attribute = Attribute.new(params[:attribute])
+    @attribute.listposition = @attribute.importposition
+    @attribute.scheduleposition = @attribute.importposition
 
     respond_to do |format|
       if @attribute.save

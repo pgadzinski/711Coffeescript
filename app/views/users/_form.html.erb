@@ -11,7 +11,7 @@
     </div>
   <% end %>
 
-  <% if @user.admin == true %>
+  <% if @user.userLevel == 'Admin' %>
         MaxSchedulerId <br>
         <%= f.text_field :maxscheduler_id %>
   <% else %>
@@ -46,6 +46,23 @@
     <%= f.label :timeZone %><br />
     <%= f.text_field :timeZone %>
   </div>
+  <div class="field">
+    Schedule Width<br />
+    <%= f.text_field :DeskSchedWidth %>
+  </div>
+    <div class="field">
+    Schedule Listview Height<br />
+    <%= f.text_field :SchedListHeight %>
+  </div>
+    <div class="field">
+    Schedule Height<br />
+    <%= f.text_field :SchedHeight %>
+  </div>
+  </div>
+    <div class="field">
+    User level: Scheduler, Editor, Viewer<br />
+    <%= f.text_field :userLevel %>
+  </div>
   <div>
   Current Site<br>
       <%= f.select :currentSite, Site.where("maxscheduler_id = ?", @maxschedulerId).collect {|site| [ site.name, site.id ] }, :style => 'width: 50px;'  %>
@@ -67,4 +84,4 @@
   </div>
 <% end %>
 
-
+userLevel

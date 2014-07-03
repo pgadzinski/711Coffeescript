@@ -22,5 +22,8 @@
 
 
 <%= link_to 'Edit', edit_importdatum_path(@importdatum) %> |
-<%= link_to 'Back', importdata_path %> | 
-<a href=/importdata/<%= @importdatum.id.to_s %>/review>Review</a>
+<%= link_to 'Back', importdata_path %> <br>
+<br>
+<a href=/importdata/<%= @importdatum.id.to_s %>/review><b>Data Review</b></a> <br>
+<a href=/importdata/<%= @importdatum.id.to_s %>/reviewDesktopListViewJobs><b>Desktop export Listview jobs review</b></a> <br>
+<a href=/importdata/<%= @importdatum.id.to_s %>/reviewDesktopScheduledJobs><b>Desktop export Scheduled jobs review</b></a> <br>

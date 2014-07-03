@@ -1254,7 +1254,7 @@ function makejob(){
 
 		case "drop_to_listview":
 			//msg = "shipID="+id+"&path="+action;
-			msg = "utf8=%E2%9C%93&job[resource_id]=none&job[schedPixelVal]=0&commit=Update+Job"
+			msg = "utf8=%E2%9C%93&job[resource_id]=0&job[schedPixelVal]=0&commit=Update+Job"
 			break;
 
 		case "update_data":

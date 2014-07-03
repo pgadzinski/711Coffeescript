@@ -27,6 +27,18 @@
       <%= f.label :timeZone %>
       <%= f.text_field :timeZone %>
 <br><br>
+    Schedule Width<br>
+    <%= f.text_field :DeskSchedWidth %>
+<br><br>
+    Schedule Listview Height<br>
+    <%= f.text_field :SchedListHeight %>
+<br><br>
+    Schedule Height<br>
+    <%= f.text_field :SchedHeight %>
+<br><br>
+    User level: Scheduler, Editor, Viewer<br>
+    <%= f.text_field :userLevel %>
+<br><br>
       Current Site<br>
       <%= f.select :currentSite, Site.where("maxscheduler_id = ?", @maxschedulerId).collect {|site| [ site.name, site.id ] }, :style => 'width: 50px;'  %>
 <br><br>
@@ -46,3 +58,5 @@
 </div>
 
 <%= link_to 'Back', users_path %>
+
+userLevel

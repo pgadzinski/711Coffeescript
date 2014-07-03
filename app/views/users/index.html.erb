@@ -14,6 +14,10 @@
     <th>Time zone</th>
     <th>Current Site</th>
     <th>Current Board</th>    
+    <th>Schedule width</th>
+    <th>ListView height</th>
+    <th>Schedule height</th>
+    <th>User level</th>
     <th></th>
   </tr>
 
@@ -28,6 +32,10 @@
     <td><%= user.timeZone %></td>
     <td><%= Site.find(user.currentSite).name %></td>
     <td><%= Board.find(user.currentBoard).name %></td>
+    <td><%= user.DeskSchedWidth %></td>
+    <td><%= user.SchedListHeight %></td>
+    <td><%= user.SchedHeight %></td>
+    <td><%= user.userLevel %></td>
     <td><%= link_to 'Edit', edit_user_path(user), :class => 'btn btn-info'  %></td>
   </tr>
 <% end %>

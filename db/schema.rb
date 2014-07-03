@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130413045155) do
+ActiveRecord::Schema.define(:version => 20140427050231) do
 
   create_table "attributes", :force => true do |t|
     t.string   "name"
@@ -130,7 +130,8 @@ ActiveRecord::Schema.define(:version => 20130413045155) do
     t.string   "maxscheduler_id"
     t.string   "rowHeight"
     t.string   "defaultJobLength"
-    t.string   "numberOfWeeks"
+    t.string   "schedItemDelimiter"
+    t.string   "uniqueDataFields"
   end
 
   create_table "users", :force => true do |t|
@@ -139,17 +140,20 @@ ActiveRecord::Schema.define(:version => 20130413045155) do
     t.string   "email"
     t.string   "color"
     t.integer  "rowHeight"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.string   "password_digest"
     t.string   "remember_token"
-    t.boolean  "admin",           :default => false
     t.string   "maxscheduler_id"
     t.string   "currentSite"
     t.string   "currentBoard"
     t.string   "schedStartDate"
     t.string   "timeZone"
     t.string   "numberOfWeeks"
+    t.string   "DeskSchedWidth"
+    t.string   "SchedListHeight"
+    t.string   "SchedHeight"
+    t.string   "userLevel"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

@@ -58,14 +58,17 @@
 }
 
 .dataTables_filter {
-	width: 50%;
+	width: 100%;
 	float: right;
 	text-align: right;
+	background-color: #00FF00;
+	border: 1px solid black;
 }
 
 .dataTables_info {
-	width: 60%;
+	width: 100%;
 	float: left;
+	background-color: #CCFF99;
 }
 
 .dataTables_paginate {

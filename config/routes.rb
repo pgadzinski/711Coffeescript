@@ -6,7 +6,7 @@ Maxschedulerweb::Application.routes.draw do
 
   root :to => 'sessions#new'
   
-  match '/jobs/moveDown/', to: 'jobs#moveDown'
+  match '/jobs/moveDownForm/', to: 'jobs#moveDownForm'
   
   resources :resources
   resources :boards
@@ -23,16 +23,23 @@ Maxschedulerweb::Application.routes.draw do
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
 
-  get "scheduler/jobData"
   get "scheduler/showData"
+  get "scheduler/jobData"
+  get "scheduler/mx"
   
   match '/test', to: 'boards#test'
 
   match '/importdata/:id/review', to: 'importdata#review'
+  match '/importdata/:id/reviewDesktopScheduledJobs', to: 'importdata#reviewDesktopScheduledJobs'
+  match '/importdata/:id/reviewDesktopListViewJobs', to: 'importdata#reviewDesktopListViewJobs'
   match '/importdata/:id/createjobs', to: 'importdata#createjobs'
   match '/importdata/:id/importScheduledJobs', to: 'importdata#importScheduledJobs'
+
+  match '/maxschedulers/:id/populateData', to: 'maxschedulers#populateData'
   
-  match '/jobs/update/:id', to: 'jobs#async_update'
+  match '/jobs/asyncUpdate/:id', to: 'jobs#asyncUpdate'
+  match '/jobs/asyncNew/', to: 'jobs#asyncNew'
+  match '/jobs/asyncDelete/:id', to: 'jobs#asyncDelete'
   
   match ':controller(/:action(/:id))(.:format)'
   

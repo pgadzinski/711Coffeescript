@@ -14,7 +14,6 @@ class SitesController < ApplicationController
 
   def set
       current_user.currentSite = params[:id]
-      binding.pry
       current_user.save
       #current_user.save(:validate => false)
       session[:site] = params[:id]
@@ -65,6 +64,8 @@ class SitesController < ApplicationController
   # POST /sites.json
   def create
     @site = Site.new(params[:site])
+
+    binding.pry
 
     respond_to do |format|
       if @site.save

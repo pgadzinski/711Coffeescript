@@ -11,7 +11,7 @@
           <ul class="nav">
           	<% if signed_in? %>
                 <li><a>MX: <%= Maxscheduler.find(@maxschedulerId).name %> </a> 
- 		        <% if current_user.admin? %>
+ 		        <% if current_user.userLevel == 'Admin' %>
     			     <li><a href="/maxschedulers">MXs</a>
   				  <% end %>
  				         

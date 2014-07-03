@@ -16,7 +16,7 @@ class UsersController < ApplicationController
       current_user.currentSite = params[:id]
       current_user.save(:validate => false)
       sign_in current_user
-      redirect_to '/scheduler/showData'
+      redirect_to '/scheduler/mx'
   end
 
   #Method to set the Board for a user and store value in the database. Done because session cookies weren't reliable
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
       current_user.currentBoard = params[:id]
       current_user.save(:validate => false)
       sign_in current_user
-      redirect_to '/scheduler/showData'
+      redirect_to '/scheduler/mx'
   end
 
   def index
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
     @users = User.where("maxscheduler_id = ?", @maxschedulerId)
 
     #If the user is admin show all system users
-    if (current_user.admin == true)
+    if (current_user.userLevel == 'Admin')
         @users = User.all      
     end
 

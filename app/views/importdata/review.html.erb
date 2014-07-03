@@ -7,24 +7,32 @@
 @attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
 @numberOfAttributes = @attributes.size
 @tableString = "<table border=1><tr>"
+@attrToImportAry = Array.new 
 
 @attributes.each do | attr |
-  @tableString = @tableString + "<td>" + attr.name.to_s + "</td>"
+  @tableString = @tableString + "<td><b>" + attr.name.to_s + " - " + attr.importposition.to_s + "</b></td>"
+  @attrToImportAry.push(attr.importposition)
 end
 @tableString = @tableString + "</tr>"
 
 #Pull in import data and parse out to a form
 require 'csv'    
 csv = CSV.parse(@importdatum.data, {:headers => false, :col_sep => "," } )
-@rowCounter = 1
 csv.each do | rowAry |    
-  @colCounter = 1
-    rowAry.each do | entry |
-      @tableString = @tableString + "<td>" + entry.to_s + "</td>"
-      @colCounter = @colCounter + 1
-    end
+	#rowAry.pop            #gets rid of last element of an array in this case a space.
+
+	#Implementing the ImportPosition option for attributes, only import those fields in the imported data
+	@attrToImportAry.each do |key|
+		@tableString = @tableString + "<td>" + rowAry[key - 1].to_s + "</td>"
+		#binding.pry
+	end
+
+	#Old method that iterates over all data
+    #rowAry.each do | entry |
+    #  @tableString = @tableString + "<td>" + entry.to_s + "</td>"
+    #end
+
   @tableString = @tableString + "</tr>"
-  @rowCounter = @rowCounter + 1
 end
 @tableString = @tableString + "</table>"
 %>
@@ -38,10 +46,13 @@ end
 <br>
 
 <a href=/importdata/<%= @importdatum.id.to_s %>/createjobs>Import Jobs</a> &nbsp;&nbsp;&nbsp;
-<a href=/importdata/<%= @importdatum.id.to_s %>/importScheduledJobs>Import as MaxScheduler Export data</a>
 <br>
 <br>
 
 
 <%= link_to 'Show', @importdatum %> |
 <%= link_to 'Back', importdata_path %>
+
+
+
+

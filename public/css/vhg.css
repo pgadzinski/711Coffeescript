@@ -1,0 +1,229 @@
+/*
+
+=====================================
+
+ * Data Tables and Cascading Style Sheets Gallery *
+
+ *  http://icant.co.uk/csstablegallery/index.php  *
+
+ * Author: Velizar Garvalov at  http://www.vhg-design.com/ *
+
+ =====================================
+
+*/
+
+
+
+table {
+
+	margin:0; 
+
+ 	padding:0;
+
+	font-family: "Trebuchet MS", Trebuchet, Arial, sans-serif;	
+
+	color: #000000;
+
+}
+
+table, tr, th, td {
+
+	border-collapse: collapse;
+
+}
+
+p {
+  white-space:normal;
+} 
+
+caption {
+
+margin:0; 
+
+ 	padding:0;
+
+	background: #f3f3f3;
+
+	font-family: "Trebuchet MS", Trebuchet, Arial, sans-serif;	
+
+	font-size: 12px;
+
+	font-weight: bold;
+
+	color: #555d6d;
+
+	border-top: dashed 1px #c2c2c2;
+
+	border-bottom: dashed 1px #c2c2c2;
+
+}
+
+
+
+/* HEAD */
+
+
+
+thead {
+
+	background-color: #FFFFFF;
+
+	border: none;
+
+}
+
+thead tr th {
+
+	text-align: center;
+
+	color: #1c5d79;
+
+	background-image: url(col_bg.gif);
+
+	background-repeat: repeat-x;
+
+	border-left:solid 1px #FF9900;
+
+	border-right:solid 1px #FF9900;	
+
+	border-collapse: collapse;
+
+	height:10px;
+
+}
+
+
+
+/* BODY */
+
+
+
+tbody tr {
+
+	background: #dfedf3;
+
+	font-size: 12px;
+
+}
+
+tbody tr.odd {
+
+	background: #F0FFFF;
+
+}
+
+tbody tr:hover, tbody tr.odd:hover {
+
+	background: #ffffff;
+
+}
+
+tbody tr th, tbody tr td {
+
+	padding: 0px;
+
+	border: solid 1px #326e87;
+
+}
+
+tbody tr th {
+
+	background: #1c5d79;
+
+	font-family: "Trebuchet MS", Trebuchet, Arial, sans-serif;	
+
+	font-size: 12px;
+
+	padding: 0px;
+
+	text-align: center;
+
+	font-weight: bold;
+
+	color: #FFFFFF;
+
+	border-bottom: solid 1px white;
+
+}
+
+tbody tr th:hover {
+
+	background: #ffffff;
+
+
+
+}
+
+
+
+/* LINKS */
+
+
+
+table a {
+
+	color: #FF6600;
+
+	text-decoration: none;
+
+	font-size: 12px;
+
+	border-bottom: solid 1px white;
+
+}
+
+table a:hover {
+
+	color: #FF9900;
+
+	border-bottom: none;
+
+}
+
+
+
+/* FOOTER */
+
+
+
+tfoot {
+
+	background: #f3f3f3;
+
+	font-family: "Trebuchet MS", Trebuchet, Arial, sans-serif;	
+
+	font-size: 12px;
+
+	font-weight: bold;
+
+	color: #555d6d;
+
+	text-align: center;
+
+	border-top: solid 2px #326e87;
+
+	border-bottom: dashed 1px #c2c2c2;
+
+}
+
+tfoot tr th, tfoot tr td {
+
+	/*padding: .1em .6em;*/
+
+	
+
+}
+
+tfoot tr th {
+
+	border-top: solid 1px #326e87;
+
+}
+
+tfoot tr td {
+
+	text-align: right;
+
+	
+
+}

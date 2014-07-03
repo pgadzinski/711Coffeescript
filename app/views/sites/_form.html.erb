@@ -35,6 +35,14 @@
     <%= f.label :defaultJobLength %><br />
     <%= f.text_field :defaultJobLength %>
   </div>
+  <div class="field">
+    Scheduled Job Delimiter<br />
+    <%= f.text_field :schedItemDelimiter %>
+  </div>
+  <div class="field">
+    Unique Attribute(s) for data import<br />
+    <%= f.text_field :uniqueDataFields %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

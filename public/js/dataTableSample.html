@@ -1,0 +1,120 @@
+
+<!-- datatables th part -->
+
+        <style type="text/css" title="currentStyle">
+            @import "../css/demo_page.css";
+            @import "../css/demo_table.css";
+        </style>
+        <script type="text/javascript" language="javascript" src="./jquery.js"></script>
+        <script type="text/javascript" language="javascript" src="./jquery_002.js"></script>
+        <script type="text/javascript" charset="utf-8">
+            $(document).ready(function() {
+                $('#example').dataTable( {
+                    "sScrollY": "400px",
+                    "sScrollX": "1300px",
+                    "bPaginate": false
+                } );
+            } );
+        </script>
+    </head>
+    <body>
+    <div id="container" >
+            
+            <div id="demo">
+
+<table cellpadding="0" cellspacing="0" border="1" class="display" id="example" >
+
+<!-- datatables th end part-->
+
+
+  <thead>
+
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+	    	<th>JobNum</th>   
+		    	<th>Customer</th>   
+		    	<th>PurOrderNum</th>   
+		    	<th>Color</th>   
+		    	<th>Duration</th>   
+	 <!--attributeLoop -->
+    <th>Resource</th>
+    <th>DateTime</th>
+    <th>PixelVal </th>
+    <th>Site</th>
+    <th>User</th>
+  </tr>
+</thead>
+
+<tbody>
+
+<tr>
+  	<td><a href="/jobs/1" class="btn btn-info">S</a></td>
+    <td><a href="/jobs/1/edit" class="btn btn-info">E</a></td>
+    <td><a href="/jobs/1" class="btn btn-primary" data-confirm="Are you sure?" data-method="delete" rel="nofollow">D</a></td>
+	<!--attributeLoop -->
+    	<td>1</td>   
+    	<td>2</td>   
+    	<td>3</td>   
+    	<td>4</td>   
+    	<td>5</td>   
+    <td>none</td>
+    <td>2013-04-01 06:09:36</td>
+    <td>8</td>
+    <td>Building1</td>
+    <td>Peter , Gadzinski </td>
+</tr>	
+<tr>
+  	<td><a href="/jobs/2" class="btn btn-info">S</a></td>
+    <td><a href="/jobs/2/edit" class="btn btn-info">E</a></td>
+    <td><a href="/jobs/2" class="btn btn-primary" data-confirm="Are you sure?" data-method="delete" rel="nofollow">D</a></td>
+	<!--attributeLoop -->
+    	<td>32510</td>   
+    	<td>Yeast Fills</td>   
+    	<td>72</td>   
+    	<td>White</td>   
+    	<td>4</td>   
+    <td>none</td>
+    <td>2013-04-01 07:02:24</td>
+    <td>52</td>
+    <td>Building1</td>
+    <td>Peter , Gadzinski </td>
+</tr>	
+<tr>
+  	<td><a href="/jobs/3" class="btn btn-info">S</a></td>
+    <td><a href="/jobs/3/edit" class="btn btn-info">E</a></td>
+    <td><a href="/jobs/3" class="btn btn-primary" data-confirm="Are you sure?" data-method="delete" rel="nofollow">D</a></td>
+	<!--attributeLoop -->
+    	<td>32520</td>   
+    	<td>Dutchies</td>   
+    	<td>60</td>   
+    	<td>Green</td>   
+    	<td>1</td>   
+    <td>2</td>
+    <td>2013-04-01 08:02:24</td>
+    <td>102</td>
+    <td>Building1</td>
+    <td>Peter , Gadzinski </td>
+</tr>	
+<tr>
+  	<td><a href="/jobs/4" class="btn btn-info">S</a></td>
+    <td><a href="/jobs/4/edit" class="btn btn-info">E</a></td>
+    <td><a href="/jobs/4" class="btn btn-primary" data-confirm="Are you sure?" data-method="delete" rel="nofollow">D</a></td>
+	<!--attributeLoop -->
+    	<td>11111</td>   
+    	<td>7777</td>   
+    	<td>33333</td>   
+    	<td>Whitesss</td>   
+    	<td>2</td>   
+    <td>none</td>
+    <td>2013-04-01 06:07:12</td>
+    <td>6</td>
+    <td>Building1</td>
+    <td>Peter , Gadzinski </td>
+</tr>	
+ <!--jobLoop -->
+
+</tbody>
+
+</table>	

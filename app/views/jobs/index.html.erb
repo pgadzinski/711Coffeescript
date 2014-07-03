@@ -64,7 +64,13 @@
     	<% i=i+1 %>
     	<% end %>
 	<% end %> 
-    <td><%= job.resource_id %></td>
+    <td>
+        <% if (job.resource_id == '0') %>
+        <%= 'Not Scheduled' %>
+        <% else %>
+        <%= Resource.find(job.resource_id).name %>
+        <% end %>
+    </td>
     <td><%= job.schedDateTime %></td>
     <td><%= job.schedPixelVal %></td>
     <td><%= Site.find(job.site_id).name %></td>

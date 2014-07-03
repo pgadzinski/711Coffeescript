@@ -7,8 +7,6 @@
   <tr>
     <th>Attribute Name</th>
     <th>Import Position</th>
-    <th>List Position</th>
-    <th>Schedule Position</th>
     <th>Column Width</th>
     <th></th>
   </tr>
@@ -17,8 +15,6 @@
   <tr>
     <td><%= attribute.name %></td>
     <td><%= attribute.importposition %></td>
-    <td><%= attribute.listposition %></td>
-    <td><%= attribute.scheduleposition %></td>
     <td><%= attribute.columnWidth %></td>
     <td><%= link_to 'Edit', edit_attribute_path(attribute), :class => 'btn btn-info'  %></td>
   </tr>
@@ -43,8 +39,6 @@
   <tr> <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
   <td><%= f.text_field :name%></td>
   <td><%= f.number_field :importposition, :style => 'width: 50px;'   %></td>
-  <td><%= f.number_field :listposition, :style => 'width: 50px;'   %></td>
-  <td><%= f.number_field :scheduleposition, :style => 'width: 50px;'   %></td>
   <td><%= f.number_field :columnWidth, :style => 'width: 50px;'   %></td>
   <td></td>
   </tr>

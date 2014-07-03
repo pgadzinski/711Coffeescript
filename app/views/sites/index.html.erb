@@ -6,6 +6,9 @@
 
 <table id="sites" class="table table-striped table-bordered table-condensed">
 
+
+
+
   <thead>
   <tr>
     <th>Name</th>
@@ -13,6 +16,8 @@
     <th>Date time column width</th>
     <th>Row Height</th>
     <th>Default job length</th>
+    <th>Scheduled Job Delimiter</th>
+    <th>Unique Attribute(s) for data import</th>
     <th></th>
   </tr>
   </thead>
@@ -25,6 +30,8 @@
     <td><%= site.dateTimeColumnWidth %></td>
     <td><%= site.rowHeight %></td>
     <td><%= site.defaultJobLength %></td>
+    <td><%= site.schedItemDelimiter %></td>
+    <td><%= site.uniqueDataFields %></td>
     <td><%= link_to 'Edit', edit_site_path(site), :class => 'btn btn-info'   %></td>
   </tr>
 <% end %>
@@ -53,6 +60,8 @@
     <td><%= f.text_field :dateTimeColumnWidth, :style => 'width: 120px;' %></td>
   	<td><%= f.text_field :rowHeight, :style => 'width: 120px;' %></td>
     <td><%= f.text_field :defaultJobLength, :style => 'width: 120px;' %></td>
+    <td><%= f.text_field :schedItemDelimiter, :style => 'width: 120px;' %></td>
+    <td><%= f.text_field :uniqueDataFields, :style => 'width: 120px;' %></td>
   	<td></td>
   </tr>
   <tr><td colspan=7><%= f.submit nil , :class => 'btn btn-primary'  %></td></tr>

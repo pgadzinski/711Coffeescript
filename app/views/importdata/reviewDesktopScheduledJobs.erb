@@ -1,0 +1,44 @@
+<h1>Review importdatum</h1>
+
+
+<!--Build an HTML table that holds the validated import data -->
+
+<%
+@attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
+@numberOfAttributes = @attributes.size
+@tableString = "<table border=1><tr>"
+
+@attributes.each do | attr |
+  @tableString = @tableString + "<td><b>" + attr.name.to_s + "</b></td>"
+end
+@tableString = @tableString + "<td><b>Board</b></td><td><b>Lane</b></td><td><b>Date</b></td><td><b>Time</b></td></tr>"
+
+#Pull in import data and parse out to a form
+require 'csv'    
+csv = CSV.parse(@importdatum.data, {:headers => false, :col_sep => "," } )
+csv.each do | rowAry | 
+	rowAry.pop            #gets rid of last element of an array in this case a space. 
+    rowAry.each do | entry |
+      @tableString = @tableString + "<td>" + entry.to_s + "</td>"
+    end
+    #binding.pry
+  @tableString = @tableString + "</tr>"
+end
+@tableString = @tableString + "</table>"
+%>
+
+<br>
+
+<div>
+<%=raw @tableString %>
+</div>
+
+<br>
+
+<a href=/importdata/<%= @importdatum.id.to_s %>/importScheduledJobs>Import as MaxScheduler Export data</a>
+<br>
+<br>
+
+
+<%= link_to 'Show', @importdatum %> |
+<%= link_to 'Back', importdata_path %>

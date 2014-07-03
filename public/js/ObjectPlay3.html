@@ -14,19 +14,8 @@
 
 <script>
 
-$( init );
- 
-function init() {
-  $(".draggable").draggable( {
-    cursor: 'move',
-    containment: 'document',
-    stop: handleDragStop
-  } );
-}
-
-	//Call to create the job javascript objects and store them into JobBucket associative array
-	//Data file
-
+	//Setting some javascript data that's used by the UI
+	
 	attributeNamesAry = new Array ("Cust","JobNum","PONum","Duration","Qty","Completed","Color");
 
 	numberOfAttributes = 7;
@@ -44,12 +33,6 @@ function init() {
 </script>
 
 <body>
-
-<button id="create-user">Create new job</button>
-<button id="buildList">Build List</button>
-<button id="placeScheduledJobs">Build Schedule</button>
-
-
 
 <table border="1" style="width: 1268px" cellpadding="0" cellspacing="0">
 <tr>
@@ -110,6 +93,7 @@ function init() {
 </div>
 
 <br>
+
 List view
 
 <table border="1" style="width: 1268px" cellpadding="0" cellspacing="0">
@@ -131,6 +115,8 @@ List view
 
 </table>
 </div>
+
+
 
 <!-- New Job Modal -->
 <div id="dialog-form" title="Job Edit">
@@ -164,16 +150,21 @@ Attr7: 		<input type="text" name="eattr7" id="eattr7" value="" class="text ui-wi
 </form>
 </div>
 
+
 </body>
 
-<script src="./jobDataFile2.js"></script>
+
+
+
+
 <script src="./modal.js"></script>
 
 
-<br>
+<button id="create-user">Create new job</button>
+<button id="buildList">Build List</button>
+<button id="placeScheduledJobs">Build Schedule</button>
 
-<div id="jtest">
 
-</div>
+
 
 </html>

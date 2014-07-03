@@ -1,0 +1,171 @@
+<html>
+
+<title>MaxScheduler Main Screen</title>
+
+<script src="../js/jquery-1.6.2.min.js"></script>
+<script src="../js/jquery-ui.js"></script>
+<link rel="stylesheet" href="../css/jquery-ui.css" />
+
+<!-- Code for color picker -->
+<script language="javascript" type="text/javascript" src="../js/jquery.colorPicker.js"/></script>
+<link rel="stylesheet" href="../css/colorPicker.css" type="text/css" />
+
+<!-- Code to support drop down menus -->
+<link rel="StyleSheet" href="../css/vhg.css" type="text/css"> 
+<script type="text/javascript" src="../js/dropdowntabs.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../css/bluetabs.css">
+
+ <style>
+#draggable { width: 150px; height: 150px; padding: 0.5em; }
+</style>
+
+<style>
+fieldset { padding:0; border:0; margin-top:25px; }
+h1 { font-size: 1.2em; margin: .6em 0; }
+div#users-contain { width: 450px; margin: 5px 0; }
+div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
+div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+.ui-dialog .ui-state-error { padding: .3em; }
+.validateTips { border: 1px solid transparent; padding: 0.3em; }
+</style>
+
+
+<script>
+
+	//Setting some javascript data that's used by the UI
+	<%=raw @attrString %>
+	numberOfAttributes = <%= @attributes.size %>;
+
+	//Dynamic sizing of columns or set that them static?
+	resourceDict = <%=raw @resourceDictString %>
+
+	//Set the width of scheduled jobs
+	scheduledJobWidth = <%=raw @resourceColWidth %>
+
+	//String used by Datatables to setup the table header
+	listViewHeading = [<%=raw @attributeString %>];
+
+	//Position of Duration and Color attributes if they exist
+	durationPosition = '<%=raw @jobLengthInData %>';
+	colorPosition = '<%= @jobColorPosition %>';
+
+	//Control for the width of the schedule
+	outsideWidth= '<%= @outsideWidth %>';
+
+	//Control for the height of the ListView
+	listViewHeight = '<%= @scheduleListHeight %>';
+
+	//Default job height, used when job duration is an attribute, but the value is 0 or a word. A check will happen and the default length is used
+	defaultJobLength = 30;
+
+	//Delimiter used to separate data for scheduled jobs
+	schedItemDelimiter = '<%=raw @schedItemDelimiter %>';
+
+	//Get the user level permission 
+	userLevel = '<%=raw @userLevel %>';
+
+</script>
+
+<body>
+
+<!-- Picker for Site and Boards -->
+
+	<div id="bluemenu" class="bluetabs">
+	<ul style="text-align: left;">
+	<li class="">Site: <a rel="siteMenu1"><font size="-2"><%= @currentSiteName %></font></a></li>
+	<li class="">Board: <a rel="boardMenu1"><font size="-2"><%= @currentBoardName %></font></a></li>
+	</ul>
+	</div>
+
+	<div style="visibility: hidden;" id="siteMenu1" class="dropmenudiv_b">
+	<% @sites.each do |site| %><a href="/users/setSite/<%= site.id %>"><%= site.name %></a><% end %>
+	</div>
+
+	<div style="visibility: hidden;" id="boardMenu1" class="dropmenudiv_b">
+ 	<% @boards.each do |board| %><a href="/users/setBoard/<%= board.id %>"><%= board.name %></a><% end %> 
+	</div>
+
+	<script type="text/javascript">
+	tabdropdown.init("bluemenu")
+	</script>
+
+
+<table border="1" style="width: <%= @insideWidth %>px" cellpadding="0" cellspacing="0">
+<tr>
+	<td align=center width="<%= @dateTimeColumnWidth %>" bgcolor="#FF6600">
+           &nbsp;
+	</td>
+	<%=raw @resourceString %>
+</tr>
+</table>
+
+<!-- div that hold the schedule table and makes it scrollable -->
+<div id="scheduleContainer" style="overflow: auto; border-style:solid; border-width: 1px; height: <%= @scheduleHeight %>px; width: <%= @outsideWidth %>px;">
+
+	<div id="schedule" style="position:relative;" ondrop="drop(event)" ondragover="allowDrop(event)"> 
+		<!-- table that shows the schedule structure -->
+		<table width="<%= @insideWidth %>" border="1">
+			<%=raw @schedulingTable %>
+		</table>
+
+		<div id="ScheduledJobs">
+	    </div>
+
+	</div>	
+</div>
+
+<div style="height: 5px;"> </div> 
+
+<!-- ListView begins -->
+
+<!-- datatables th part -->
+
+        <style type="text/css" title="currentStyle">
+            @import "../css/demo_page.css";
+            @import "../css/demo_table.css";
+        </style>
+        <script type="text/javascript" language="javascript" src="../js/jquery_002.js"></script>
+		<div style="width: <%= @outsideWidth %>px; border-style:solid; border-width: 1px;">
+
+		    <div id="container" >
+		            
+		            <div id="demo">
+
+					</div>
+			</div>
+		</div>	
+
+<!-- New Job Modal -->
+<div id="dialog-form" title="New Job">
+<form>
+<%=raw @newJobForm %>
+</form>
+</div>
+
+<!-- Edit Job Modal -->
+<div id="edit-form" title="Edit Job">
+<form>
+<%=raw  @editJobForm %> 
+</form>
+</div>
+
+<br>
+
+<div id=JobMoverForm>
+<form accept-charset="UTF-8" action="../jobs/moveDownForm/" method="post"><div style="margin:0;padding:0;display:inline">
+<input name="utf8" type="hidden" value="&#x2713;" /><input name="_method" type="hidden" value="put" />
+
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Job Shifter</b> Id: <input type="text" name="jobId" value="" style="width: 50px;" > 
+
+Amount: <input  type="text" name="shiftAmountInTime" value="" style="width: 50px;" >
+
+<input name="commit" type="submit" value="Move Jobs">
+</form>
+</div>
+
+<script src="../js/modal.js">
+</script>
+</body>
+
+</html>

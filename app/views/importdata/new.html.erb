@@ -1,4 +1,4 @@
-<h1>New importdatum</h1>
+<h1>Import Data screen</h1>
 
 <%= form_for(@importdatum) do |f| %>
   <% if @importdatum.errors.any? %>
@@ -16,8 +16,11 @@
   <%= f.hidden_field :maxscheduler_id, :value => @maxschedulerId %>
   <%= f.hidden_field :site_id, :value => @siteId %>
   <%= f.hidden_field :user_id, :value => current_user.id %>
-  <div class="field">
-    <%= f.label :data %><br />
+  <div class="col-xs-4" >
+
+<br>
+    Copy and Paste import data into field below. Remember for importing from MaxScheduler desktop, <b>MUST HAVE EXACT</b> match of Attribute names and ID field.<br />
+<br>
     <%= f.text_area :data %>
   </div>
   <div class="actions">
