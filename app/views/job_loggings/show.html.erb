@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Job:</b>
+  <%= @job_logging.job_id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @job_logging.user_id %>
+</p>
+
+<p>
+  <b>Maxscheduler:</b>
+  <%= @job_logging.maxscheduler_id %>
+</p>
+
+<p>
+  <b>Jobdetailsbefore:</b>
+  <%= @job_logging.jobDetailsBefore %>
+</p>
+
+<p>
+  <b>Jobdetailsafter:</b>
+  <%= @job_logging.jobDetailsAfter %>
+</p>
+
+<p>
+  <b>Jobdetailschange:</b>
+  <%= @job_logging.jobDetailsChange %>
+</p>
+
+
+<%= link_to 'Edit', edit_job_logging_path(@job_logging) %> |
+<%= link_to 'Back', job_loggings_path %>

@@ -1,0 +1,41 @@
+<%= form_for(@job_logging) do |f| %>
+  <% if @job_logging.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@job_logging.errors.count, "error") %> prohibited this job_logging from being saved:</h2>
+
+      <ul>
+      <% @job_logging.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :job_id %><br />
+    <%= f.text_field :job_id %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :maxscheduler_id %><br />
+    <%= f.text_field :maxscheduler_id %>
+  </div>
+  <div class="field">
+    <%= f.label :jobDetailsBefore %><br />
+    <%= f.text_area :jobDetailsBefore %>
+  </div>
+  <div class="field">
+    <%= f.label :jobDetailsAfter %><br />
+    <%= f.text_area :jobDetailsAfter %>
+  </div>
+  <div class="field">
+    <%= f.label :jobDetailsChange %><br />
+    <%= f.text_area :jobDetailsChange %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

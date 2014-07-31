@@ -10,6 +10,14 @@ class JobsController < ApplicationController
       @attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
   end  
 
+  after_filter :updateBoardTimeStamp
+  #Implementing ScheduleTimeStamp server side here. Update the current Board to state a change has been made to the schedule. 
+  def updateBoardTimeStamp
+    @board = Board.find(@boardId)
+    @board.scheduleTimeStamp = Time.now.to_s
+    @board.save(:validate => false)
+  end
+
   # GET /jobs
   # GET /jobs.json
   def index
@@ -65,15 +73,13 @@ class JobsController < ApplicationController
     end
   end
 
-  # PUT /jobs/1
-  # PUT /jobs/1.json
+  # Ajax call from client to update job details covered actions: dropping job on schedule, job dropping to listview, re-scheduling job, editing details 
   def asyncUpdate
-    #params :id
-    #render :json => params
-       
+      
     render :json => params 
     
     @job = Job.find(params[:id])
+    @jobOld = @job.dup                 #this is for logging, want to record before and after
     @job.update_attributes(params[:job])
 
     #Hacky bad code
@@ -127,8 +133,6 @@ class JobsController < ApplicationController
         end
       end
 
-    #binding pry
-
     @row = (@pixelValue.to_i) / (@rowHeight.to_i)
     @timeOfRow = @dateHash[@row.to_s]
     @secondsInRow = ((@pixelValue.to_i).fdiv(@rowHeight).abs.modulo(1)) * (@rowTimeIncrement * 3600)
@@ -138,6 +142,23 @@ class JobsController < ApplicationController
     @job.schedDateTime = @jobTime
     @job.save(:validate => false)
 
+    @jobChange = ''
+    @jobBefore = ''
+    @jobAfter = ''
+    @job.attributes.each do |attr_name, attr_value|
+      if !(attr_name == 'created_at' || attr_name == 'updated_at' || attr_name == 'id') 
+        if (attr_value != (@jobOld[attr_name.to_s]))
+          @jobBefore = @jobBefore + ' | ' + attr_name.to_s + ' : ' + @jobOld[attr_name.to_s].to_s
+          @jobAfter =  @jobAfter + ' | ' + attr_name.to_s  + ' : ' + attr_value.to_s
+        end
+      end    
+    end
+
+    #Job update should succeed at this point. Lets make an entry to the job log
+    @joblog1 = JobLogging.new
+    @joblog1.update_attributes(:job_id => @job.id, :user_id => current_user.id, :maxscheduler_id => @maxschedulerId, :jobDetailsBefore => @jobBefore, :jobDetailsAfter => @jobAfter, :jobDetailsChange => 'Delta')
+
+    #binding.pry
   end
     
   # asyncNew used by MXWebUI to create new jobs which are unscheduled and end up in List View

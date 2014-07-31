@@ -1,0 +1,23 @@
+<h1>Job Change Log</h1>
+<br>
+<table id="sites" class="table table-striped table-bordered table-condensed">
+  <tr>
+    <th>Job</th>
+    <th>User</th>
+    <th>Maxscheduler</th>
+    <th>Job Details Before</th>
+    <th>Job Details After</th>
+  </tr>
+
+<% @job_loggings.each do |job_logging| %>
+  <tr>
+    <td><%= job_logging.job_id %></td>
+    <td><%= job_logging.user_id %></td>
+    <td><%= job_logging.maxscheduler_id %></td>
+    <td><%= job_logging.jobDetailsBefore %></td>
+    <td><%= job_logging.jobDetailsAfter %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />

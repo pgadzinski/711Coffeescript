@@ -1,5 +1,7 @@
 Maxschedulerweb::Application.routes.draw do
 
+  resources :job_loggings
+
   resources :operationhours
 
   resources :importdata
@@ -26,6 +28,7 @@ Maxschedulerweb::Application.routes.draw do
   get "scheduler/showData"
   get "scheduler/jobData"
   get "scheduler/mx"
+  get "scheduler/checkForJobDataUpdate"
   
   match '/test', to: 'boards#test'
 

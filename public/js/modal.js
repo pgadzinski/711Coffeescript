@@ -130,21 +130,21 @@
 				//$("#example_info").append('&nbsp;&nbsp;&nbsp;&nbsp;<button id="create-job">Create new job</button>');
 	};
 
-	//Setup error handling for Ajax calls
+	//Error handling for Ajax calls
     $.ajaxSetup({
         error: function(jqXHR, exception) {
             if (jqXHR.status === 0) {
                 alert('No internet connection.\n Please verify your connected to the Internet.');
             } else if (jqXHR.status == 404) {
-                alert('Requested page not found. [404]');
+                alert('Requested page not found. [404]. Please contact support if this issue persists.');
             } else if (jqXHR.status == 500) {
-                alert('Internal Server Error [500].');
+                alert('Internal Server Error [500]. Please contact support if this issue persists.');
             } else if (exception === 'parsererror') {
-                alert('Requested JSON parse failed.');
+                alert('Requested JSON parse failed. Please contact support if this issue persists.');
             } else if (exception === 'timeout') {
-                alert('Time out error.');
+                alert('Time out error. Please contact support if this issue persists.');
             } else if (exception === 'abort') {
-                alert('Ajax request aborted.');
+                alert('Ajax request aborted. Please contact support if this issue persists.');
             } else {
                 alert('Uncaught Error.\n' + jqXHR.responseText);
             }
@@ -251,8 +251,6 @@
 		    getJobData();
 		    return;
   		}
-
-
 
   		//BUG: There is an offset issue with moving scheduled items around. The 'offset' value needs to be substracted from the value given by ui.offset.top
 
@@ -663,18 +661,15 @@
 
 	}; 
 
-
-
    //Next 2 methods are for long polling the job data from Rails for synching job data between the separate users of the same schedule
-	var FREQ = 1000000 ;
+	var FREQ = 3000 ;  //This is equal to 2 minutes
 	var repeat = true;
 		
 	//Endless loop that triggers the Ajax call below	
 	function startAJAXcalls(){
-	
 		if(repeat){
 			setTimeout( function() {
-					getJobData();
+					checkForJobDataUpdate();   //This is not getting fired, not sure what is happening here. 
 					startAJAXcalls();
 				}, 	
 				FREQ
@@ -682,6 +677,34 @@
 		}
 	}
 	
+	//Call the server and see if job data needs to be updated. Make an Ajax call with client time stamp. The backend will make a comparison 
+	//between the client time stamp and server time stamp. If the timestamps match there is no update needed. If client time stamp is behind, jobData refresh needed
+	//If client time stamp is ahead? Error? Something has gone really wrong. Popup alert to contact support, cause a jobData update. 
+	function checkForJobDataUpdate(){
+
+		postingURL = '/scheduler/checkForJobDataUpdate?clientTimeStamp=' + clientScheduleTimeStamp + '&boardId=' + boardId 
+
+		$.ajax({
+			url: postingURL,
+			cache: false,
+			dataType: "script",
+			success: function(msg){
+
+				//String comparison to see if the client is out of date. There is weird double quotes on the string returned from the server. 
+				//Perhaps fix in the future. 
+				if (msg == "'Update'") {
+					getJobData();
+				}
+				if (msg == "'Match'") {
+					return;
+				}
+				if (msg == "'Messed'") {
+					alert("Something is wrong with data synch. Please use web browser Reload to reload page. If problem continues contact Support.")
+				}
+
+			}
+		});
+	}
 
 	//Pull the proper job data for this schedule. Does it need to include a query perhaps? 
 	function getJobData(){
@@ -690,17 +713,12 @@
 			cache: false,
 			dataType: "script",
 			success: function(){
-				
 				buildList();
  				placeScheduledJobs();
-
 			}
-
 		});
 	}
 
 	//Kick of the looping of Ajax calls
 	getJobData();
 	startAJAXcalls();
-
-

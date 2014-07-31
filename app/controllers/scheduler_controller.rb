@@ -97,194 +97,38 @@ class SchedulerController < ApplicationController
       
   end  
 
-  #Original method for driving Pavel's UI screen. 
-  def showData
+  #Method will be called frequently through Ajax with client time stamp data. Comparison will be done between client and server time stamp. 
+  #If the timestamps match there is no update needed. If client time stamp is behind, jobData refresh needed.
+  def checkForJobDataUpdate
+    require 'date'
 
-      #Pick up the data that connects with the right maxscheduler, site, board. 
-      #Careful that unscheduled jobs don't have board set yet
+    #Need to grab the clientSide time stamp posted through ajax
+    clientTimeStamp = params[:clientTimeStamp]
+    boardId = params[:boardId]
+    @board = Board.find(boardId)
+    serverTimeStamp = @board.scheduleTimeStamp.to_time
+    zone = ActiveSupport::TimeZone.new("Eastern Time (US & Canada)")
 
-      @attributes = Attribute.where("maxscheduler_id = ?", @maxschedulerId)
-      @operationhours = Operationhour.where("maxscheduler_id = ? and site_id = ?", @maxschedulerId, @siteId)
+    serverTimeStamp = serverTimeStamp.in_time_zone(zone)
 
-      @sites = Site.where("maxscheduler_id = ?", @maxschedulerId)
-      @boards = Board.where("maxscheduler_id = ? and site_id = ?", @maxschedulerId, @siteId)
+    clientTimeStamp = Time.parse(clientTimeStamp)
+    clientTimeStamp = clientTimeStamp.in_time_zone(zone)
 
-      @resources = Resource.where("maxscheduler_id = ? and site_id = ?", @maxschedulerId, @siteId)
-      
-      @schedItemDelimiter = @site.schedItemDelimiter
+    timeStatus = ''
 
-      #Get the list of jobs that should be displayed on this schedule, ie. in the schedule time frame
-      @site = Site.find(@siteId)
+    if (serverTimeStamp == clientTimeStamp)
+      timeStatus = "Match"
+    end
+    if (serverTimeStamp > clientTimeStamp)
+      timeStatus = "Update"
+    end
+    if (serverTimeStamp < clientTimeStamp)
+      timeStatus = "Messed"
+    end
 
-      #Figure out what jobs should be displayed on this schedule. The jobs contained within are the relevant ones. 
-      #There are the class of jobs that should not be moved: span the schedule, start before and overlap, start on and extend
-      #Need to find the jobs that don't move. For this to work, need to have the start and end times. End times can change
-      #thus need to calculate dynamically.
+    #binding.pry
 
-      #Figure out some timebound parameters for figuring out scheduled job edge cases
-      @schedEndTime = @schedStartDateTime + (@numberOfRows * 3600 * @rowTimeIncrement)
-      @schedUpperBound = @schedStartDateTime - (3600 * 24 * 7 )
-      @schedLowerBound = @schedEndTime + (3600 * 24 * 7 )
-      #@schedStartTime = @schedStartTime.getlocal(current_user.timeZone)
-
-      @scheduledJobs = Job.where("maxscheduler_id = ? and board_id = ? and schedDateTime >= ? and schedDateTime <= ? and resource_id != '0' ", @maxschedulerId, @boardId, @schedUpperBound, @schedLowerBound)
-      @listJobs = Job.where("maxscheduler_id = ? and site_id = ? and resource_id = '0' ", @maxschedulerId, @siteId)
-      @jobs = @scheduledJobs|@listJobs
-
-      #Create array that holds Board and Resource data
-      @boardResourceAry = "var MXS_board_data = {"
-      board = Board.find(@boardId)
-      
-      #@boards.each do |board|
-      
-        @numOfResources = Resource.where("board_id= ?", @boardId).count
-        @colWidth = 1000/@numOfResources
-        @boardResourceAry = @boardResourceAry + '"Board1":['
-        @boardResourceAry = @boardResourceAry + '{"col_num":' + @numOfResources.to_s + ', "col_width": '+ @colWidth.to_s + '}, {'
-            @resources.each do |resource|
-                if (board.id.to_s == resource.board_id)
-                    @boardResourceAry = @boardResourceAry + '"' + resource.id.to_s + '":"' + resource.name + '",' 
-                end #if end
-            end #resource end
-        @boardResourceAry = @boardResourceAry  + ' } ],'
-      
-      #end #board end
-      
-      @boardResourceAry = @boardResourceAry + '};'
-
-      @rowHeight = (@site.rowHeight).to_f
-      @rowTimeIncrement = (@site.rowTimeIncrement).to_f
-
-      #Figure out if one of the Attributes holds job length. If not use Default length set in the Site table
-      @attributes.each do |attr|
-          if (attr.name == "Duration")
-              #attrPosition = attr.importposition
-              attrPosition = attr.listposition
-              @jobLengthInData = "attr" + attrPosition.to_s
-          end
-      end
-
-      #Create array that holds job data
-      @jobAry = "var MXS_job_data = {" + "\n"
-      @jobs.each do |job|
-
-          if (@jobLengthInData)
-              @jobDurationInTime = (job[@jobLengthInData].to_f) * 3600 
-              @jobDisplaySize = (( @jobDurationInTime.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight 
-          else              
-              @jobDurationInTime = @site.defaultJobLength.to_i * 3600
-              @jobDisplaySize = (( @jobDurationInTime.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight 
-          end
-        
-          #Figure out if the job is in the Listview or scheduled
-          if (job.resource_id == "0")
-              @joblane = "0"
-              @jobLocation = "listview"
-              @pixelValue = 0
-          else
-              @jobStartTime = job.schedDateTime
-              @jobStartTime = @jobStartTime.to_time
-              @jobEndTime = @jobStartTime + @jobDurationInTime
-
-                #Calculate the position on the schedule from the job time stamp
-                #Step through the extendedDateHash to find out which row the job should be placed in. Check the job time is bounded by the row
-                @pixelValue = 0
-
-                @joblane = job.resource_id
-
-                @jobLocation = "board"
-                @jobRowNumber = 10000000
-              
-                @extendedDateHash.each do | rowNumber , rowDataStart |
-                     @rowNumber = rowNumber
-                     @rowStartDateTime = rowDataStart[0]
-                     @rowEndDateTime = @rowStartDateTime + (@rowTimeIncrement * 3600)
-
-                     if ((@rowStartDateTime <= @jobStartTime) && ( @jobStartTime <= @rowEndDateTime))
-                          @jobRowNumber = @rowNumber           
-                          @rowStatusStart = rowDataStart[1]
-                          @pixelValue = (@jobRowNumber.to_i) * @rowHeight
-                          @remainingTimeDifference = (@jobStartTime - @rowStartDateTime)
-                          @pixelValue = @pixelValue + (((@remainingTimeDifference.to_f) / (@rowTimeIncrement * 3600) ) * @rowHeight )
-                     end
-                end
-
-                #Find out which row the end of the job lands
-                @pixelValueEndOfJob = @pixelValue + @jobDisplaySize
-                @endRow = (@pixelValueEndOfJob) / (@rowHeight)
-                @endRow = @endRow.to_i
-                @rowDataEnd = @extendedDateHash[@endRow.to_s]
-
-                #binding.pry
-
-                @rowStatusEnd = @rowDataEnd[1]
-
-                #if (@pixelValue > (@operationalHoursRowCount * @rowHeight))
-                @pixelValue = @pixelValue - (@operationalHoursRowCount * @rowHeight)
-                @pixelValueEndOfJob = @pixelValueEndOfJob - (@operationalHoursRowCount * @rowHeight)
-
-                #if the job is entirely before the schedule start, don't do anything. 'next' jumps out of the loop
-                if (@rowStatusStart == -1 && @rowStatusEnd == -1)
-                    next
-                end
-                #if the job starts before the schedule start and overlaps onto the visible schedule
-                if (@rowStatusStart == -1 && @rowStatusEnd == 0)
-                    @jobDisplaySize = @pixelValue.abs
-                    @pixelValue = 0 
-                end
-                #if the job starts on the visible schedule, but trails off the end
-                if (@rowStatusStart == 0 && @rowStatusEnd == 1)
-                    @pixelValue = @pixelValue
-                    @jobDisplaySize = (@operationalHoursRowCount * @rowHeight) - @pixelValue
-                end
-                #if the job is entirely after the schedule end, don't do anything. 'next' jumps out of the loop
-                if (@rowStatusStart == 1 && @rowStatusEnd == 1)
-                    next
-                end
-
-          end 
-
-          #binding.pry
-          
-          #If a job hasn't found a row to sit in, then it should be pushed to list view
-          if @jobRowNumber == 10000000
-              #@jobLocation = "listview"
-              next
-          end 
-
-          #binding.pry
-
-          @jobAry = @jobAry + '"' + job.id.to_s + '":[ {"left":0, "top":' + @pixelValue.to_s + ', "width":' + @colWidth.to_s + ' , "height":' + @jobDisplaySize.to_s + ', "location": "' + @jobLocation + '", "board": "Board1", "lane": ' + @joblane.to_s + '},{ '   
-          @i = 1
-          
-          @attributes.each do |attr|
-              if attr.name
-                  @x = "attr"+ @i.to_s
-                  #Need to protect against Null attribute values in database
-                  if (job[@x].nil?) 
-                      job[@x] =' '
-                  end    
-                  @jobAry = @jobAry + '"' + attr.name + '":"' + job[@x] + '",'
-              end #if end
-              @i = @i + 1
-          end #attribute end 
-
-          @jobAry = @jobAry + '} , {"some_date":"data"} ],' + "\n"
-      
-      end #job end
-      
-      @jobAry = @jobAry + '};'
-
-      #Create a hash that defines how wide each column is
-      @columnWidthsHash = "var MXS_field_widths = { 'id': 50, "
-      @attributes.each do |attr|
-              if attr.name
-                  @columnWidthsHash = @columnWidthsHash + '"' + attr.name + '":"' + attr.columnWidth.to_s + '",'
-              end #if end
-      end #attribute end 
-      @columnWidthsHash = @columnWidthsHash + "}"
-
-      @jobData = @jobAry
+    render :text => "'"+timeStatus+"'", :status => 200
 
   end
 
@@ -307,6 +151,7 @@ class SchedulerController < ApplicationController
       
       #Get the list of jobs that should be displayed on this schedule, ie. in the schedule time frame
       @site = Site.find(@siteId)
+      board = Board.find(@boardId)
 
       #Figure out what jobs should be displayed on this schedule. The jobs contained within are the relevant ones. 
       #There are the class of jobs that should not be moved: span the schedule, start before and overlap, start on and extend
@@ -323,26 +168,10 @@ class SchedulerController < ApplicationController
       @listJobs = Job.where("maxscheduler_id = ? and site_id = ? and resource_id = '0' ", @maxschedulerId, @siteId)
       @jobs = @scheduledJobs|@listJobs
 
-      #Create array that holds Board and Resource data
-      @boardResourceAry = "var MXS_board_data = {"
-      board = Board.find(@boardId)
+      #binding.pry
       
-      #@boards.each do |board|
-      
-        @numOfResources = Resource.where("board_id= ?", @boardId).count
-        @colWidth = 1000/@numOfResources
-        @boardResourceAry = @boardResourceAry + '"Board1":['
-        @boardResourceAry = @boardResourceAry + '{"col_num":' + @numOfResources.to_s + ', "col_width": '+ @colWidth.to_s + '}, {'
-            @resources.each do |resource|
-                if (board.id.to_s == resource.board_id)
-                    @boardResourceAry = @boardResourceAry + '"' + resource.id.to_s + '":"' + resource.name + '",' 
-                end #if end
-            end #resource end
-        @boardResourceAry = @boardResourceAry  + ' } ],'
-      
-      #end #board end
-      
-      @boardResourceAry = @boardResourceAry + '};'
+      @numOfResources = Resource.where("board_id= ?", @boardId).count
+      @colWidth = 1000/@numOfResources
 
       @rowHeight = (@site.rowHeight).to_f
       @rowTimeIncrement = (@site.rowTimeIncrement).to_f
@@ -380,7 +209,6 @@ class SchedulerController < ApplicationController
           #Figure out if the job is in the Listview or scheduled
           if (job.resource_id == "0")
               @joblane = "0"
-              @jobLocation = "listview"
               @pixelValue = 0
           else
               @jobStartTime = job.schedDateTime
@@ -397,9 +225,7 @@ class SchedulerController < ApplicationController
 
                 @joblane = job.resource_id
 
-                @jobLocation = "board"
-                @jobRowNumber = 10000000
-              
+                #Search through extendedHash and find out which row a job sits in. Would prefer this to be function instead of a looping search              
                 @extendedDateHash.each do | rowNumber , rowDataStart |
                      @rowNumber = rowNumber
                      @rowStartDateTime = rowDataStart[0]
@@ -430,6 +256,7 @@ class SchedulerController < ApplicationController
 
                 #if the job is entirely before the schedule start, don't do anything. 'next' jumps out of the loop
                 if (@rowStatusStart == -1 && @rowStatusEnd == -1)
+                    #I should do more than just jump out of loop, these jobs should not go into jobData 
                     next
                 end
                 #if the job starts before the schedule start and overlaps onto the visible schedule
@@ -438,6 +265,9 @@ class SchedulerController < ApplicationController
                     @pixelValue = 0 
                     @draggable = 'no'
                 end
+
+                #Should clearly handle if (@rowStatusStart == 1 && @rowStatusEnd == 1)
+
                 #if the job starts on the visible schedule, but trails off the end
                 if (@rowStatusStart == 0 && @rowStatusEnd == 1)
                     @pixelValue = @pixelValue
@@ -446,20 +276,11 @@ class SchedulerController < ApplicationController
                 end
                 #if the job is entirely after the schedule end, don't do anything. 'next' jumps out of the loop
                 if (@rowStatusStart == 1 && @rowStatusEnd == 1)
+                    #I should do more than just jump out of loop, these jobs should not go into jobData 
                     next
                 end
 
           end 
-
-          #binding.pry
-          
-          #If a job hasn't found a row to sit in, then it should be pushed to list view
-          if @jobRowNumber == 10000000
-              #@jobLocation = "listview"
-              next
-          end 
-
-
 
           #Building the JavaScript string to hold job data
           @jobAry = @jobAry + job.id.to_s + ': (new jobCreate( ' + job.id.to_s + ',' + @joblane.to_s + ',"100",' + 
@@ -467,7 +288,6 @@ class SchedulerController < ApplicationController
                               ',"' + job[@jobColorPosition].to_s + '","' + @draggable.to_s + '",'
 
           @i = 1
-
           #Push out the attribute values          
           @attributes.each do |attr|
               if attr.name
@@ -488,14 +308,13 @@ class SchedulerController < ApplicationController
       
       @jobAry = @jobAry + '};'
 
-      #Create a hash that defines how wide each column is
-      @columnWidthsHash = "var MXS_field_widths = { 'id': 50, "
-      @attributes.each do |attr|
-              if attr.name
-                  @columnWidthsHash = @columnWidthsHash + '"' + attr.name + '":"' + attr.columnWidth.to_s + '",'
-              end #if end
-      end #attribute end 
-      @columnWidthsHash = @columnWidthsHash + "}"
+      #Push out to job log that an update has been pushed out. Gives a sense of synch traffic. 
+      @joblog1 = JobLogging.new
+      @joblog1.update_attributes(:job_id => ' ', :user_id => current_user.id, :maxscheduler_id => @maxschedulerId, :jobDetailsBefore => 'Job Data call', :jobDetailsAfter => ' ', :jobDetailsChange => ' ')
+
+
+      @jobAry = @jobAry + "\n\n" + 'clientScheduleTimeStamp = "' + board.scheduleTimeStamp.to_s + '";'
+      #@jobAry = @jobAry + "\n\n" + 'ClientScheduleTimeStamp = "' + DateTime.now.utc.to_s + '"'
 
       render :js =>  @jobAry
   end 
@@ -592,7 +411,7 @@ def mx
               #Loop through the number of rows for that Operation Hours entry
               for i in 1..(entry.numberOfRows.to_i)
                   @schedulingTable = @schedulingTable + "<tr>\n"
-                      @schedulingTable = @schedulingTable + "<td valign=top width=" + @dateTimeColumnWidth + " height=" + @schedulerRowHeight +  
+                      @schedulingTable = @schedulingTable + "<td valign=top align=center width=" + @dateTimeColumnWidth + " height=" + @schedulerRowHeight +  
                               " style=background-color:" + colorArray[entry.dayOfTheWeek.to_i] +";>" + @dateHash[@rowCounter].strftime("%a-%b-%d %I:%M%p")  + " </td>" 
                       #Put in a table cell <td> for each resource for this board
                       for k in 1 .. (@resources.size)                     

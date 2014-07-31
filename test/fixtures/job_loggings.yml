@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  job_id: MyString
+  user_id: MyString
+  maxscheduler_id: MyString
+  jobDetailsBefore: MyText
+  jobDetailsAfter: MyText
+  jobDetailsChange: MyText
+
+two:
+  job_id: MyString
+  user_id: MyString
+  maxscheduler_id: MyString
+  jobDetailsBefore: MyText
+  jobDetailsAfter: MyText
+  jobDetailsChange: MyText
